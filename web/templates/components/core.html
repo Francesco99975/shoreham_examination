@@ -1,0 +1,111 @@
+{{define "metatags"}}
+    <title>{{ .AppName }}{{ if .Title }} | {{ .Title }}{{ end }}</title>
+    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    {{- if .Metatags.Description}}
+        <meta name="description" content="{{.Metatags.Description}}">
+    {{- end}}
+    {{- if .Metatags.Keywords}}
+        <meta name="keywords" content="{{.Metatags.Keywords}}">
+    {{- end}}
+{{end}}
+
+{{define "css"}}
+    <link rel="stylesheet" href="/static/css/normalize.css">
+    <link rel="stylesheet" href="/static/css/output.css">
+{{end}}
+
+{{define "js"}}
+    <script src="https://unpkg.com/htmx.org@1.9.3"></script>
+    <!-- <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script> -->
+{{end}}
+
+{{define "header"}}
+<header class="bg-black text-white p-2 z-[12] h-20 w-full flex justify-between items-center sticky top-0 right-0" >
+    <div class="flex items-center">
+        <img class="w-[3.5rem] h-[3.5rem]" src="static/images/logo.png" alt="Your Logo" />
+        <h1 class="ml-2">{{ .AppName }}</h1>
+    </div>
+    <nav>
+       
+            <input type="checkbox" name="" id="">
+            <div class="hamburger-lines">
+                <span class="line line1"></span>
+                <span class="line line2"></span>
+                <span class="line line3"></span>
+            </div>
+            <ul>
+                <li><a href="/home">Home</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+           
+     
+    </nav>
+  </header>
+{{ end }}
+
+{{define "navdash"}}
+<header class="bg-black text-white p-2 z-[12] h-20 w-full flex justify-between items-center sticky top-0 right-0" >
+    <div class="flex items-center">
+        <img class="w-[3.5rem] h-[3.5rem]" src="static/images/logo.png" alt="Your Logo" />
+        <h1 class="ml-2">{{ .AppName }}</h1>
+    </div>
+    <nav>
+       
+            <input type="checkbox" name="" id="">
+            <div class="hamburger-lines">
+                <span class="line line1"></span>
+                <span class="line line2"></span>
+                <span class="line line3"></span>
+            </div>
+            <ul>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/settings">Settings</a></li>
+            </ul>
+           
+     
+    </nav>
+  </header>
+{{ end }}
+
+{{define "footer"}}
+    <footer class="bg-black text-white flex items-center justify-center">
+        <p class="text-sm text-center">
+        &copy; <span class="current-year">{{ .Year }}</span> [Company Name]. All rights
+        reserved.
+        </p>
+    </footer>
+    {{- if .CSRF}}
+        <script>
+            document.body.addEventListener('htmx:configRequest', function(evt)  {
+                if (evt.detail.verb !== "get") {
+                    evt.detail.parameters['csrf'] = '{{.CSRF}}';
+                }
+            })
+        </script>
+    {{end}}
+    <script>
+        document.body.addEventListener('htmx:beforeSwap', function(evt) {
+            if (evt.detail.xhr.status >= 400){
+                evt.detail.shouldSwap = true;
+                evt.detail.target = htmx.find("body");
+            }
+        });
+
+        const hamburgerMenu = document.querySelector(".hamburger-menu");
+        const bars = document.querySelectorAll(".bar");
+        const navMenu = document.querySelector("nav ul.absolute");
+        const copyrightYear = document.querySelector(".current-year");
+
+        // Toggle the 'open' class to animate the hamburger menu
+        function toggleMenu() {
+            hamburgerMenu.classList.toggle("open");
+            bars[0].classList.toggle("open1");
+            bars[1].classList.toggle("open2");
+            bars[2].classList.toggle("open3");
+            navMenu.classList.toggle("open");
+        }
+    </script>
+{{end}}
