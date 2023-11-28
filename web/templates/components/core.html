@@ -18,7 +18,9 @@
 {{end}}
 
 {{define "js"}}
-    <script src="https://unpkg.com/htmx.org@1.9.3"></script>
+<script type="module">
+    import 'htmx.org';
+  </script>
     <!-- <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script> -->
 {{end}}
 

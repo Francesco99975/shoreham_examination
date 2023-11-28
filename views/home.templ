@@ -1,0 +1,37 @@
+package views
+
+templ BasePage(title string) {
+    <!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta name="viewport" content="width=device-width, initial-scale=1"/>
+			<title>{ title }</title>
+			<script type="module" src="/assets/dist/index.js"></script>
+			<link rel="stylesheet" href="/assets/dist/index.css"/>
+		</head>
+		<body class="h-full w-full flex flex-col justify-stretch items-stretch">
+			// if showNavbar {
+			// 	@Navbar(user)
+			// }
+			<div class="grow">
+				{ children... }
+			</div>
+		</body>
+	</html>
+}
+
+templ HomePage(title string) {
+	@BasePage(title) {
+		<!DOCTYPE html>
+		<main class="mx-auto flex flex-col items-center md:my-4 md:max-w-screen-md lg:max-w-screen-lg">
+			<section class="flex flex-col gap-2 mb-4">
+				<p class="font-bold">
+					Intro
+				</p>
+			</section>
+			<section class="mb-4 flex w-full flex-col gap-4">
+				Body content
+			</section>
+		</main>
+	}
+}
