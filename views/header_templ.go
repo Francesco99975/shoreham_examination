@@ -23,7 +23,7 @@ func Header(admin bool) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><header class=\"flex justify-between items-center text-center bg-green-500 text-white border-x-8 md:border-x-[2rem] border-green-900 h-24\"><img src=\"/assets/images/logo.png\" alt=\"LOGO\" class=\"h-10 w-40\"><h1 class=\"text-xl text-center md:text-2xl m-0 title-font hidden md:inline\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<header class=\"flex justify-between items-center text-center bg-green-500 text-white border-x-8 md:border-x-[2rem] border-green-900 h-24\"><img src=\"/assets/images/logo.png\" alt=\"LOGO\" class=\"h-10 w-40\"><h1 class=\"text-xl text-center md:text-2xl m-0 title-font hidden md:inline\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -37,7 +37,7 @@ func Header(admin bool) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if admin {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"m-2\"><input id=\"menu-toggle\" type=\"checkbox\"> <label class=\"menu-button-container\" for=\"menu-toggle\"><div class=\"menu-button\"></div></label><ul class=\"menu\"><li><a href=\"/gen\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<nav hx-boost class=\"m-2\"><input id=\"menu-toggle\" type=\"checkbox\"> <label class=\"menu-button-container\" for=\"menu-toggle\"><div class=\"menu-button\"></div></label><ul class=\"menu\"><li><a href=\"/gen\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -91,7 +91,7 @@ func Header(admin bool) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</li></ul></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</li></ul></nav>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

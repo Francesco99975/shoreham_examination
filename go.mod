@@ -4,7 +4,6 @@ go 1.21.4
 
 require (
 	github.com/a-h/templ v0.2.476
-	github.com/gorilla/csrf v1.7.2
 	github.com/jdudmesh/gomon-client v0.2.4
 	github.com/labstack/echo/v4 v4.11.3
 	github.com/labstack/gommon v0.4.1
@@ -14,7 +13,6 @@ require (
 require (
 	github.com/Microsoft/go-winio v0.6.1 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
-	github.com/gorilla/securecookie v1.1.2 // indirect
 	github.com/james-barrow/golang-ipc v1.2.4 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect

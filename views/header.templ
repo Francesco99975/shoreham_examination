@@ -2,7 +2,6 @@ package views
 
 
 templ Header(admin bool) {
-    <!DOCTYPE html>
     <header class="flex justify-between items-center text-center bg-green-500 text-white border-x-8 md:border-x-[2rem] border-green-900 h-24">
         <img src="/assets/images/logo.png" alt="LOGO" class="h-10 w-40" />
 
@@ -11,7 +10,7 @@ templ Header(admin bool) {
         </h1>
 
         if admin {
-             <div class="m-2">
+             <nav hx-boost class="m-2">
                 <input id="menu-toggle" type="checkbox" />
                     <label class="menu-button-container" for="menu-toggle">
                         <div class="menu-button"></div>
@@ -24,7 +23,7 @@ templ Header(admin bool) {
                         <li><a href="/mmpi">MMPI-2</a></li>
                         <li id="logout">Logout</li>
                     </ul>
-            </div>
+            </nav>
         }
     </header>
 }

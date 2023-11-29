@@ -1,0 +1,38 @@
+package views
+
+import "github.com/Francesco99975/shorehamex/internal/models"
+
+templ Asq(site models.Site, admin bool, questions []string, multi []string) {
+    @CoreHTML(site) {
+        <!DOCTYPE html>
+        <main class="flex w-full md:w-2/3 flex-col items-start justify-between p-2 mt-5 md:self-center">
+            <h1 class="text-3xl text-blue-900 mb-5">
+                Anxiety Symptoms Questionnaire
+            </h1>
+
+            
+            <form class="w-full flex flex-col items-start justify-center">
+
+                if admin {
+                    @StringInput("patient", "text", "Patient Name")
+                }
+
+                //Implement Radio True or False
+
+                <h2 class="text-xl text-blue-900 mt-3">
+                Do you experience or fear any of the following?
+                </h2>
+
+                @SimpleCheckboxInput("ex", "Multi")
+
+                <button
+                type="submit"
+                class="w-full mt-5 bg-green-900 text-white text-lg text-center font-bold"
+                >
+                Submit
+                </button>
+            </form>
+       
+      </main>
+    }
+}
