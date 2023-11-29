@@ -1,0 +1,30 @@
+package views
+
+
+templ Header(admin bool) {
+    <!DOCTYPE html>
+    <header class="flex justify-between items-center text-center bg-green-500 text-white border-x-8 md:border-x-[2rem] border-green-900 h-24">
+        <img src="/assets/images/logo.png" alt="LOGO" class="h-10 w-40" />
+
+        <h1 class="text-xl text-center md:text-2xl m-0 title-font hidden md:inline">
+            Shoreham Examination
+        </h1>
+
+        if admin {
+             <div class="m-2">
+                <input id="menu-toggle" type="checkbox" />
+                    <label class="menu-button-container" for="menu-toggle">
+                        <div class="menu-button"></div>
+                    </label>
+                    <ul class="menu">
+                        <li><a href="/gen">Auth Code Generator</a></li>
+                        <li><a href="/asq">Anxiety Symptom Questionnaire</a></li>
+                        <li><a href="/bai">Beck Anxiety Inventory</a></li>
+                        <li><a href="/bdi">Beck Depression Inventory</a></li>
+                        <li><a href="/mmpi">MMPI-2</a></li>
+                        <li id="logout">Logout</li>
+                    </ul>
+            </div>
+        }
+    </header>
+}

@@ -1,36 +1,27 @@
 package views
 
-templ BasePage(title string) {
-    <!DOCTYPE html>
-	<html lang="en">
-		<head>
-			<meta name="viewport" content="width=device-width, initial-scale=1"/>
-			<title>{ title }</title>
-			<script type="module" src="/assets/dist/index.js"></script>
-			<link rel="stylesheet" href="/assets/dist/index.css"/>
-		</head>
-		<body class="h-full w-full flex flex-col justify-stretch items-stretch">
-			// if showNavbar {
-			// 	@Navbar(user)
-			// }
-			<div class="grow">
-				{ children... }
-			</div>
-		</body>
-	</html>
-}
+import "github.com/Francesco99975/shorehamex/internal/models"
 
-templ HomePage(title string) {
-	@BasePage(title) {
+
+templ HomePage(site models.Site) {
+	@CoreHTML(site) {
 		<!DOCTYPE html>
-		<main class="mx-auto flex flex-col items-center md:my-4 md:max-w-screen-md lg:max-w-screen-lg">
-			<section class="flex flex-col gap-2 mb-4">
-				<p class="font-bold">
-					Intro
-				</p>
-			</section>
-			<section class="mb-4 flex w-full flex-col gap-4">
-				Body content
+		@Header(true)
+		<main class="flex flex-col w-full justify-center items-center h-[60vh]">
+			<h1 class="text-2xl text-green-700 font-bold my-2">Select</h1>
+			<section class="flex flex-col w-2/3 md:w-1/4 p-2 justify-center items-center bg-gray-300 shadow-lg rounded-sm">
+				<a
+				href="/staff"
+				class="rounded w-full m-3 p-2 text-white bg-green-700 text-center md:text-lg"
+				>
+				I am a Staff Member
+				</a>
+				<a
+				href="/patient"
+				class="rounded w-full m-3 p-2 text-white bg-green-700 text-center md:text-lg"
+				>
+				I am a Patient
+				</a>
 			</section>
 		</main>
 	}

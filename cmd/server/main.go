@@ -12,10 +12,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	log.Infof("Starting UI server: %s", cfg.CurrentDirectory)
+	log.Infof("Starting UI server: %s\n", cfg.CurrentDirectory)
 
 	e := createRouter(cfg)
 
-	fmt.Printf("Running ShoreHamEx on port %s\n", cfg.ServerAddress())
+	fmt.Printf("Running ShoreHamEx on port %s", cfg.ServerAddress())
 	log.Fatal(e.Start(cfg.ServerAddress()))
 }

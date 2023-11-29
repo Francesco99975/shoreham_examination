@@ -3,7 +3,9 @@ package controllers
 import (
 	"bytes"
 	"context"
+	"time"
 
+	"github.com/Francesco99975/shorehamex/internal/models"
 	"github.com/Francesco99975/shorehamex/views"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
@@ -12,15 +14,14 @@ import (
 func Index() echo.HandlerFunc {
 	buf := bytes.NewBuffer(nil)
 
-	// data := models.Site{
-	// 	AppName:  "HTMX + GO",
-	// 	Title:    "Home",
-	// 	CSRF:     csrf.Token(r),
-	// 	Metatags: models.SEO{Description: "Basic boilerplate for go web apps", Keywords: "go,htmx,web"},
-	// 	Year:     time.Now().Year(),
-	// }
+	data := models.Site{
+		AppName:  "HTMX + GO",
+		Title:    "Home",
+		Metatags: models.SEO{Description: "Basic boilerplate for go web apps", Keywords: "go,htmx,web"},
+		Year:     time.Now().Year(),
+	}
 
-	err := views.HomePage("Demo - Home").Render(context.Background(), buf)
+	err := views.HomePage(data).Render(context.Background(), buf)
 
 	if err != nil {
 		log.Warn("TODO: you need to implement this properly")

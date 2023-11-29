@@ -2,12 +2,11 @@ package models
 
 type SEO struct {
 	Description string
-	Keywords string
+	Keywords    string
 }
 type Site struct {
-	AppName string
-	Title string
+	AppName  string
+	Title    string
 	Metatags SEO
-	CSRF string
-	Year int
+	Year     int
 }
