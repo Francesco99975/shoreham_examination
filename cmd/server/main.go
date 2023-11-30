@@ -2,20 +2,22 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/Francesco99975/shorehamex/cmd/boot"
 	"github.com/labstack/gommon/log"
 )
 
 func main() {
-	cfg, err := boot.LoadConfig()
+	err := boot.LoadEnvVariables()
 	if err != nil {
 		panic(err)
 	}
-	log.Infof("Starting UI server: %s\n", cfg.CurrentDirectory)
 
-	e := createRouter(cfg)
+	port := os.Getenv("PORT")
 
-	fmt.Printf("Running ShoreHamEx on port %s", cfg.ServerAddress())
-	log.Fatal(e.Start(cfg.ServerAddress()))
+	e := createRouter()
+
+	fmt.Printf("Running ShoreHamEx on port %s", port)
+	log.Fatal(e.Start(":" + port))
 }

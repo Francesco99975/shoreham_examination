@@ -1,36 +1,20 @@
 package boot
 
 import (
-	"context"
 	"fmt"
 	"os"
 
-	"github.com/sethvargo/go-envconfig"
+	"github.com/Francesco99975/shorehamex/internal/models"
+	"github.com/joho/godotenv"
 )
 
-type Config struct {
-	CurrentDirectory string
-	StaticFileDir    string `env:"STATIC_FILE_DIR,default=./static"`
-	DatabaseURL      string `env:"DATABASE_URL,default=sqlite://file::memory:?cache=shared"`
-	Server           struct {
-		Port int `env:"PORT,default=8080"`
-	}
-}
-
-func LoadConfig() (*Config, error) {
-	var cfg Config
-	if err := envconfig.Process(context.Background(), &cfg); err != nil {
-		return nil, err
-	}
-	cwd, err := os.Getwd()
+func LoadEnvVariables() error {
+	err := godotenv.Load(".env")
 	if err != nil {
-		return nil, fmt.Errorf("getting current directory: %w", err)
+		return fmt.Errorf("cannot load environment variables")
 	}
-	cfg.CurrentDirectory = cwd
 
-	return &cfg, nil
-}
+	models.Setup(os.Getenv("DSN"))
 
-func (c *Config) ServerAddress() string {
-	return fmt.Sprintf(":%d", c.Server.Port)
+	return err
 }
