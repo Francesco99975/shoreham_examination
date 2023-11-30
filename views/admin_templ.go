@@ -39,7 +39,7 @@ func Admin(site models.Site) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <main class=\"flex flex-col w-full h-[80vh] justify-center items-center text-center\"><div><section class=\"flex flex-col justify-around items-center w-3/4 md:w-1/3 bg-gray-200 text-green-500 shadow-lg rounded p-2\"><h1 class=\"text-lg md:text-xl text-green-500 font-bold\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <main class=\"flex flex-col w-full h-[80vh] justify-center items-center text-center\"><div class=\"w-full flex justify-center items-center\"><section class=\"flex flex-col justify-around items-center w-3/4 md:w-1/3 bg-gray-200 text-green-500 shadow-lg rounded p-2\"><h1 class=\"text-lg md:text-xl text-green-500 font-bold\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -76,7 +76,7 @@ func Admin(site models.Site) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"bg-green-500 text-white rounded-sm font-bold\" type=\"submit\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"bg-green-500 text-white rounded-sm font-bold p-2\" type=\"submit\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

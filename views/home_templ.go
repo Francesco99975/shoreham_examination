@@ -48,7 +48,7 @@ func HomePage(site models.Site) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><section class=\"flex flex-col w-2/3 md:w-1/4 p-2 justify-center items-center bg-gray-300 shadow-lg rounded-sm\"><a href=\"/staff\" class=\"rounded w-full m-3 p-2 text-white bg-green-700 text-center md:text-lg\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><section hx-boost=\"true\" class=\"flex flex-col w-2/3 md:w-1/4 p-2 justify-center items-center bg-gray-300 shadow-lg rounded-sm\"><a href=\"/staff\" class=\"rounded w-full m-3 p-2 text-white bg-green-700 text-center md:text-lg\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

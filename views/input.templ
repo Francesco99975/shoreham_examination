@@ -3,17 +3,32 @@ package views
 
 templ StringInput(id string, typology string, label string) {
     <div class="flex flex-col w-full p-2 justify-around">
-        <label for={ id } class="w-fit p-1 backdrop-blur-xl rounded !bg-opacity-20">
+        <label for={ id } class="w-fit p-1 backdrop-blur-xl rounded !bg-opacity-20 text-green-900">
             { label }
         </label>
-        <input id={ id } type={ typology }  />
+        <input class="border-b-2 border-solid bg-transparent outline-none mb-3 border-green-500 text-green-500" id={ id } type={ typology }  />
     </div>
 }
 
 
 templ SimpleCheckboxInput(id string, label string) {
     <div class="m-1">
-        <input type="checkbox" id={ id } name={ id } value={ id } />
+        <input type="checkbox" id={ id } name={ id } />
         <label for={ id }>{ label }</label>
     </div>
+}
+
+templ RadioInput(id string, name string, label string) {
+  <div class="radio">
+    <input id={ id } name={ name } type="radio" />
+    <label  for={ id } class="radio-label">{ label }</label>
+  </div>
+}
+
+templ RadioField(id string, label string) {
+    <fieldset>
+        <legend>{ label }</legend>
+        @RadioInput(id+"y", id, "Yes")
+        @RadioInput(id+"n", id, "No")
+    </fieldset>
 }

@@ -1,6 +1,7 @@
 package views
 
 import "github.com/Francesco99975/shorehamex/internal/models"
+import "strings"
 
 templ Asq(site models.Site, admin bool, questions []string, multi []string) {
     @CoreHTML(site) {
@@ -17,19 +18,23 @@ templ Asq(site models.Site, admin bool, questions []string, multi []string) {
                     @StringInput("patient", "text", "Patient Name")
                 }
 
-                //Implement Radio True or False
+                for _, question := range questions {
+                    @RadioField(strings.ReplaceAll(question, " ", ""), question)
+                }
 
                 <h2 class="text-xl text-blue-900 mt-3">
-                Do you experience or fear any of the following?
+                    Do you experience or fear any of the following?
                 </h2>
 
-                @SimpleCheckboxInput("ex", "Multi")
+                for _, item := range multi {
+                    @SimpleCheckboxInput(strings.ReplaceAll(item, " ", ""), item)
+                }
 
                 <button
                 type="submit"
-                class="w-full mt-5 bg-green-900 text-white text-lg text-center font-bold"
+                class="w-full mt-5 bg-green-900 text-white text-lg text-center font-bold p-2 rounded-sm"
                 >
-                Submit
+                    Submit
                 </button>
             </form>
        

@@ -8,14 +8,14 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func Index() echo.HandlerFunc {
+func Patient() echo.HandlerFunc {
 
 	data := models.Site{
 		AppName:  "Shoreham Examination",
-		Title:    "Home",
+		Title:    "Patient",
 		Metatags: models.SEO{Description: "Examination tool", Keywords: "tools,exam"},
 		Year:     time.Now().Year(),
 	}
 
-	return GeneratePage(views.HomePage(data))
+	return GeneratePage(views.Patient(data))
 }

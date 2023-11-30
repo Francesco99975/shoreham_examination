@@ -8,14 +8,18 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func Index() echo.HandlerFunc {
+func Asq() echo.HandlerFunc {
 
 	data := models.Site{
 		AppName:  "Shoreham Examination",
-		Title:    "Home",
+		Title:    "ASQ Exam",
 		Metatags: models.SEO{Description: "Examination tool", Keywords: "tools,exam"},
 		Year:     time.Now().Year(),
 	}
 
-	return GeneratePage(views.HomePage(data))
+	admin := true
+	questions := []string{"Is it it?", "Is it not?"}
+	multiq := []string{"This", "That"}
+
+	return GeneratePage(views.Asq(data, admin, questions, multiq))
 }

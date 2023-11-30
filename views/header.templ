@@ -10,13 +10,13 @@ templ Header(admin bool) {
         </h1>
 
         if admin {
-             <nav hx-boost class="m-2">
+             <nav hx-boost="true" class="m-2">
                 <input id="menu-toggle" type="checkbox" />
                     <label class="menu-button-container" for="menu-toggle">
                         <div class="menu-button"></div>
                     </label>
                     <ul class="menu">
-                        <li><a href="/gen">Auth Code Generator</a></li>
+                        <li><a href="/admin">Auth Code Generator</a></li>
                         <li><a href="/asq">Anxiety Symptom Questionnaire</a></li>
                         <li><a href="/bai">Beck Anxiety Inventory</a></li>
                         <li><a href="/bdi">Beck Depression Inventory</a></li>

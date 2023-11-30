@@ -35,7 +35,13 @@ func createRouter(cfg *boot.Config) *echo.Echo {
 
 	e.GET("/", controllers.Index())
 
-	// e.GET("/about", controllers.About)
+	e.GET("/staff", controllers.Staff())
+
+	e.GET("/patient", controllers.Patient())
+
+	e.GET("/admin", controllers.Admin())
+
+	e.GET("/asq", controllers.Asq())
 
 	return e
 }

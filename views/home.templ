@@ -9,7 +9,7 @@ templ HomePage(site models.Site) {
 		@Header(false)
 		<main class="flex flex-col w-full justify-center items-center h-[60vh]">
 			<h1 class="text-2xl text-green-700 font-bold my-2">Select</h1>
-			<section class="flex flex-col w-2/3 md:w-1/4 p-2 justify-center items-center bg-gray-300 shadow-lg rounded-sm">
+			<section hx-boost="true" class="flex flex-col w-2/3 md:w-1/4 p-2 justify-center items-center bg-gray-300 shadow-lg rounded-sm">
 				<a
 				href="/staff"
 				class="rounded w-full m-3 p-2 text-white bg-green-700 text-center md:text-lg"
