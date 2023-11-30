@@ -1,8 +1,13 @@
 package main
 
 import (
-	"github.com/Francesco99975/shorehamex/internal/controllers"
+	"os"
 
+	"github.com/Francesco99975/shorehamex/internal/controllers"
+	"github.com/Francesco99975/shorehamex/internal/middlewares"
+
+	"github.com/gorilla/sessions"
+	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
@@ -18,8 +23,11 @@ func (r *Reloader) Reload(data string) {
 func createRouter() *echo.Echo {
 
 	e := echo.New()
+
 	e.Use(middleware.Logger())
-	// e.Static("/assets", "")
+	e.Use(session.Middleware(sessions.NewCookieStore([]byte(os.Getenv("SESSION_SECRET")))))
+
+	e.Static("/assets", "./static")
 
 	e.GET("/", controllers.Index())
 
@@ -27,9 +35,15 @@ func createRouter() *echo.Echo {
 
 	e.GET("/patient", controllers.Patient())
 
-	e.GET("/admin", controllers.Admin())
+	adminGroup := e.Group("/admin", middlewares.AuthMiddleware())
 
-	e.GET("/asq", controllers.Asq())
+	adminGroup.GET("/", controllers.Admin())
+
+	adminGroup.GET("/asq", controllers.Asq())
+
+	e.POST("/login", controllers.Login())
+
+	e.POST("/logout", controllers.Logout())
 
 	return e
 }

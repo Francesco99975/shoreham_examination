@@ -1,10 +1,25 @@
 package models
 
+type Exam string
+
+const (
+	ASQ Exam = "asq"
+	BAI Exam = "bai"
+	BDI Exam = "bdi"
+	P3  Exam = "p3"
+)
+
 const ASQ_MAX_SCORE int16 = 38
 const BAI_MAX_SCORE int16 = 57
 const BDI_MAX_SCORE int16 = 30
 const P3_MAX_SCORE int16 = 85
 const P3_ADJUST int16 = 44 // To Be subtracted from p3 score
+
+type BasicExamResults struct {
+	Score       int32
+	Indications string
+	Examinator  Exam
+}
 
 const MMPI_TEST_ANSWERS string = "TTFTFFTFFFFFFTFTFFFTTTFFFTFFTFTFFTFTTTTFTFFFFTTTFTTTTFTTTFTFFTTFTTTFTTTFTFF" +
 	"TTFFFTTFFTFTTTFTTTFFFFTFFFFFFTFTTFTFFFFTFTTFTFFTFFFTTTTFFFFTFTFTFFFTFFFTFFT" +
@@ -26,6 +41,11 @@ type MMPICategoryResult struct {
 	Title              string
 	Scales             []ScaleResult
 	DerivedIndications []string
+}
+
+type MMPIResults struct {
+	Categories []MMPICategoryResult
+	Duration   int64
 }
 
 type MMPIScales []struct {

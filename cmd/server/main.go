@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/Francesco99975/shorehamex/cmd/boot"
+	"github.com/Francesco99975/shorehamex/internal/models"
 	"github.com/labstack/gommon/log"
 )
 
@@ -15,6 +16,8 @@ func main() {
 	}
 
 	port := os.Getenv("PORT")
+
+	models.Setup(os.Getenv("DSN"))
 
 	e := createRouter()
 

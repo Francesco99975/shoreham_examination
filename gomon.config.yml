@@ -24,7 +24,7 @@ proxy:
   enabled: true
   port: 4000
   downstream:
-    host: localhost:8080
+    host: localhost:8020
     timeout: 5
 ui:
   enabled: true
