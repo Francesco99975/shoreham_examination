@@ -82,7 +82,7 @@ func Header(admin bool) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a></li><li id=\"logout\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a></li><li id=\"logout\"><form hx-post=\"/logout\" hx-target=\"body\" hx-replace-url=\"true\"><button type=\"submit\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -91,7 +91,7 @@ func Header(admin bool) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</li></ul></nav>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></form></li></ul></nav>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

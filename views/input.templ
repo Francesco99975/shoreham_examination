@@ -6,7 +6,7 @@ templ StringInput(id string, typology string, label string) {
         <label for={ id } class="w-fit p-1 backdrop-blur-xl rounded !bg-opacity-20 text-green-900">
             { label }
         </label>
-        <input class="border-b-2 border-solid bg-transparent outline-none mb-3 border-green-500 text-green-500" id={ id } type={ typology }  />
+        <input class="border-b-2 border-solid bg-transparent outline-none mb-3 border-green-500 text-green-500" id={ id } name={ id } type={ typology }  />
     </div>
 }
 
@@ -18,9 +18,9 @@ templ SimpleCheckboxInput(id string, label string) {
     </div>
 }
 
-templ RadioInput(id string, name string, label string) {
+templ RadioInput(id string, name string, label string, value string) {
   <div class="radio">
-    <input id={ id } name={ name } type="radio" />
+    <input id={ id } name={ name } type="radio" value={ value }/>
     <label  for={ id } class="radio-label">{ label }</label>
   </div>
 }
@@ -28,7 +28,34 @@ templ RadioInput(id string, name string, label string) {
 templ RadioField(id string, label string) {
     <fieldset>
         <legend>{ label }</legend>
-        @RadioInput(id+"y", id, "Yes")
-        @RadioInput(id+"n", id, "No")
+        @RadioInput(id+"y", id, "Yes", "0")
+        @RadioInput(id+"n", id, "No", "1")
+    </fieldset>
+}
+
+templ SexRadioField(id string, label string) {
+    <fieldset>
+        <legend>{ label }</legend>
+        @RadioInput(id+"y", id, "Male", "male")
+        @RadioInput(id+"n", id, "Female", "female")
+    </fieldset>
+}
+
+
+templ BoolRadioField(id string, label string) {
+    <fieldset>
+        <legend>{ label }</legend>
+        @RadioInput(id+"y", id, "True", "0")
+        @RadioInput(id+"n", id, "False", "1")
+    </fieldset>
+}
+
+templ MultiRadioField(id string, label string) {
+    <fieldset>
+        <legend>{ label }</legend>
+        @RadioInput(id+"na", id, "Not At All", "0")
+        @RadioInput(id+"mb", id, "Mildly but it did't bother me much", "1")
+        @RadioInput(id+"md", id, "Moderately - it wasn't pleasant at times", "2")
+        @RadioInput(id+"sv", id, "Severely - it bothered me a lot", "3")
     </fieldset>
 }

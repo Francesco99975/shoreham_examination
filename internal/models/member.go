@@ -6,16 +6,16 @@ type Member struct {
 	Password string `json:"password"`
 }
 
-func CreateMember(memeber *Member) error {
+func CreateMember(member *Member) error {
 	statement := `INSERT INTO users(email, password) VALUES($1, $2);`
 
-	_, err := db.Exec(statement, memeber.Email, memeber.Password)
+	_, err := db.Exec(statement, member.Email, member.Password)
 
 	return err
 }
 
-func GetMemeber(email string) (Member, error) {
-	var memeber Member
+func GetMember(email string) (Member, error) {
+	var member Member
 
 	statement := `SELECT * FROM members WHERE email=$1;`
 
@@ -25,13 +25,15 @@ func GetMemeber(email string) (Member, error) {
 		return Member{}, err
 	}
 
+	defer rows.Close()
+
 	for rows.Next() {
-		err = rows.Scan(&memeber.ID, &memeber.Email, &memeber.Password)
+		err = rows.Scan(&member.ID, &member.Email, &member.Password)
 		if err != nil {
 			return Member{}, err
 		}
 
 	}
 
-	return memeber, nil
+	return member, nil
 }

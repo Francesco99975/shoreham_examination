@@ -3,13 +3,13 @@ package views
 import "github.com/Francesco99975/shorehamex/internal/models"
 import "strings"
 
-templ Asq(site models.Site, admin bool, questions []string, multi []string) {
+templ Bdi(site models.Site, admin bool, questions []string) {
     @CoreHTML(site) {
         <!DOCTYPE html>
         @Header(admin)
         <main class="flex w-full md:w-2/3 flex-col items-start justify-between p-2 mt-5 md:self-center">
             <h1 class="text-3xl text-blue-900 mb-5">
-                Anxiety Symptoms Questionnaire
+                Beck Depression Inventory
             </h1>
 
             
@@ -19,16 +19,13 @@ templ Asq(site models.Site, admin bool, questions []string, multi []string) {
                     @StringInput("patient", "text", "Patient Name")
                 }
 
-                for _, question := range questions {
-                    @RadioField(strings.ReplaceAll(question, " ", ""), question)
-                }
-
-                <h2 class="text-xl text-blue-900 mt-3">
-                    Do you experience or fear any of the following?
+                <h2 className="text-xl text-blue-900 my-3">
+                     Please indicate how much have you been bothered by a symptom
+                    during the past month
                 </h2>
 
-                for _, item := range multi {
-                    @SimpleCheckboxInput(strings.ReplaceAll(item, " ", ""), item)
+                for _, question := range questions {
+                    @MultiRadioField(strings.ReplaceAll(question, " ", ""), question)
                 }
 
                 <button

@@ -29,15 +29,15 @@ func createRouter() *echo.Echo {
 
 	e.Static("/assets", "./static")
 
-	e.GET("/", controllers.Index())
+	e.GET("/", controllers.Index(), middlewares.ReverseAuthMiddleware())
 
-	e.GET("/staff", controllers.Staff())
+	e.GET("/staff", controllers.Staff(), middlewares.ReverseAuthMiddleware())
 
 	e.GET("/patient", controllers.Patient())
 
 	adminGroup := e.Group("/admin", middlewares.AuthMiddleware())
 
-	adminGroup.GET("/", controllers.Admin())
+	adminGroup.GET("", controllers.Admin())
 
 	adminGroup.GET("/asq", controllers.Asq())
 

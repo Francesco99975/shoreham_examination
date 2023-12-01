@@ -13,7 +13,7 @@ import "bytes"
 import "github.com/Francesco99975/shorehamex/internal/models"
 import "strings"
 
-func Asq(site models.Site, admin bool, questions []string, multi []string) templ.Component {
+func MMPI(site models.Site, admin bool, questions []string, multi []string) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -44,7 +44,7 @@ func Asq(site models.Site, admin bool, questions []string, multi []string) templ
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Var3 := `Anxiety Symptoms Questionnaire`
+			templ_7745c5c3_Var3 := `MMPI-2`
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var3)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -59,27 +59,12 @@ func Asq(site models.Site, admin bool, questions []string, multi []string) templ
 					return templ_7745c5c3_Err
 				}
 			}
+			templ_7745c5c3_Err = SexRadioField("sex", "What is your Sex").Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
 			for _, question := range questions {
-				templ_7745c5c3_Err = RadioField(strings.ReplaceAll(question, " ", ""), question).Render(ctx, templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h2 class=\"text-xl text-blue-900 mt-3\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Var4 := `Do you experience or fear any of the following?`
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var4)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h2>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			for _, item := range multi {
-				templ_7745c5c3_Err = SimpleCheckboxInput(strings.ReplaceAll(item, " ", ""), item).Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = BoolRadioField(strings.ReplaceAll(question, " ", ""), question).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -88,8 +73,8 @@ func Asq(site models.Site, admin bool, questions []string, multi []string) templ
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Var5 := `Submit`
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var5)
+			templ_7745c5c3_Var4 := `Submit`
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var4)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

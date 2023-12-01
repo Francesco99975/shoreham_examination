@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/Francesco99975/shorehamex/internal/models"
@@ -16,21 +17,22 @@ func Login() echo.HandlerFunc {
 		email := c.FormValue("email")
 		password := c.FormValue("password")
 
-		member, err := models.GetMemeber(email)
+		member, err := models.GetMember(email)
 
-		if err != nil {
+		if err != nil || member.Email == "" {
 			return echo.NewHTTPError(http.StatusNotFound, "Member not found")
 		}
 
 		err = bcrypt.CompareHashAndPassword([]byte(member.Password), []byte(password))
 		if err != nil {
+			fmt.Println(err)
 			return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized: wrong password")
 		}
 
 		sess, err := session.Get("session", c)
 
 		if err != nil {
-			return echo.NewHTTPError(http.StatusUnauthorized, "Not Authorized")
+			return echo.NewHTTPError(http.StatusInternalServerError, "Server error on session")
 		}
 		sess.Options = &sessions.Options{
 			Path:     "/",
@@ -41,10 +43,11 @@ func Login() echo.HandlerFunc {
 			// SameSite: http.SameSiteDefaultMode,
 		}
 
+		sess.Values["email"] = member.Email
 		sess.Values["authenticated"] = true
 		sess.Save(c.Request(), c.Response())
 
-		return c.JSON(http.StatusOK, "Authenticated")
+		return c.Redirect(http.StatusSeeOther, "/admin")
 	}
 }
 
@@ -56,8 +59,19 @@ func Logout() echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusUnauthorized, "Not Authorized")
 		}
 
-		sess.Values["authenticated"] = false
+		sess.Options = &sessions.Options{
+			Path:     "/",
+			MaxAge:   -1,
+			HttpOnly: true,
+			// Secure: true, https
+			// Domain: "",
+			// SameSite: http.SameSiteDefaultMode,
+		}
 
-		return c.JSON(http.StatusOK, "Logged out")
+		sess.Values["email"] = ""
+		sess.Values["authenticated"] = false
+		sess.Save(c.Request(), c.Response())
+
+		return c.Redirect(http.StatusSeeOther, "/")
 	}
 }

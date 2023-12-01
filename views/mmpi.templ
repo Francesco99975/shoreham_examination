@@ -3,13 +3,13 @@ package views
 import "github.com/Francesco99975/shorehamex/internal/models"
 import "strings"
 
-templ Asq(site models.Site, admin bool, questions []string, multi []string) {
+templ MMPI(site models.Site, admin bool, questions []string, multi []string) {
     @CoreHTML(site) {
         <!DOCTYPE html>
         @Header(admin)
         <main class="flex w-full md:w-2/3 flex-col items-start justify-between p-2 mt-5 md:self-center">
             <h1 class="text-3xl text-blue-900 mb-5">
-                Anxiety Symptoms Questionnaire
+                MMPI-2
             </h1>
 
             
@@ -19,16 +19,10 @@ templ Asq(site models.Site, admin bool, questions []string, multi []string) {
                     @StringInput("patient", "text", "Patient Name")
                 }
 
+                 @SexRadioField("sex", "What is your Sex")
+
                 for _, question := range questions {
-                    @RadioField(strings.ReplaceAll(question, " ", ""), question)
-                }
-
-                <h2 class="text-xl text-blue-900 mt-3">
-                    Do you experience or fear any of the following?
-                </h2>
-
-                for _, item := range multi {
-                    @SimpleCheckboxInput(strings.ReplaceAll(item, " ", ""), item)
+                    @BoolRadioField(strings.ReplaceAll(question, " ", ""), question)
                 }
 
                 <button

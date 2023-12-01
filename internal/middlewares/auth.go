@@ -23,3 +23,20 @@ func AuthMiddleware() echo.MiddlewareFunc {
 		}
 	}
 }
+
+func ReverseAuthMiddleware() echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			sess, err := session.Get("session", c)
+			if err != nil {
+				return next(c)
+			}
+
+			if auth, ok := sess.Values["authenticated"].(bool); !ok || !auth {
+				return next(c)
+			} else {
+				return c.Redirect(http.StatusSeeOther, "/admin")
+			}
+		}
+	}
+}
