@@ -41,6 +41,14 @@ func createRouter() *echo.Echo {
 
 	adminGroup.GET("/asq", controllers.Asq())
 
+	adminGroup.GET("/bai", controllers.Bai())
+
+	adminGroup.GET("/bdi", controllers.Bdi())
+
+	adminGroup.GET("/p3", controllers.P3())
+
+	adminGroup.GET("/mmpi", controllers.MMPI())
+
 	e.POST("/login", controllers.Login())
 
 	e.POST("/logout", controllers.Logout())

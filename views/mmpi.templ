@@ -3,7 +3,7 @@ package views
 import "github.com/Francesco99975/shorehamex/internal/models"
 import "strings"
 
-templ MMPI(site models.Site, admin bool, questions []string, multi []string) {
+templ MMPI(site models.Site, admin bool, questions []string) {
     @CoreHTML(site) {
         <!DOCTYPE html>
         @Header(admin)
