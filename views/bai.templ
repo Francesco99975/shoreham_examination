@@ -1,7 +1,7 @@
 package views
 
 import "github.com/Francesco99975/shorehamex/internal/models"
-import "strings"
+import "strconv"
 
 templ Bai(site models.Site, admin bool, questions []string) {
     @CoreHTML(site) {
@@ -24,8 +24,8 @@ templ Bai(site models.Site, admin bool, questions []string) {
                     during the past month
                 </h2>
 
-                for _, question := range questions {
-                    @MultiRadioField(strings.ReplaceAll(question, " ", ""), question)
+                for index, question := range questions {
+                    @MultiRadioField("A"+strconv.Itoa(index), question)
                 }
 
                 <button

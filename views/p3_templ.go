@@ -11,9 +11,9 @@ import "io"
 import "bytes"
 
 import "github.com/Francesco99975/shorehamex/internal/models"
-import "strings"
+import "strconv"
 
-func P3(site models.Site, admin bool, questions []string) templ.Component {
+func P3(site models.Site, admin bool, groups [][]string) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -63,17 +63,8 @@ func P3(site models.Site, admin bool, questions []string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Var4 := `Please indicate how much have you been bothered by a symptom`
+			templ_7745c5c3_Var4 := `Please indicate the most appropriate answer`
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var4)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" ")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Var5 := `during the past month`
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var5)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -81,8 +72,8 @@ func P3(site models.Site, admin bool, questions []string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			for _, question := range questions {
-				templ_7745c5c3_Err = MultiRadioField(strings.ReplaceAll(question, " ", ""), question).Render(ctx, templ_7745c5c3_Buffer)
+			for index, group := range groups {
+				templ_7745c5c3_Err = MMultiRadioField("A"+strconv.Itoa(index), strconv.Itoa(index+1)+".", group).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -91,8 +82,8 @@ func P3(site models.Site, admin bool, questions []string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Var6 := `Submit`
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var6)
+			templ_7745c5c3_Var5 := `Submit`
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var5)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

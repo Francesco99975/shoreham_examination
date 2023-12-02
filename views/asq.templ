@@ -1,7 +1,7 @@
 package views
 
 import "github.com/Francesco99975/shorehamex/internal/models"
-import "strings"
+import "strconv"
 
 templ Asq(site models.Site, admin bool, questions []string, multi []string) {
     @CoreHTML(site) {
@@ -19,16 +19,16 @@ templ Asq(site models.Site, admin bool, questions []string, multi []string) {
                     @StringInput("patient", "text", "Patient Name")
                 }
 
-                for _, question := range questions {
-                    @RadioField(strings.ReplaceAll(question, " ", ""), question)
+                for index, question := range questions {
+                    @RadioField("A"+strconv.Itoa(index), question)
                 }
 
                 <h2 class="text-xl text-blue-900 mt-3">
                     Do you experience or fear any of the following?
                 </h2>
 
-                for _, item := range multi {
-                    @SimpleCheckboxInput(strings.ReplaceAll(item, " ", ""), item)
+                for index, item := range multi {
+                    @SimpleCheckboxInput("MA"+strconv.Itoa(index), item)
                 }
 
                 <button

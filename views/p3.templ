@@ -1,9 +1,9 @@
 package views
 
 import "github.com/Francesco99975/shorehamex/internal/models"
-import "strings"
+import "strconv"
 
-templ P3(site models.Site, admin bool, questions []string) {
+templ P3(site models.Site, admin bool, groups [][]string) {
     @CoreHTML(site) {
         <!DOCTYPE html>
         @Header(admin)
@@ -20,12 +20,11 @@ templ P3(site models.Site, admin bool, questions []string) {
                 }
 
                 <h2 className="text-xl text-blue-900 my-3">
-                     Please indicate how much have you been bothered by a symptom
-                    during the past month
+                     Please indicate the most appropriate answer
                 </h2>
 
-                for _, question := range questions {
-                    @MultiRadioField(strings.ReplaceAll(question, " ", ""), question)
+                for index, group := range groups {
+                     @MMultiRadioField("A"+strconv.Itoa(index), strconv.Itoa(index + 1)+".", group)
                 }
 
                 <button

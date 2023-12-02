@@ -1,12 +1,20 @@
 package controllers
 
 import (
+	"encoding/json"
+	"fmt"
 	"time"
 
+	"github.com/Francesco99975/shorehamex/internal/helpers"
 	"github.com/Francesco99975/shorehamex/internal/models"
 	"github.com/Francesco99975/shorehamex/views"
 	"github.com/labstack/echo/v4"
 )
+
+type AsqContent struct {
+	Questions []string `json:"questions"`
+	Multiq    []string `json:"multiq"`
+}
 
 func Asq() echo.HandlerFunc {
 
@@ -17,9 +25,23 @@ func Asq() echo.HandlerFunc {
 		Year:     time.Now().Year(),
 	}
 
-	admin := true
-	questions := []string{"Is it it?", "Is it not?"}
-	multiq := []string{"This", "That"}
+	filename := "data/asq.json"
+	var cnt *AsqContent
 
-	return GeneratePage(views.Asq(data, admin, questions, multiq))
+	qsj, err := helpers.ParseFile(filename)
+	if err != nil {
+		fmt.Printf("error while reading json: %s", err.Error())
+	}
+
+	err = json.Unmarshal(qsj, &cnt)
+	if err != nil {
+		fmt.Printf("error while parsing json: %s", err.Error())
+	}
+
+	if len(cnt.Multiq) <= 0 || len(cnt.Questions) <= 0 {
+		return GeneratePage(views.ServerError(data, err))
+	}
+	admin := true
+
+	return GeneratePage(views.Asq(data, admin, cnt.Questions, cnt.Multiq))
 }

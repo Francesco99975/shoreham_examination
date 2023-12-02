@@ -11,7 +11,7 @@ import "io"
 import "bytes"
 
 import "github.com/Francesco99975/shorehamex/internal/models"
-import "strings"
+import "strconv"
 
 func Asq(site models.Site, admin bool, questions []string, multi []string) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
@@ -59,8 +59,8 @@ func Asq(site models.Site, admin bool, questions []string, multi []string) templ
 					return templ_7745c5c3_Err
 				}
 			}
-			for _, question := range questions {
-				templ_7745c5c3_Err = RadioField(strings.ReplaceAll(question, " ", ""), question).Render(ctx, templ_7745c5c3_Buffer)
+			for index, question := range questions {
+				templ_7745c5c3_Err = RadioField("A"+strconv.Itoa(index), question).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -78,8 +78,8 @@ func Asq(site models.Site, admin bool, questions []string, multi []string) templ
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			for _, item := range multi {
-				templ_7745c5c3_Err = SimpleCheckboxInput(strings.ReplaceAll(item, " ", ""), item).Render(ctx, templ_7745c5c3_Buffer)
+			for index, item := range multi {
+				templ_7745c5c3_Err = SimpleCheckboxInput("MA"+strconv.Itoa(index), item).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

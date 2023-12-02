@@ -11,7 +11,7 @@ import "io"
 import "bytes"
 
 import "github.com/Francesco99975/shorehamex/internal/models"
-import "strings"
+import "strconv"
 
 func MMPI(site models.Site, admin bool, questions []string) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
@@ -63,8 +63,8 @@ func MMPI(site models.Site, admin bool, questions []string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			for _, question := range questions {
-				templ_7745c5c3_Err = BoolRadioField(strings.ReplaceAll(question, " ", ""), question).Render(ctx, templ_7745c5c3_Buffer)
+			for index, question := range questions {
+				templ_7745c5c3_Err = BoolRadioField("A"+strconv.Itoa(index), question).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
