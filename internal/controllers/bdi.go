@@ -15,7 +15,7 @@ type BdiContent struct {
 	Questions [][]string `json:"questions"`
 }
 
-func Bdi() echo.HandlerFunc {
+func Bdi(admin bool) echo.HandlerFunc {
 
 	data := models.Site{
 		AppName:  "Shoreham Examination",
@@ -40,8 +40,6 @@ func Bdi() echo.HandlerFunc {
 	if len(cnt.Questions) <= 0 {
 		return GeneratePage(views.ServerError(data, err))
 	}
-
-	admin := true
 
 	return GeneratePage(views.Bdi(data, admin, cnt.Questions))
 }

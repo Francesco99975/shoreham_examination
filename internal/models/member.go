@@ -1,13 +1,12 @@
 package models
 
 type Member struct {
-	ID       uint64 `json:"id"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
 func CreateMember(member *Member) error {
-	statement := `INSERT INTO users(email, password) VALUES($1, $2);`
+	statement := `INSERT INTO members(email, password) VALUES($1, $2);`
 
 	_, err := db.Exec(statement, member.Email, member.Password)
 
@@ -28,7 +27,7 @@ func GetMember(email string) (Member, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		err = rows.Scan(&member.ID, &member.Email, &member.Password)
+		err = rows.Scan(&member.Email, &member.Password)
 		if err != nil {
 			return Member{}, err
 		}

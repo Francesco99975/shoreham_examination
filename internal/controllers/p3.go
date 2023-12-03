@@ -15,7 +15,7 @@ type P3Content struct {
 	Questions [][]string `json:"questions"`
 }
 
-func P3() echo.HandlerFunc {
+func P3(admin bool) echo.HandlerFunc {
 
 	data := models.Site{
 		AppName:  "Shoreham Examination",
@@ -40,8 +40,6 @@ func P3() echo.HandlerFunc {
 	if len(cnt.Questions) <= 0 {
 		return GeneratePage(views.ServerError(data, err))
 	}
-
-	admin := true
 
 	return GeneratePage(views.P3(data, admin, cnt.Questions))
 }

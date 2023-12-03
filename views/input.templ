@@ -30,8 +30,8 @@ templ RadioInput(id string, name string, label string, value string) {
 templ RadioField(id string, label string) {
     <fieldset>
         <legend>{ label }</legend>
-        @RadioInput(id+"y", id, "Yes", "0")
-        @RadioInput(id+"n", id, "No", "1")
+        @RadioInput(id+"y", id, "Yes", "1")
+        @RadioInput(id+"n", id, "No", "0")
     </fieldset>
 }
 
@@ -47,8 +47,8 @@ templ SexRadioField(id string, label string) {
 templ BoolRadioField(id string, label string) {
     <fieldset>
         <legend>{ label }</legend>
-        @RadioInput(id+"y", id, "True", "0")
-        @RadioInput(id+"n", id, "False", "1")
+        @RadioInput(id+"y", id, "True", "1")
+        @RadioInput(id+"n", id, "False", "0")
     </fieldset>
 }
 

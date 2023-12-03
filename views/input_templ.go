@@ -225,11 +225,11 @@ func RadioField(id string, label string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = RadioInput(id+"y", id, "Yes", "0").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = RadioInput(id+"y", id, "Yes", "1").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = RadioInput(id+"n", id, "No", "1").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = RadioInput(id+"n", id, "No", "0").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -315,11 +315,11 @@ func BoolRadioField(id string, label string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = RadioInput(id+"y", id, "True", "0").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = RadioInput(id+"y", id, "True", "1").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = RadioInput(id+"n", id, "False", "1").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = RadioInput(id+"n", id, "False", "0").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -16,7 +16,7 @@ type AsqContent struct {
 	Multiq    []string `json:"multiq"`
 }
 
-func Asq() echo.HandlerFunc {
+func Asq(admin bool) echo.HandlerFunc {
 
 	data := models.Site{
 		AppName:  "Shoreham Examination",
@@ -41,7 +41,6 @@ func Asq() echo.HandlerFunc {
 	if len(cnt.Multiq) <= 0 || len(cnt.Questions) <= 0 {
 		return GeneratePage(views.ServerError(data, err))
 	}
-	admin := true
 
 	return GeneratePage(views.Asq(data, admin, cnt.Questions, cnt.Multiq))
 }

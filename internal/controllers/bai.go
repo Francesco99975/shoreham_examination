@@ -15,7 +15,7 @@ type BaiContent struct {
 	Questions []string `json:"questions"`
 }
 
-func Bai() echo.HandlerFunc {
+func Bai(admin bool) echo.HandlerFunc {
 
 	data := models.Site{
 		AppName:  "Shoreham Examination",
@@ -40,8 +40,6 @@ func Bai() echo.HandlerFunc {
 	if len(cnt.Questions) <= 0 {
 		return GeneratePage(views.ServerError(data, err))
 	}
-
-	admin := true
 
 	return GeneratePage(views.Bai(data, admin, cnt.Questions))
 }

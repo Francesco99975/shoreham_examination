@@ -3,7 +3,7 @@ package views
 import "github.com/Francesco99975/shorehamex/internal/models"
 import "strconv"
 
-templ MMPI(site models.Site, admin bool, questions []string) {
+templ MMPI(site models.Site, admin bool, questions []string, page int) {
     @CoreHTML(site) {
         <!DOCTYPE html>
         @Header(admin)
@@ -13,26 +13,50 @@ templ MMPI(site models.Site, admin bool, questions []string) {
             </h1>
 
             
-            <form class="w-full flex flex-col items-start justify-center">
+            <form id="tfq" class="w-full" hx-post="/mmpi" hx-sync="this:abort">
 
-                if admin {
-                    @StringInput("patient", "text", "Patient Name")
-                }
+            <input type="hidden" id="page" name="page" value={strconv.Itoa(page)} />
 
-                 @SexRadioField("sex", "What is your Sex")
+                <div id="fq" class="w-full flex flex-col items-start justify-center">
+                    if admin && page == 1 {
+                        @StringInput("patient", "text", "Patient Name")
+                    }
 
-                for index, question := range questions {
-                    @BoolRadioField("A"+strconv.Itoa(index), question)
-                }
+                    if page == 1 {
+                        @SexRadioField("sex", "What is your Sex")
+                    }
+
+                    @MMPIFormPartial(questions, page)
+                </div>
 
                 <button
-                type="submit"
-                class="w-full mt-5 bg-green-900 text-white text-lg text-center font-bold p-2 rounded-sm"
+                    type="submit"
+                    class="w-full mt-5 bg-green-900 text-white text-lg text-center font-bold p-2 rounded-sm"
                 >
-                    Submit
-                </button>
+                    if page == 23 {
+                        Submit
+                    } else { 
+                        Continue to page { strconv.Itoa(page + 1) } / 23 
+                    }
+               </button>
             </form>
-       
+
       </main>
+      <script>
+		 const tfq = window.document.getElementById("tfq");
+         const body = window.document.querySelector("body");
+			if (tfq) {
+                body.addEventListener('click', function() {
+                    console.log(Object.fromEntries(new FormData(tfq)))
+                })
+			}
+		</script>
+    }
+}
+
+
+templ MMPIFormPartial(questions []string, page int) {
+    for index, question := range questions {
+        @BoolRadioField(strconv.Itoa(page)+"A"+strconv.Itoa(index), question)
     }
 }
