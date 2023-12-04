@@ -54,6 +54,8 @@ type MMPICategoryResult struct {
 }
 
 type MMPIResults struct {
+	Patient    string
+	Sex        string
 	Categories []MMPICategoryResult
 	Duration   int64
 }
@@ -133,7 +135,7 @@ type LocalRes struct {
 }
 
 func (local *LocalRes) Save() error {
-	statement := `INSERT INTO localres(patient, sex, page, answers, aid) VALUES($1, $2, $3, $4);`
+	statement := `INSERT INTO localres(patient, sex, page, answers, aid) VALUES($1, $2, $3, $4, $5);`
 
 	_, err := db.Exec(statement, local.Patient, local.Sex, local.Page, local.Answers, local.Aid)
 
@@ -144,8 +146,26 @@ func (local *LocalRes) Save() error {
 	return nil
 }
 
+func (local *LocalRes) Update(newPage int, newAnswers []string) error {
+	statement := `UPDATE localres SET page=$1,answers=$2 WHERE patient=$3;`
+
+	local.Page = uint16(newPage)
+	local.Answers = strings.Join(append(strings.Split(local.Answers, ""), newAnswers...), "")
+
+	_, err := db.Exec(statement, local.Page, local.Answers, local.Patient)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (local *LocalRes) Calculate() (MMPIResults, error) {
 	var results MMPIResults
+
+	results.Patient = local.Patient
+	results.Sex = local.Sex
 
 	filename := "data/scales.json"
 	var scalesData MMPIScales
@@ -171,17 +191,24 @@ func (local *LocalRes) Calculate() (MMPIResults, error) {
 	}
 
 	for _, category := range scalesData {
+
 		results.Categories = append(results.Categories, MMPICategoryResult{
-			Title: category.Title,
+			Title:              category.Title,
+			Scales:             make([]ScaleResult, 0),
+			DerivedIndications: make([]string, 0),
 		})
+
 		for _, scale := range category.Items {
-			grade(parsedAnswers, scale, local.Sex, &results)
+			err := grade(parsedAnswers, scale, local.Sex, &results)
+			if err != nil {
+				return MMPIResults{}, err
+			}
 		}
 
-		results.Categories[len(results.Categories)-1].deriveIndications(scalesData)
+		results.Categories[len(results.Categories)-1].deriveIndications(scalesData, &results)
 	}
 
-	return MMPIResults{}, nil
+	return results, nil
 }
 
 func Load(patient string) (LocalRes, error) {
@@ -208,7 +235,7 @@ func Load(patient string) (LocalRes, error) {
 }
 
 func grade(answers []bool, scale Scale, sex string, results *MMPIResults) error {
-	if scale.Gender != sex {
+	if scale.Gender != sex && len(scale.Gender) > 0 {
 		return nil
 	}
 
@@ -216,19 +243,20 @@ func grade(answers []bool, scale Scale, sex string, results *MMPIResults) error 
 
 	for _, asw := range scale.Answers {
 		for i := 0; i < len(asw); i += 2 {
-			question := asw[i].(int)
-			answer := asw[i+1].(bool)
+			if i+1 < len(asw) {
+				question := int(asw[i].(float64))
+				answer := asw[i+1].(bool)
 
-			if answers[question] != answer {
-				return nil
+				if answers[question-1] == answer {
+					if len(asw)%2 == 1 {
+						rawScore += int32(asw[len(asw)-1].(float64))
+					} else {
+						rawScore++
+					}
+				}
 			}
 		}
 
-		if len(asw)%2 == 1 {
-			rawScore += asw[len(asw)-1].(int32)
-		} else {
-			rawScore++
-		}
 	}
 
 	for _, sbs := range scale.SubScales {
@@ -254,10 +282,10 @@ func grade(answers []bool, scale Scale, sex string, results *MMPIResults) error 
 	var purpose string
 	if len(scale.Text) > 0 {
 		purpose = scale.Text
-	}
-
-	if len(scale.Comment) > 0 {
+	} else if len(scale.Comment) > 0 {
 		purpose = scale.Comment
+	} else {
+		purpose = "N/A"
 	}
 
 	results.Categories[len(results.Categories)-1].Scales = append(results.Categories[len(results.Categories)-1].Scales, ScaleResult{ScaleName: scale.Name, ScaleDescription: scale.Title, ScalePupose: purpose, Score: finalScore})
@@ -302,12 +330,12 @@ func calculateTScore(rawScore int32, scale Scale, sex string, results *MMPIResul
 		rawScore -= scale.ScoreOffsets.Female
 	}
 
-	return tScores[int(math.Min(float64(rawScore), float64(len(tScores)-1)))]
+	return tScores[int(math.Max(0, math.Min(float64(rawScore), float64(len(tScores)-1))))]
 
 }
 
-func (cr *MMPICategoryResult) deriveIndications(scalesData MMPIScales) {
-	var indres []string
+func (cr *MMPICategoryResult) deriveIndications(scalesData MMPIScales, currentResults *MMPIResults) {
+	var indres []string = make([]string, 0)
 
 	for _, sr := range cr.Scales {
 		var indications Indications
@@ -327,39 +355,26 @@ func (cr *MMPICategoryResult) deriveIndications(scalesData MMPIScales) {
 			continue
 		}
 
-		var F int32
-		var VRIN int32
-		var TRIN int32
-		for _, srf := range cr.Scales {
-			if srf.ScaleName == "F" {
-				F = srf.Score
-				break
+		var F int32 = 0
+		var VRIN int32 = 0
+		var TRIN int32 = 0
+		for _, ct := range currentResults.Categories {
+			for _, sv := range ct.Scales {
+				if sv.ScaleName == "F" {
+					F = sr.Score
+
+				}
+
+				if sv.ScaleName == "VRIN" {
+					VRIN = sr.Score
+
+				}
+
+				if sv.ScaleName == "TRIN" {
+					TRIN = sr.Score
+
+				}
 			}
-
-			F = 0
-
-		}
-
-		for _, srv := range cr.Scales {
-
-			if srv.ScaleName == "VRIN" {
-				VRIN = srv.Score
-				break
-			}
-
-			VRIN = 0
-
-		}
-
-		for _, srt := range cr.Scales {
-
-			if srt.ScaleName == "TRIN" {
-				TRIN = srt.Score
-				break
-			}
-
-			TRIN = 0
-
 		}
 
 		switch sr.ScaleName {
@@ -520,6 +535,10 @@ func (cr *MMPICategoryResult) deriveIndications(scalesData MMPIScales) {
 		}
 	}
 
-	cr.DerivedIndications = indres
+	if len(indres) > 0 {
+		cr.DerivedIndications = append(cr.DerivedIndications, indres...)
+	} else {
+		cr.DerivedIndications = append(cr.DerivedIndications, "No particular indications")
+	}
 
 }

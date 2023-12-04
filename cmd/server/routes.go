@@ -10,15 +10,7 @@ import (
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/labstack/gommon/log"
 )
-
-type Reloader struct {
-}
-
-func (r *Reloader) Reload(data string) {
-	log.Debugf("Reloading trigger: %s", data)
-}
 
 func createRouter() *echo.Echo {
 
@@ -48,6 +40,8 @@ func createRouter() *echo.Echo {
 	adminGroup.GET("/p3", controllers.P3(true))
 
 	adminGroup.GET("/mmpi", controllers.MMPI(true))
+
+	adminGroup.POST("/mmpi", controllers.MMPICalc())
 
 	e.POST("/login", controllers.Login())
 

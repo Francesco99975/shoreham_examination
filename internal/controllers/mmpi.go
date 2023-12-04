@@ -49,6 +49,7 @@ func MMPI(admin bool) echo.HandlerFunc {
 	}
 
 	return func(c echo.Context) error {
+
 		page, err := strconv.Atoi(c.QueryParam("page"))
 		if err != nil {
 			page = 1
@@ -84,7 +85,9 @@ func MMPI(admin bool) echo.HandlerFunc {
 
 			return c.Blob(200, "text/html; charset=utf-8", buf.Bytes())
 		} else {
-			err = views.MMPIFormPartial(paginatedQuestions, page).Render(context.Background(), buf)
+			patient := c.QueryParam("patient")
+
+			err = views.MMPIFormPartial(paginatedQuestions, page, patient).Render(context.Background(), buf)
 
 			if err != nil {
 				log.Warn("TODO: you need to implement this properly")
@@ -100,12 +103,14 @@ func MMPICalc() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		answersPerPage := 25
 		patient := c.FormValue("patient")
+
 		page, err := strconv.Atoi(c.FormValue("page"))
 		if err != nil {
 			return echo.NewHTTPError(http.StatusBadRequest, "Invalid data")
 		}
 
 		var answers []string
+
 		var limit int
 		if page != 23 {
 			limit = answersPerPage
@@ -113,22 +118,29 @@ func MMPICalc() echo.HandlerFunc {
 			limit = models.MMPI2_MAX_SCORE - (answersPerPage * 22)
 		}
 
-		for i := 0; i < limit; i++ {
-			answer, err := strconv.Atoi(c.FormValue(fmt.Sprintf("%dA%d", page, i)))
-			if err != nil {
-				return echo.NewHTTPError(http.StatusBadRequest, "Insifficient data")
-			}
+		startIndex := (page - 1) * limit
+		endIndex := startIndex + limit
 
-			if answer > 1 || answer < 0 {
-				return echo.NewHTTPError(http.StatusBadRequest, "Invalid data")
-			}
+		test := strings.Split(models.MMPI_TEST_ANSWERS, "")[startIndex:endIndex]
 
-			if answer == 0 {
-				answers = append(answers, "F")
-			} else {
-				answers = append(answers, "T")
-			}
-		}
+		answers = append(answers, test...)
+
+		// for i := 0; i < limit; i++ {
+		// 	answer, err := strconv.Atoi(c.FormValue(fmt.Sprintf("%dA%d", page, i)))
+		// 	if err != nil {
+		// 		return echo.NewHTTPError(http.StatusBadRequest, "Insifficient data")
+		// 	}
+
+		// 	if answer > 1 || answer < 0 {
+		// 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid data")
+		// 	}
+
+		// 	if answer == 0 {
+		// 		answers = append(answers, "F")
+		// 	} else {
+		// 		answers = append(answers, "T")
+		// 	}
+		// }
 
 		sess, err := session.Get("session", c)
 		if err != nil {
@@ -144,13 +156,13 @@ func MMPICalc() echo.HandlerFunc {
 		if page == 1 {
 
 			sex := c.FormValue("sex")
-			newlocal = models.LocalRes{Patient: patient, Sex: sex, Page: uint16(page), Answers: strings.Join(answers, ""), Aid: sess.Values["email"].(string)}
+			newlocal = models.LocalRes{Patient: patient, Sex: sex, Page: uint16(page + 1), Answers: strings.Join(answers, ""), Aid: sess.Values["email"].(string)}
 			err = newlocal.Save()
 			if err != nil {
-				return echo.NewHTTPError(http.StatusInternalServerError, "Could not save tempoary data")
+				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Could not save tempoary data: %s", err.Error()))
 			}
 
-			return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/mmpi?page=%d&patient=%s", page+1, patient))
+			return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/admin/mmpi?page=%d&patient=%s", page+1, patient))
 		}
 
 		newlocal, err = models.Load(patient)
@@ -158,12 +170,31 @@ func MMPICalc() echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusInternalServerError, "Could not load tempoary data")
 		}
 
-		newlocal.Answers = strings.Join(append(strings.Split(newlocal.Answers, ""), answers...), "")
-
-		if page == 23 {
-			return c.Redirect(http.StatusSeeOther, "/")
+		err = newlocal.Update(page+1, answers)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Could not update tempoary data: %s", err.Error()))
 		}
 
-		return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/mmpi?page=%d&patient=%s", page+1, patient))
+		if page == 23 {
+			results, err := newlocal.Calculate()
+			if err != nil {
+				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during evaluation: %s", err.Error()))
+			}
+
+			//create PDF with result attach to email and send with additional info
+
+			buf := bytes.NewBuffer(nil)
+
+			err = views.MMPIFinal(results).Render(context.Background(), buf)
+
+			if err != nil {
+				log.Warn("TODO: you need to implement this properly")
+				log.Errorf("rendering index: %s", err)
+			}
+
+			return c.Blob(200, "text/html; charset=utf-8", buf.Bytes())
+		}
+
+		return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/admin/mmpi?page=%d&patient=%s", page+1, patient))
 	}
 }
