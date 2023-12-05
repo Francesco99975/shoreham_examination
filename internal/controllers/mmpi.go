@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -34,7 +35,7 @@ func MMPI(admin bool) echo.HandlerFunc {
 	filename := "data/mmpi2.json"
 	var cnt *MMPIContent
 
-	qsj, err := helpers.ParseFile(filename)
+	qsj, err := os.ReadFile(filename)
 	if err != nil {
 		fmt.Printf("error while reading json: %s", err.Error())
 	}
@@ -181,8 +182,6 @@ func MMPICalc() echo.HandlerFunc {
 				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during evaluation: %s", err.Error()))
 			}
 
-			//create PDF with result attach to email and send with additional info
-
 			buf := bytes.NewBuffer(nil)
 
 			err = views.MMPIFinal(results).Render(context.Background(), buf)
@@ -192,7 +191,23 @@ func MMPICalc() echo.HandlerFunc {
 				log.Errorf("rendering index: %s", err)
 			}
 
-			return c.Blob(200, "text/html; charset=utf-8", buf.Bytes())
+			file, err := helpers.GeneratePDF(results)
+
+			if err != nil {
+				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during pdf generation: %s", err.Error()))
+			}
+
+			success, err := helpers.SendEmail("MMPI-2", results.Patient, file)
+
+			if err != nil {
+				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during email sending: %s", err.Error()))
+			}
+
+			if success {
+				return c.Blob(200, "text/html; charset=utf-8", buf.Bytes())
+			} else {
+				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during email sending(failed): %s", err.Error()))
+			}
 		}
 
 		return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/admin/mmpi?page=%d&patient=%s", page+1, patient))

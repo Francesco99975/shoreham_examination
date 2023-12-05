@@ -4,9 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"math"
+	"os"
 	"strings"
-
-	"github.com/Francesco99975/shorehamex/internal/helpers"
 )
 
 type Exam string
@@ -170,7 +169,7 @@ func (local *LocalRes) Calculate() (MMPIResults, error) {
 	filename := "data/scales.json"
 	var scalesData MMPIScales
 
-	scj, err := helpers.ParseFile(filename)
+	scj, err := os.ReadFile(filename)
 	if err != nil {
 		fmt.Printf("error while reading json: %s", err.Error())
 	}
@@ -339,20 +338,15 @@ func (cr *MMPICategoryResult) deriveIndications(scalesData MMPIScales, currentRe
 
 	for _, sr := range cr.Scales {
 		var indications Indications
-		var err error
+
 		for _, category := range scalesData {
 			for _, item := range category.Items {
 				if item.Name == sr.ScaleName {
 					indications = item.Indications
-					err = nil
 					break
 				}
-				err = fmt.Errorf("no indications")
-			}
-		}
 
-		if err != nil {
-			continue
+			}
 		}
 
 		var F int32 = 0

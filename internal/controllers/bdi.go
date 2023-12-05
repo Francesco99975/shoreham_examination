@@ -3,9 +3,9 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"time"
 
-	"github.com/Francesco99975/shorehamex/internal/helpers"
 	"github.com/Francesco99975/shorehamex/internal/models"
 	"github.com/Francesco99975/shorehamex/views"
 	"github.com/labstack/echo/v4"
@@ -27,7 +27,7 @@ func Bdi(admin bool) echo.HandlerFunc {
 	filename := "data/bdi.json"
 	var cnt *BdiContent
 
-	qsj, err := helpers.ParseFile(filename)
+	qsj, err := os.ReadFile(filename)
 	if err != nil {
 		fmt.Printf("error while reading json: %s", err.Error())
 	}

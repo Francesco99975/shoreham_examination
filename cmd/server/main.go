@@ -6,7 +6,6 @@ import (
 
 	"github.com/Francesco99975/shorehamex/cmd/boot"
 	"github.com/Francesco99975/shorehamex/internal/models"
-	"github.com/labstack/gommon/log"
 )
 
 func main() {
@@ -22,5 +21,5 @@ func main() {
 	e := createRouter()
 
 	fmt.Printf("Running ShoreHamEx on port %s", port)
-	log.Fatal(e.Start(":" + port))
+	e.Logger.Fatal(e.Start(":" + port))
 }
