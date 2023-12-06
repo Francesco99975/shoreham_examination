@@ -187,7 +187,7 @@ func MMPICalc() echo.HandlerFunc {
 				log.Errorf("rendering index: %s", err)
 			}
 
-			file, err := helpers.GeneratePDF(results)
+			file, err := helpers.GeneratePDFMMPI(results)
 
 			if err != nil {
 				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during pdf generation: %s", err.Error()))

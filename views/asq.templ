@@ -13,11 +13,13 @@ templ Asq(site models.Site, admin bool, questions []string, multi []string) {
             </h1>
 
             
-            <form class="w-full flex flex-col items-start justify-center">
+            <form class="w-full flex flex-col items-start justify-center" hx-post="/admin/asq">
 
                 if admin {
                     @StringInput("patient", "text", "Patient Name")
                 }
+
+                @SexRadioField("sex", "What is your Sex")
 
                 for index, question := range questions {
                     @RadioField("A"+strconv.Itoa(index), question)

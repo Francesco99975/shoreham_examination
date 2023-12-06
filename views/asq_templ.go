@@ -49,7 +49,7 @@ func Asq(site models.Site, admin bool, questions []string, multi []string) templ
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><form class=\"w-full flex flex-col items-start justify-center\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><form class=\"w-full flex flex-col items-start justify-center\" hx-post=\"/admin/asq\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -58,6 +58,10 @@ func Asq(site models.Site, admin bool, questions []string, multi []string) templ
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
+			}
+			templ_7745c5c3_Err = SexRadioField("sex", "What is your Sex").Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
 			}
 			for index, question := range questions {
 				templ_7745c5c3_Err = RadioField("A"+strconv.Itoa(index), question).Render(ctx, templ_7745c5c3_Buffer)

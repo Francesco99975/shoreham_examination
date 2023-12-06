@@ -3,9 +3,12 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"os"
+	"strconv"
 	"time"
 
+	"github.com/Francesco99975/shorehamex/internal/helpers"
 	"github.com/Francesco99975/shorehamex/internal/models"
 	"github.com/Francesco99975/shorehamex/views"
 	"github.com/labstack/echo/v4"
@@ -42,4 +45,44 @@ func Bai(admin bool) echo.HandlerFunc {
 	}
 
 	return GeneratePage(views.Bai(data, admin, cnt.Questions))
+}
+
+func BaiCalc() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		patient := c.FormValue("patient")
+		sex := c.FormValue("sex")
+
+		var score int
+
+		for i := 0; i < 21; i++ {
+
+			asw, err := strconv.Atoi(c.FormValue(fmt.Sprintf("A%d", i)))
+			if err != nil {
+				echo.NewHTTPError(http.StatusBadRequest, "Bad request")
+			}
+
+			score += asw
+
+		}
+
+		var indication string
+
+		file, err := helpers.GeneratePDFGeneric("Beck Anxiety Inventory", patient, sex, indication, score)
+
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during pdf generation: %s", err.Error()))
+		}
+
+		success, err := helpers.SendEmail("Beck Anxiety Inventory", patient, file)
+
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during email sending: %s", err.Error()))
+		}
+
+		if success {
+			return c.Redirect(http.StatusSeeOther, "/success")
+		} else {
+			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during email sending(failed): %s", err.Error()))
+		}
+	}
 }

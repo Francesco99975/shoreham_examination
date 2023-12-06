@@ -13,11 +13,13 @@ templ P3(site models.Site, admin bool, groups [][]string) {
             </h1>
 
             
-            <form class="w-full flex flex-col items-start justify-center">
+            <form class="w-full flex flex-col items-start justify-center" hx-post="/admin/p3"> 
 
                 if admin {
                     @StringInput("patient", "text", "Patient Name")
                 }
+
+                 @SexRadioField("sex", "What is your Sex")
 
                 <h2 className="text-xl text-blue-900 my-3">
                      Please indicate the most appropriate answer

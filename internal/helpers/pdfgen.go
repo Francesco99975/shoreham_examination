@@ -18,7 +18,56 @@ import (
 	"github.com/johnfercher/maroto/v2/pkg/props"
 )
 
-func GeneratePDF(results models.MMPIResults) (string, error) {
+func GeneratePDFGeneric(test string, patient string, sex string, indication string, score int) (string, error) {
+	date := time.Now().Format(time.RubyDate)
+	cfg := config.NewBuilder().
+		WithPageNumber("Page {current} of {total}", props.RightBottom).
+		WithMargins(10, 15, 10).
+		Build()
+
+	mrt := maroto.New(cfg)
+	m := maroto.NewMetricsDecorator(mrt)
+
+	err := m.RegisterHeader(getPageHeader(patient, sex, date))
+	if err != nil {
+		return "", err
+	}
+
+	m.AddRows(text.NewRow(25, fmt.Sprintf("%s results for %s", test, patient), props.Text{
+		Top:   3,
+		Style: fontstyle.Bold,
+		Align: align.Center,
+		Size:  20,
+	}))
+
+	m.AddRows(text.NewRow(75, fmt.Sprintf("Score: %s", strconv.Itoa(score)), props.Text{
+		Top:   5,
+		Style: fontstyle.Italic,
+		Align: align.Center,
+		Size:  16,
+	}))
+
+	m.AddRows(text.NewRow(75, fmt.Sprintf("Indication: %s", indication), props.Text{
+		Top:   5,
+		Style: fontstyle.Italic,
+		Align: align.Center,
+		Size:  16,
+	}))
+
+	document, err := m.Generate()
+	if err != nil {
+		return "", err
+	}
+
+	filename := strings.ReplaceAll(fmt.Sprintf("%s-%s.pdf", patient, date), " ", "_")
+
+	document.Save(filename)
+
+	return filename, err
+
+}
+
+func GeneratePDFMMPI(results models.MMPIResults) (string, error) {
 	date := time.Now().Format(time.RubyDate)
 	cfg := config.NewBuilder().
 		WithPageNumber("Page {current} of {total}", props.RightBottom).

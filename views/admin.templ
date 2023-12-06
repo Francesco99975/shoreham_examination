@@ -13,7 +13,7 @@ templ Admin(site models.Site) {
                       Generate Patient Access Code
                   </h1>
 
-                  <form class="w-full flex flex-col items-center justify-center">
+                  <form class="w-full flex flex-col items-center justify-center" hx-post="/admin/gen" hx-target="#message">
                       @StringInput("patient", "text", "Patient Name")
 
                       @SimpleCheckboxInput("asq", "Axienty Symtoms Questionnaire")
@@ -30,6 +30,9 @@ templ Admin(site models.Site) {
                           Generate Patient Access Code
                       </button>
                   </form>
+
+                  <p id="message" class="rounded border-green-800 italic text-white text-center w-3/4 p-2 my-2">
+                  </p>
               </section>
           </div>
       </main>
