@@ -29,6 +29,27 @@ templ MMPI(site models.Site, admin bool, questions []string, page int) {
             </form>
 
       </main>
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Capture the start time when the page loads
+            var startTime = new Date().getTime();
+
+            // Add a submit event listener to the form
+            document.getElementById("fq").addEventListener("submit", function() {
+                // Calculate the time spent on the page
+                var endTime = new Date().getTime();
+                var timeSpent = endTime - startTime;
+
+                // Attach the time spent as a hidden input to the form
+                var timeInput = document.createElement("input");
+                timeInput.type = "hidden";
+                timeInput.name = "duration";
+                timeInput.value = timeSpent;
+
+                this.appendChild(timeInput);
+            });
+        });
+      </script>
     }
 }
 

@@ -49,7 +49,7 @@ func Bai(site models.Site, admin bool, questions []string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><form class=\"w-full flex flex-col items-start justify-center\" hx-post=\"/admin/bai\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><form id=\"fq\" class=\"w-full flex flex-col items-start justify-center\" hx-post=\"/admin/bai\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

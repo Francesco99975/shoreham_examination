@@ -110,6 +110,11 @@ func MMPICalc() echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusBadRequest, "Invalid data")
 		}
 
+		duration, err := strconv.Atoi(c.FormValue("duration"))
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, "Invalid data")
+		}
+
 		var answers []string
 
 		var limit int
@@ -157,7 +162,7 @@ func MMPICalc() echo.HandlerFunc {
 		if page == 1 {
 
 			sex := c.FormValue("sex")
-			newlocal = models.LocalRes{Patient: patient, Sex: sex, Page: uint16(page + 1), Answers: strings.Join(answers, ""), Aid: sess.Values["email"].(string)}
+			newlocal = models.LocalRes{Patient: patient, Sex: sex, Page: uint16(page + 1), Answers: strings.Join(answers, ""), Duration: duration, Aid: sess.Values["email"].(string)}
 			err = newlocal.Save()
 			if err != nil {
 				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Could not save tempoary data: %s", err.Error()))
@@ -171,7 +176,7 @@ func MMPICalc() echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusInternalServerError, "Could not load tempoary data")
 		}
 
-		err = newlocal.Update(page+1, answers)
+		err = newlocal.Update(page+1, answers, duration)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Could not update tempoary data: %s", err.Error()))
 		}

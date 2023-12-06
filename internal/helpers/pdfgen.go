@@ -18,7 +18,7 @@ import (
 	"github.com/johnfercher/maroto/v2/pkg/props"
 )
 
-func GeneratePDFGeneric(test string, patient string, sex string, indication string, score int) (string, error) {
+func GeneratePDFGeneric(test string, patient string, sex string, duration int, indication string, score int) (string, error) {
 	date := time.Now().Format(time.RubyDate)
 	cfg := config.NewBuilder().
 		WithPageNumber("Page {current} of {total}", props.RightBottom).
@@ -28,7 +28,7 @@ func GeneratePDFGeneric(test string, patient string, sex string, indication stri
 	mrt := maroto.New(cfg)
 	m := maroto.NewMetricsDecorator(mrt)
 
-	err := m.RegisterHeader(getPageHeader(patient, sex, date))
+	err := m.RegisterHeader(getPageHeader(patient, sex, duration, date))
 	if err != nil {
 		return "", err
 	}
@@ -78,7 +78,7 @@ func GeneratePDFMMPI(results models.MMPIResults) (string, error) {
 	mrt := maroto.New(cfg)
 	m := maroto.NewMetricsDecorator(mrt)
 
-	err := m.RegisterHeader(getPageHeader(results.Patient, results.Sex, date))
+	err := m.RegisterHeader(getPageHeader(results.Patient, results.Sex, results.Duration, date))
 	if err != nil {
 		return "", err
 	}
@@ -154,8 +154,8 @@ func getTransactions(scaleResults []models.ScaleResult) []core.Row {
 	return rows
 }
 
-func getPageHeader(patient string, sex string, date string) core.Row {
-	return row.New(30).Add(
+func getPageHeader(patient string, sex string, duration int, date string) core.Row {
+	return row.New(50).Add(
 		col.New(10).Add(
 			text.New(fmt.Sprintf("Patient: %s", patient), props.Text{
 				Size:  12,
@@ -171,6 +171,12 @@ func getPageHeader(patient string, sex string, date string) core.Row {
 			}),
 			text.New(fmt.Sprintf("Date: %s", date), props.Text{
 				Top:   12,
+				Size:  12,
+				Align: align.Left,
+				Color: getBlueColor(),
+			}),
+			text.New(fmt.Sprintf("Taked in: %d Minutes", duration/60000), props.Text{
+				Top:   18,
 				Size:  12,
 				Align: align.Left,
 				Color: getBlueColor(),

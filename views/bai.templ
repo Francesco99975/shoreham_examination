@@ -13,7 +13,7 @@ templ Bai(site models.Site, admin bool, questions []string) {
             </h1>
 
             
-            <form class="w-full flex flex-col items-start justify-center" hx-post="/admin/bai">
+            <form id="fq" class="w-full flex flex-col items-start justify-center" hx-post="/admin/bai">
 
                 if admin {
                     @StringInput("patient", "text", "Patient Name")

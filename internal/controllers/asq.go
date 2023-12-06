@@ -53,6 +53,11 @@ func AsqCalc() echo.HandlerFunc {
 		patient := c.FormValue("patient")
 		sex := c.FormValue("sex")
 
+		duration, err := strconv.Atoi(c.FormValue("duration"))
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, "Invalid data")
+		}
+
 		var score int
 
 		for i := 0; i < models.ASQ_MAX_SCORE; i++ {
@@ -76,7 +81,7 @@ func AsqCalc() echo.HandlerFunc {
 
 		var indication string
 
-		file, err := helpers.GeneratePDFGeneric("Anxiety Symptoms Questionnaire", patient, sex, indication, score)
+		file, err := helpers.GeneratePDFGeneric("Anxiety Symptoms Questionnaire", patient, sex, duration, indication, score)
 
 		if err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during pdf generation: %s", err.Error()))

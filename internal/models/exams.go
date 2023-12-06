@@ -56,7 +56,7 @@ type MMPIResults struct {
 	Patient    string
 	Sex        string
 	Categories []MMPICategoryResult
-	Duration   int64
+	Duration   int
 }
 
 type Indications struct {
@@ -126,17 +126,18 @@ type MMPIScales []struct {
 }
 
 type LocalRes struct {
-	Patient string
-	Sex     string
-	Page    uint16
-	Answers string
-	Aid     string
+	Patient  string
+	Sex      string
+	Page     uint16
+	Answers  string
+	Duration int
+	Aid      string
 }
 
 func (local *LocalRes) Save() error {
-	statement := `INSERT INTO localres(patient, sex, page, answers, aid) VALUES($1, $2, $3, $4, $5);`
+	statement := `INSERT INTO localres(patient, sex, page, answers, duration, aid) VALUES($1, $2, $3, $4, $5, $6);`
 
-	_, err := db.Exec(statement, local.Patient, local.Sex, local.Page, local.Answers, local.Aid)
+	_, err := db.Exec(statement, local.Patient, local.Sex, local.Page, local.Answers, local.Duration, local.Aid)
 
 	if err != nil {
 		return err
@@ -145,13 +146,14 @@ func (local *LocalRes) Save() error {
 	return nil
 }
 
-func (local *LocalRes) Update(newPage int, newAnswers []string) error {
-	statement := `UPDATE localres SET page=$1,answers=$2 WHERE patient=$3;`
+func (local *LocalRes) Update(newPage int, newAnswers []string, duration int) error {
+	statement := `UPDATE localres SET page=$1,answers=$2,duration=$3 WHERE patient=$4;`
 
 	local.Page = uint16(newPage)
 	local.Answers = strings.Join(append(strings.Split(local.Answers, ""), newAnswers...), "")
+	local.Duration += duration
 
-	_, err := db.Exec(statement, local.Page, local.Answers, local.Patient)
+	_, err := db.Exec(statement, local.Page, local.Answers, local.Duration, local.Patient)
 
 	if err != nil {
 		return err
@@ -165,6 +167,7 @@ func (local *LocalRes) Calculate() (MMPIResults, error) {
 
 	results.Patient = local.Patient
 	results.Sex = local.Sex
+	results.Duration = local.Duration
 
 	filename := "data/scales.json"
 	var scalesData MMPIScales
@@ -223,7 +226,7 @@ func Load(patient string) (LocalRes, error) {
 
 	var local LocalRes
 	for rows.Next() {
-		err = rows.Scan(&local.Patient, &local.Sex, &local.Page, &local.Answers, &local.Aid)
+		err = rows.Scan(&local.Patient, &local.Sex, &local.Page, &local.Answers, &local.Duration, &local.Aid)
 		if err != nil {
 			return LocalRes{}, err
 		}

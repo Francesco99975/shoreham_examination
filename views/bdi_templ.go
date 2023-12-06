@@ -49,7 +49,7 @@ func Bdi(site models.Site, admin bool, groups [][]string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><form class=\"w-full flex flex-col items-start justify-center\" hx-post=\"/admin/bdi\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><form id=\"fq\" class=\"w-full flex flex-col items-start justify-center\" hx-post=\"/admin/bdi\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -91,7 +91,36 @@ func Bdi(site models.Site, admin bool, groups [][]string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></form></main>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></form></main><script>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Var6 := `
+        document.addEventListener("DOMContentLoaded", function() {
+            // Capture the start time when the page loads
+            var startTime = new Date().getTime();
+
+            // Add a submit event listener to the form
+            document.getElementById("fq").addEventListener("submit", function() {
+                // Calculate the time spent on the page
+                var endTime = new Date().getTime();
+                var timeSpent = endTime - startTime;
+
+                // Attach the time spent as a hidden input to the form
+                var timeInput = document.createElement("input");
+                timeInput.type = "hidden";
+                timeInput.name = "duration";
+                timeInput.value = timeSpent;
+
+                this.appendChild(timeInput);
+            });
+        });
+      `
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var6)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

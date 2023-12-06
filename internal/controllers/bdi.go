@@ -51,6 +51,10 @@ func BdiCalc() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		patient := c.FormValue("patient")
 		sex := c.FormValue("sex")
+		duration, err := strconv.Atoi(c.FormValue("duration"))
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, "Invalid data")
+		}
 
 		var score int
 
@@ -67,7 +71,7 @@ func BdiCalc() echo.HandlerFunc {
 
 		var indication string
 
-		file, err := helpers.GeneratePDFGeneric("Beck Depression Inventory", patient, sex, indication, score)
+		file, err := helpers.GeneratePDFGeneric("Beck Depression Inventory", patient, sex, duration, indication, score)
 
 		if err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during pdf generation: %s", err.Error()))
