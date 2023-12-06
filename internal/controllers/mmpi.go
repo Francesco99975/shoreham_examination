@@ -182,10 +182,6 @@ func MMPICalc() echo.HandlerFunc {
 				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during evaluation: %s", err.Error()))
 			}
 
-			buf := bytes.NewBuffer(nil)
-
-			err = views.MMPIFinal(results).Render(context.Background(), buf)
-
 			if err != nil {
 				log.Warn("TODO: you need to implement this properly")
 				log.Errorf("rendering index: %s", err)
@@ -204,7 +200,7 @@ func MMPICalc() echo.HandlerFunc {
 			}
 
 			if success {
-				return c.Blob(200, "text/html; charset=utf-8", buf.Bytes())
+				return c.Redirect(http.StatusSeeOther, "/success")
 			} else {
 				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during email sending(failed): %s", err.Error()))
 			}

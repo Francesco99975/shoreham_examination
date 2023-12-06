@@ -27,6 +27,8 @@ func createRouter() *echo.Echo {
 
 	e.GET("/patient", controllers.Patient())
 
+	e.GET("/success", controllers.Success())
+
 	adminGroup := e.Group("/admin", middlewares.AuthMiddleware())
 
 	adminGroup.GET("", controllers.Admin())
