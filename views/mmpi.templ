@@ -29,32 +29,13 @@ templ MMPI(site models.Site, admin bool, questions []string, page int) {
             </form>
 
       </main>
-      <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Capture the start time when the page loads
-            var startTime = new Date().getTime();
-
-            // Add a submit event listener to the form
-            document.getElementById("fq").addEventListener("submit", function() {
-                // Calculate the time spent on the page
-                var endTime = new Date().getTime();
-                var timeSpent = endTime - startTime;
-
-                // Attach the time spent as a hidden input to the form
-                var timeInput = document.createElement("input");
-                timeInput.type = "hidden";
-                timeInput.name = "duration";
-                timeInput.value = timeSpent;
-
-                this.appendChild(timeInput);
-            });
-        });
-      </script>
     }
 }
 
 
 templ MMPIFormPartial(questions []string, page int, patient string) {
+    <input type="hidden" id="duration" name="duration" value="0"/>
+
     <input type="hidden" id="page" name="page" value={strconv.Itoa(page)} />
     if page > 1 {
         <input type="hidden" id="patient" name="patient" value={patient} />
@@ -73,6 +54,25 @@ templ MMPIFormPartial(questions []string, page int, patient string) {
              Continue to page { strconv.Itoa(page + 1) } / 23 
         }
     </button>
+
+     <script>   
+            // Capture the start time when the page loads
+            var startTime = new Date().getTime();
+            console.log("hello")
+
+            // Add a submit event listener to the form
+            for (const el of document.querySelectorAll('input[type="radio"]')) {
+                el.addEventListener("change", function() {
+                    // Calculate the time spent on the page
+                    var endTime = new Date().getTime();
+                    var timeSpent = endTime - startTime;
+
+                    // Update duration on hidden element
+                    var timeInput = document.getElementById("duration")
+                    timeInput.value = timeSpent;
+                });
+            }   
+      </script>
 }
 
 

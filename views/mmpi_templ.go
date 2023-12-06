@@ -66,36 +66,7 @@ func MMPI(site models.Site, admin bool, questions []string, page int) templ.Comp
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</form></main><script>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Var4 := `
-        document.addEventListener("DOMContentLoaded", function() {
-            // Capture the start time when the page loads
-            var startTime = new Date().getTime();
-
-            // Add a submit event listener to the form
-            document.getElementById("fq").addEventListener("submit", function() {
-                // Calculate the time spent on the page
-                var endTime = new Date().getTime();
-                var timeSpent = endTime - startTime;
-
-                // Attach the time spent as a hidden input to the form
-                var timeInput = document.createElement("input");
-                timeInput.type = "hidden";
-                timeInput.name = "duration";
-                timeInput.value = timeSpent;
-
-                this.appendChild(timeInput);
-            });
-        });
-      `
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var4)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</form></main>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -123,12 +94,12 @@ func MMPIFormPartial(questions []string, page int, patient string) templ.Compone
 			defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var5 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var5 == nil {
-			templ_7745c5c3_Var5 = templ.NopComponent
+		templ_7745c5c3_Var4 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var4 == nil {
+			templ_7745c5c3_Var4 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<input type=\"hidden\" id=\"page\" name=\"page\" value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<input type=\"hidden\" id=\"duration\" name=\"duration\" value=\"0\"> <input type=\"hidden\" id=\"page\" name=\"page\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -165,19 +136,19 @@ func MMPIFormPartial(questions []string, page int, patient string) templ.Compone
 			return templ_7745c5c3_Err
 		}
 		if page == 23 {
-			templ_7745c5c3_Var6 := `Submit`
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var6)
+			templ_7745c5c3_Var5 := `Submit`
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var5)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Var7 := `Continue to page `
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var7)
+			templ_7745c5c3_Var6 := `Continue to page `
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var6)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var8 string = strconv.Itoa(page + 1)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
+			var templ_7745c5c3_Var7 string = strconv.Itoa(page + 1)
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -185,13 +156,39 @@ func MMPIFormPartial(questions []string, page int, patient string) templ.Compone
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Var9 := `/ 23 `
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var9)
+			templ_7745c5c3_Var8 := `/ 23 `
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var8)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button><script>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Var9 := `   
+            // Capture the start time when the page loads
+            var startTime = new Date().getTime();
+            console.log("hello")
+
+            // Add a submit event listener to the form
+            for (const el of document.querySelectorAll('input[type="radio"]')) {
+                el.addEventListener("change", function() {
+                    // Calculate the time spent on the page
+                    var endTime = new Date().getTime();
+                    var timeSpent = endTime - startTime;
+
+                    // Update duration on hidden element
+                    var timeInput = document.getElementById("duration")
+                    timeInput.value = timeSpent;
+                });
+            }   
+      `
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var9)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

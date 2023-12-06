@@ -14,7 +14,7 @@ templ Bai(site models.Site, admin bool, questions []string) {
 
             
             <form id="fq" class="w-full flex flex-col items-start justify-center" hx-post="/admin/bai">
-
+                 <input type="hidden" id="duration" name="duration" value="0"/>
                 if admin {
                     @StringInput("patient", "text", "Patient Name")
                 }
@@ -37,7 +37,25 @@ templ Bai(site models.Site, admin bool, questions []string) {
                     Submit
                 </button>
             </form>
-       
+
       </main>
+       <script>   
+            // Capture the start time when the page loads
+            var startTime = new Date().getTime();
+            console.log("hello")
+
+            // Add a submit event listener to the form
+            for (const el of document.querySelectorAll('input[type="radio"]')) {
+                el.addEventListener("change", function() {
+                    // Calculate the time spent on the page
+                    var endTime = new Date().getTime();
+                    var timeSpent = endTime - startTime;
+
+                    // Update duration on hidden element
+                    var timeInput = document.getElementById("duration")
+                    timeInput.value = timeSpent;
+                });
+            }   
+      </script>
     }
 }

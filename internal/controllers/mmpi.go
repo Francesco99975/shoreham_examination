@@ -107,12 +107,12 @@ func MMPICalc() echo.HandlerFunc {
 
 		page, err := strconv.Atoi(c.FormValue("page"))
 		if err != nil {
-			return echo.NewHTTPError(http.StatusBadRequest, "Invalid data")
+			return echo.NewHTTPError(http.StatusBadRequest, "Invalid data for page")
 		}
 
 		duration, err := strconv.Atoi(c.FormValue("duration"))
 		if err != nil {
-			return echo.NewHTTPError(http.StatusBadRequest, "Invalid data")
+			return echo.NewHTTPError(http.StatusBadRequest, "Invalid data for duration")
 		}
 
 		var answers []string

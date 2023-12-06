@@ -49,7 +49,7 @@ func Asq(site models.Site, admin bool, questions []string, multi []string) templ
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><form id=\"fq\" class=\"w-full flex flex-col items-start justify-center\" hx-post=\"/admin/asq\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><form id=\"fq\" class=\"w-full flex flex-col items-start justify-center\" hx-post=\"/admin/asq\"><input type=\"hidden\" id=\"duration\" name=\"duration\" value=\"0\"> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -101,26 +101,23 @@ func Asq(site models.Site, admin bool, questions []string, multi []string) templ
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Var6 := `
-        document.addEventListener("DOMContentLoaded", function() {
+			templ_7745c5c3_Var6 := `   
             // Capture the start time when the page loads
             var startTime = new Date().getTime();
+            console.log("hello")
 
             // Add a submit event listener to the form
-            document.getElementById("fq").addEventListener("submit", function() {
-                // Calculate the time spent on the page
-                var endTime = new Date().getTime();
-                var timeSpent = endTime - startTime;
+            for (const el of document.querySelectorAll('input[type="radio"]')) {
+                el.addEventListener("change", function() {
+                    // Calculate the time spent on the page
+                    var endTime = new Date().getTime();
+                    var timeSpent = endTime - startTime;
 
-                // Attach the time spent as a hidden input to the form
-                var timeInput = document.createElement("input");
-                timeInput.type = "hidden";
-                timeInput.name = "duration";
-                timeInput.value = timeSpent;
-
-                this.appendChild(timeInput);
-            });
-        });
+                    // Update duration on hidden element
+                    var timeInput = document.getElementById("duration")
+                    timeInput.value = timeSpent;
+                });
+            }   
       `
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var6)
 			if templ_7745c5c3_Err != nil {
