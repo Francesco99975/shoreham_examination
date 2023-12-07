@@ -11,6 +11,7 @@ import (
 	"github.com/Francesco99975/shorehamex/internal/helpers"
 	"github.com/Francesco99975/shorehamex/internal/models"
 	"github.com/Francesco99975/shorehamex/views"
+	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 )
 
@@ -47,13 +48,21 @@ func Bai(admin bool) echo.HandlerFunc {
 	return GeneratePage(views.Bai(data, admin, cnt.Questions))
 }
 
-func BaiCalc() echo.HandlerFunc {
+func BaiCalc(admin bool) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		patient := c.FormValue("patient")
 		sex := c.FormValue("sex")
 		duration, err := strconv.Atoi(c.FormValue("duration"))
 		if err != nil {
 			return echo.NewHTTPError(http.StatusBadRequest, "Invalid data")
+		}
+
+		if len(patient) <= 0 {
+			sess, err := session.Get("session", c)
+			if err != nil {
+				return echo.NewHTTPError(http.StatusBadRequest, "Invalid data")
+			}
+			patient = sess.Values["patient"].(string)
 		}
 
 		var score int
@@ -83,8 +92,10 @@ func BaiCalc() echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during email sending: %s", err.Error()))
 		}
 
-		if success {
+		if success && admin {
 			return c.Redirect(http.StatusSeeOther, "/success")
+		} else if success && !admin {
+			return c.Redirect(http.StatusSeeOther, "/examination")
 		} else {
 			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during email sending(failed): %s", err.Error()))
 		}

@@ -11,6 +11,7 @@ require (
 )
 
 require (
+	github.com/aidarkhanov/nanoid v1.0.8 // indirect
 	github.com/boombuler/barcode v1.0.1 // indirect
 	github.com/f-amaral/go-async v0.3.0 // indirect
 	github.com/gobuffalo/envy v1.10.2 // indirect
@@ -27,6 +28,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
 	github.com/rogpeppe/go-internal v1.9.0 // indirect
+	github.com/satori/go.uuid v1.2.0 // indirect
 	golang.org/x/image v0.11.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

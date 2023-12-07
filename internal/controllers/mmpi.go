@@ -100,8 +100,14 @@ func MMPI(admin bool) echo.HandlerFunc {
 	}
 }
 
-func MMPICalc() echo.HandlerFunc {
+func MMPICalc(admin bool) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		var baseRedirectPath string
+		if admin {
+			baseRedirectPath = "/admin"
+		} else {
+			baseRedirectPath = "/examination"
+		}
 		answersPerPage := 25
 		patient := c.FormValue("patient")
 
@@ -113,6 +119,15 @@ func MMPICalc() echo.HandlerFunc {
 		duration, err := strconv.Atoi(c.FormValue("duration"))
 		if err != nil {
 			return echo.NewHTTPError(http.StatusBadRequest, "Invalid data for duration")
+		}
+
+		sess, err := session.Get("session", c)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, "Invalid data")
+		}
+
+		if len(patient) <= 0 {
+			patient = sess.Values["patient"].(string)
 		}
 
 		var answers []string
@@ -148,11 +163,6 @@ func MMPICalc() echo.HandlerFunc {
 		// 	}
 		// }
 
-		sess, err := session.Get("session", c)
-		if err != nil {
-			return echo.NewHTTPError(http.StatusBadRequest, "Invalid data")
-		}
-
 		if auth, ok := sess.Values["authenticated"].(bool); !ok || !auth {
 			return echo.NewHTTPError(http.StatusBadRequest, "Invalid data")
 		}
@@ -168,7 +178,7 @@ func MMPICalc() echo.HandlerFunc {
 				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Could not save tempoary data: %s", err.Error()))
 			}
 
-			return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/admin/mmpi?page=%d&patient=%s", page+1, patient))
+			return c.Redirect(http.StatusSeeOther, fmt.Sprintf("%s/mmpi?page=%d&patient=%s", baseRedirectPath, page+1, patient))
 		}
 
 		newlocal, err = models.Load(patient)
@@ -204,13 +214,15 @@ func MMPICalc() echo.HandlerFunc {
 				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during email sending: %s", err.Error()))
 			}
 
-			if success {
+			if success && admin {
 				return c.Redirect(http.StatusSeeOther, "/success")
+			} else if success && !admin {
+				return c.Redirect(http.StatusSeeOther, "/examination")
 			} else {
 				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during email sending(failed): %s", err.Error()))
 			}
 		}
 
-		return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/admin/mmpi?page=%d&patient=%s", page+1, patient))
+		return c.Redirect(http.StatusSeeOther, fmt.Sprintf("%s/mmpi?page=%d&patient=%s", baseRedirectPath, page+1, patient))
 	}
 }

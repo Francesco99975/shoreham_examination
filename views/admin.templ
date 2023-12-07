@@ -13,7 +13,7 @@ templ Admin(site models.Site) {
                       Generate Patient Access Code
                   </h1>
 
-                  <form class="w-full flex flex-col items-center justify-center" hx-post="/admin/gen" hx-target="#message">
+                  <form class="w-full flex flex-col items-center justify-center" hx-post="/admin" hx-target="#message">
                       @StringInput("patient", "text", "Patient Name")
 
                       @SimpleCheckboxInput("asq", "Axienty Symtoms Questionnaire")
@@ -31,8 +31,8 @@ templ Admin(site models.Site) {
                       </button>
                   </form>
 
-                  <p id="message" class="rounded border-green-800 italic text-white text-center w-3/4 p-2 my-2">
-                  </p>
+                  <div id="message">
+                  </div>
               </section>
           </div>
       </main>
@@ -44,7 +44,7 @@ templ GenerationResults(id string, code string, patient string) {
      <section class="flex flex-col justify-center items-center w-3/4 md:w-1/3 py-2 bg-gray-200 text-green-500 shadow-lg rounded p-2">
        
             <h1 class="text-xl md:text-2xl text-center font-bold">
-              ID and Access Code for Patient: { patient }
+              Patient ID and Access Code for Patient: { patient }
             </h1>
         
           <span class="text-lg md:text-xl text-center tracking-wide mb-3">
@@ -68,13 +68,6 @@ templ GenerationResults(id string, code string, patient string) {
             type="button"
           >
             Copy Access Code
-          </button>
-
-          <button
-            class="bg-green-500 text-white rounded-sm font-bold mt-3"
-            type="button"
-          >
-            Generate a code for a new patient
           </button>
     </section>
 }

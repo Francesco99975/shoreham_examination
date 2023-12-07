@@ -102,12 +102,27 @@ func GeneratePDFMMPI(results models.MMPIResults) (string, error) {
 
 		m.AddRows(getTransactions(category.Scales)...)
 
-		m.AddRows(text.NewRow(75, fmt.Sprintf("Indications: %s", strings.Join(category.DerivedIndications, ",")), props.Text{
-			Top:   5,
-			Style: fontstyle.Italic,
-			Align: align.Left,
-			Size:  16,
-		}))
+		for i := 0; i < len(category.DerivedIndications); i += 3 {
+			var content string
+			endIndex := i + 3
+			if endIndex >= len(category.DerivedIndications) {
+				endIndex = len(category.DerivedIndications)
+			}
+
+			if i == 0 {
+				content = fmt.Sprintf("Indications: %s", strings.Join(category.DerivedIndications[i:endIndex], ","))
+			} else {
+				content = strings.Join(category.DerivedIndications[i:endIndex], ",")
+			}
+
+			m.AddRows(text.NewRow(20, content, props.Text{
+				Top:   5,
+				Style: fontstyle.Italic,
+				Align: align.Left,
+				Size:  16,
+			}))
+
+		}
 	}
 
 	document, err := m.Generate()

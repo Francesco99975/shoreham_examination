@@ -11,6 +11,47 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+func PatientLogin() echo.HandlerFunc {
+	return func(c echo.Context) error {
+
+		authid := c.FormValue("authid")
+		authcode := c.FormValue("authcode")
+
+		patient, err := models.GetPatient(authid)
+
+		if err != nil || patient.AuthId == "" {
+			return echo.NewHTTPError(http.StatusNotFound, "Patient not found")
+		}
+
+		err = bcrypt.CompareHashAndPassword([]byte(patient.Authcode), []byte(authcode))
+		if err != nil || len(patient.Exams) <= 0 {
+			fmt.Println(err)
+			return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
+		}
+
+		sess, err := session.Get("session", c)
+
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, "Server error on session")
+		}
+		sess.Options = &sessions.Options{
+			Path:     "/",
+			MaxAge:   86400 * 7,
+			HttpOnly: true,
+			// Secure: true, https
+			// Domain: "",
+			// SameSite: http.SameSiteDefaultMode,
+		}
+
+		sess.Values["authid"] = patient.AuthId
+		sess.Values["patient"] = patient.Name
+		sess.Values["examauth"] = true
+		sess.Save(c.Request(), c.Response())
+
+		return c.Redirect(http.StatusSeeOther, "/examination")
+	}
+}
+
 func Login() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
@@ -70,6 +111,9 @@ func Logout() echo.HandlerFunc {
 
 		sess.Values["email"] = ""
 		sess.Values["authenticated"] = false
+		sess.Values["authid"] = ""
+		sess.Values["patient"] = ""
+		sess.Values["examauth"] = false
 		sess.Save(c.Request(), c.Response())
 
 		return c.Redirect(http.StatusSeeOther, "/")
