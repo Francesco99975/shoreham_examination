@@ -78,7 +78,20 @@ func BaiCalc(admin bool) echo.HandlerFunc {
 
 		}
 
-		var indication string
+		rawPercentage := float64(score) / float64(models.ASQ_MAX_SCORE) * 100.0
+
+		var gravity string
+		if rawPercentage <= 21 {
+			gravity = "normal"
+		} else if rawPercentage >= 22 && rawPercentage <= 35 {
+			gravity = "moderate"
+		} else {
+			gravity = "severe"
+		}
+
+		percentage := fmt.Sprintf("%.2f", rawPercentage) + "%"
+
+		indication := models.CompileBasicIndication(patient, percentage, "Beck Anxiety Inventory", gravity)
 
 		file, err := helpers.GeneratePDFGeneric("Beck Anxiety Inventory", patient, sex, duration, indication, score)
 

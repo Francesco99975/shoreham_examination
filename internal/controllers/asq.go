@@ -88,7 +88,20 @@ func AsqCalc(admin bool) echo.HandlerFunc {
 			}
 		}
 
-		var indication string
+		rawPercentage := float64(score) / float64(models.ASQ_MAX_SCORE) * 100.0
+
+		var gravity string
+		if rawPercentage <= 30 {
+			gravity = "normal"
+		} else if rawPercentage >= 31 && rawPercentage <= 45 {
+			gravity = "moderate"
+		} else {
+			gravity = "severe"
+		}
+
+		percentage := fmt.Sprintf("%.2f", rawPercentage) + "%"
+
+		indication := models.CompileBasicIndication(patient, percentage, "Anxiety Symptoms Questionnaire", gravity)
 
 		file, err := helpers.GeneratePDFGeneric("Anxiety Symptoms Questionnaire", patient, sex, duration, indication, score)
 

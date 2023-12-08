@@ -78,7 +78,22 @@ func P3Calc(admin bool) echo.HandlerFunc {
 
 		}
 
-		var indication string
+		score = score - models.P3_MAX_SCORE
+
+		rawPercentage := float64(score) / float64(models.ASQ_MAX_SCORE) * 100.0
+
+		var gravity string
+		if rawPercentage <= 30 {
+			gravity = "normal"
+		} else if rawPercentage >= 31 && rawPercentage <= 50 {
+			gravity = "moderate"
+		} else {
+			gravity = "severe"
+		}
+
+		percentage := fmt.Sprintf("%.2f", rawPercentage) + "%"
+
+		indication := models.CompileBasicIndication(patient, percentage, "P3", gravity)
 
 		file, err := helpers.GeneratePDFGeneric("P3", patient, sex, duration, indication, score)
 

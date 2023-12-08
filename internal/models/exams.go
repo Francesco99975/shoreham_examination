@@ -30,6 +30,10 @@ type BasicExamResults struct {
 	Examinator  Exam
 }
 
+func CompileBasicIndication(patient string, percentage string, test string, gravity string) string {
+	return fmt.Sprintf("The patient, %s, scored %s on the %s. This result is in the %s range.", patient, percentage, test, gravity)
+}
+
 const MMPI_TEST_ANSWERS string = "TTFTFFTFFFFFFTFTFFFTTTFFFTFFTFTFFTFTTTTFTFFFFTTTFTTTTFTTTFTFFTTFTTTFTTTFTFF" +
 	"TTFFFTTFFTFTTTFTTTFFFFTFFFFFFTFTTFTFFFFTFTTFTFFTFFFTTTTFFFFTFTFTFFFTFFFTFFT" +
 	"FFFTTTFTTFTFTTFTTFFFTTFFTTFTTTTFFFTTFFFTFTFFTTFFTFFFFTFFTFTFFFFTTFTFTFFTFTF" +

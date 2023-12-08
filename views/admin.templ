@@ -49,9 +49,10 @@ templ GenerationResults(id string, code string, patient string) {
         
           <span class="text-lg md:text-xl text-center tracking-wide mb-3">
             Patient ID
-            <span class="italic underline text-green-700">{ id }</span>
+            <span id="authidc" class="italic underline text-green-700">{ id }</span>
           </span>
           <button
+           @click="copyID"
             class="border-2 border-green-500 font-bold"
             type="button"
           >
@@ -59,15 +60,41 @@ templ GenerationResults(id string, code string, patient string) {
           </button>
           <span class="text-lg md:text-xl text-center tracking-wide mb-3">
             Patient Access Code: 
-            <span class="italic underline text-green-700">
+            <span id="authcodec" class="italic underline text-green-700">
               { code }
             </span>
           </span>
           <button
+          @click="copyCode"
             class="border-2 border-green-500 font-bold"
             type="button"
           >
             Copy Access Code
           </button>
     </section>
+    <script>
+      function CopyID() {
+         // Get the text field
+        var copyID = document.getElementById("authidc");
+
+        // Select the text field
+        copyID.select();
+        copyID.setSelectionRange(0, 99999); // For mobile devices
+
+        // Copy the text inside the text field
+        navigator.clipboard.writeText(copyID.value);
+      }
+
+       function CopyCode() {
+         // Get the text field
+        var copyCode = document.getElementById("authcodec");
+
+        // Select the text field
+        copyCode.select();
+        copyCode.setSelectionRange(0, 99999); // For mobile devices
+
+        // Copy the text inside the text field
+        navigator.clipboard.writeText(copyCode.value);
+      }
+    </script>
 }
