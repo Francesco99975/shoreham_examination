@@ -13,7 +13,7 @@ templ Admin(site models.Site) {
                       Generate Patient Access Code
                   </h1>
 
-                  <form class="w-full flex flex-col items-center justify-center" hx-post="/admin" hx-target="#message">
+                  <form class="w-full flex flex-col items-center justify-center" hx-post="/admin" hx-target="this" hx-swap="outerHTML">
                       @StringInput("patient", "text", "Patient Name")
 
                       @SimpleCheckboxInput("asq", "Axienty Symtoms Questionnaire")
@@ -30,9 +30,6 @@ templ Admin(site models.Site) {
                           Generate Patient Access Code
                       </button>
                   </form>
-
-                  <div id="message">
-                  </div>
               </section>
           </div>
       </main>
@@ -41,9 +38,9 @@ templ Admin(site models.Site) {
 
 
 templ GenerationResults(id string, code string, patient string) {
-     <section class="flex flex-col justify-center items-center w-3/4 md:w-1/3 py-2 bg-gray-200 text-green-500 shadow-lg rounded p-2">
+     <section class="flex flex-col justify-center items-center w-full py-2 bg-gray-200 text-green-500 shadow-lg rounded p-2">
        
-            <h1 class="text-xl md:text-2xl text-center font-bold">
+            <h1 class="text-xl text-center font-bold">
               Patient ID and Access Code for Patient: { patient }
             </h1>
         
@@ -52,9 +49,10 @@ templ GenerationResults(id string, code string, patient string) {
             <span id="authidc" class="italic underline text-green-700">{ id }</span>
           </span>
           <button
-           @click="copyID"
-            class="border-2 border-green-500 font-bold"
+          
+            class="border-2 border-green-500 font-bold p-2"
             type="button"
+            id="copyid"
           >
             Copy Patient ID
           </button>
@@ -65,36 +63,32 @@ templ GenerationResults(id string, code string, patient string) {
             </span>
           </span>
           <button
-          @click="copyCode"
-            class="border-2 border-green-500 font-bold"
+            id="copycode"
+            class="border-2 border-green-500 font-bold p-2"
             type="button"
           >
             Copy Access Code
           </button>
+          <a class="bg-green-500 text-white rounded-sm font-bold mt-3 p-2" href="/admin" hx-boost>Generate a code for a new patient</a>
     </section>
     <script>
       function CopyID() {
          // Get the text field
         var copyID = document.getElementById("authidc");
 
-        // Select the text field
-        copyID.select();
-        copyID.setSelectionRange(0, 99999); // For mobile devices
-
         // Copy the text inside the text field
-        navigator.clipboard.writeText(copyID.value);
+        navigator.clipboard.writeText(copyID.innerHTML);
       }
 
        function CopyCode() {
          // Get the text field
         var copyCode = document.getElementById("authcodec");
 
-        // Select the text field
-        copyCode.select();
-        copyCode.setSelectionRange(0, 99999); // For mobile devices
-
         // Copy the text inside the text field
-        navigator.clipboard.writeText(copyCode.value);
+        navigator.clipboard.writeText(copyCode.innerHTML);
       }
+
+      document.getElementById("copyid").addEventListener('click', CopyID)
+      document.getElementById("copycode").addEventListener('click', CopyCode)
     </script>
 }

@@ -26,7 +26,7 @@ func PatientLogin() echo.HandlerFunc {
 		err = bcrypt.CompareHashAndPassword([]byte(patient.Authcode), []byte(authcode))
 		if err != nil || len(patient.Exams) <= 0 {
 			fmt.Println(err)
-			return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
+			return echo.NewHTTPError(http.StatusUnauthorized, fmt.Sprintf("Unauthorized: %s", err.Error()))
 		}
 
 		sess, err := session.Get("session", c)

@@ -48,7 +48,7 @@ func Admin(site models.Site) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><form class=\"w-full flex flex-col items-center justify-center\" hx-post=\"/admin\" hx-target=\"#message\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><form class=\"w-full flex flex-col items-center justify-center\" hx-post=\"/admin\" hx-target=\"this\" hx-swap=\"outerHTML\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -85,7 +85,7 @@ func Admin(site models.Site) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></form><div id=\"message\"></div></section></div></main>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></form></section></div></main>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -118,7 +118,7 @@ func GenerationResults(id string, code string, patient string) templ.Component {
 			templ_7745c5c3_Var5 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"flex flex-col justify-center items-center w-3/4 md:w-1/3 py-2 bg-gray-200 text-green-500 shadow-lg rounded p-2\"><h1 class=\"text-xl md:text-2xl text-center font-bold\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"flex flex-col justify-center items-center w-full py-2 bg-gray-200 text-green-500 shadow-lg rounded p-2\"><h1 class=\"text-xl text-center font-bold\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -150,7 +150,7 @@ func GenerationResults(id string, code string, patient string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></span> <button @click=\"copyID\" class=\"border-2 border-green-500 font-bold\" type=\"button\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></span> <button class=\"border-2 border-green-500 font-bold p-2\" type=\"button\" id=\"copyid\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -177,7 +177,7 @@ func GenerationResults(id string, code string, patient string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></span> <button @click=\"copyCode\" class=\"border-2 border-green-500 font-bold\" type=\"button\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></span> <button id=\"copycode\" class=\"border-2 border-green-500 font-bold p-2\" type=\"button\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -186,36 +186,40 @@ func GenerationResults(id string, code string, patient string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></section><script>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button> <a class=\"bg-green-500 text-white rounded-sm font-bold mt-3 p-2\" href=\"/admin\" hx-boost>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var14 := `
+		templ_7745c5c3_Var14 := `Generate a code for a new patient`
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var14)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a></section><script>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Var15 := `
       function CopyID() {
          // Get the text field
         var copyID = document.getElementById("authidc");
 
-        // Select the text field
-        copyID.select();
-        copyID.setSelectionRange(0, 99999); // For mobile devices
-
         // Copy the text inside the text field
-        navigator.clipboard.writeText(copyID.value);
+        navigator.clipboard.writeText(copyID.innerHTML);
       }
 
        function CopyCode() {
          // Get the text field
         var copyCode = document.getElementById("authcodec");
 
-        // Select the text field
-        copyCode.select();
-        copyCode.setSelectionRange(0, 99999); // For mobile devices
-
         // Copy the text inside the text field
-        navigator.clipboard.writeText(copyCode.value);
+        navigator.clipboard.writeText(copyCode.innerHTML);
       }
+
+      document.getElementById("copyid").addEventListener('click', CopyID)
+      document.getElementById("copycode").addEventListener('click', CopyCode)
     `
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var14)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var15)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

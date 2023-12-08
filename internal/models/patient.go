@@ -61,12 +61,19 @@ func (patient *Patient) NextExam() (string, error) {
 		return "cmp", nil
 	}
 
-	exam := strings.Split(patient.Exams, ",")[0]
+	queued := strings.Split(patient.Exams, ",")
 
-	if len(patient.Exams) == 1 {
+	var exam string
+
+	if len(queued) == 1 {
+		exam = patient.Exams
 		patient.Exams = ""
+	} else if len(queued) == 2 {
+		exam = queued[0]
+		patient.Exams = queued[1]
 	} else {
-		patient.Exams = strings.Join(strings.Split(patient.Exams, ",")[1:], ",")
+		exam = queued[0]
+		patient.Exams = strings.Join(queued[1:], ",")
 	}
 
 	_, err := db.Exec(statement, patient.Exams, patient.AuthId)

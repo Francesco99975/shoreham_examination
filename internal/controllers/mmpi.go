@@ -129,7 +129,7 @@ func MMPICalc(admin bool) echo.HandlerFunc {
 
 		sess, err := session.Get("session", c)
 		if err != nil {
-			return echo.NewHTTPError(http.StatusBadRequest, "Invalid data")
+			return echo.NewHTTPError(http.StatusBadRequest, "Invalid data for session")
 		}
 
 		if len(patient) <= 0 {
