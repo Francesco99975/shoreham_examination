@@ -14,13 +14,13 @@ templ Admin(site models.Site) {
                   </h1>
 
                   <form class="w-full flex flex-col items-center justify-center" hx-post="/admin" hx-target="this" hx-swap="outerHTML">
-                      @StringInput("patient", "text", "Patient Name")
+                      @StringInput("patient", "text", "Patient Name", true)
 
-                      @SimpleCheckboxInput("asq", "Axienty Symtoms Questionnaire")
-                      @SimpleCheckboxInput("bai", "Beck Anxiety Inventory")
-                      @SimpleCheckboxInput("bdi", "Beck Depression Inventory")
-                      @SimpleCheckboxInput("p3", "P3")
-                      @SimpleCheckboxInput("mmpi", "MMPI-2")
+                      @SimpleCheckboxInput("asq", "Axienty Symtoms Questionnaire", false)
+                      @SimpleCheckboxInput("bai", "Beck Anxiety Inventory", false)
+                      @SimpleCheckboxInput("bdi", "Beck Depression Inventory", false)
+                      @SimpleCheckboxInput("p3", "P3", false)
+                      @SimpleCheckboxInput("mmpi", "MMPI-2", false)
 
 
                       <button

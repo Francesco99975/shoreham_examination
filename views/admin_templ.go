@@ -52,27 +52,27 @@ func Admin(site models.Site) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = StringInput("patient", "text", "Patient Name").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = StringInput("patient", "text", "Patient Name", true).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = SimpleCheckboxInput("asq", "Axienty Symtoms Questionnaire").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = SimpleCheckboxInput("asq", "Axienty Symtoms Questionnaire", false).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = SimpleCheckboxInput("bai", "Beck Anxiety Inventory").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = SimpleCheckboxInput("bai", "Beck Anxiety Inventory", false).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = SimpleCheckboxInput("bdi", "Beck Depression Inventory").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = SimpleCheckboxInput("bdi", "Beck Depression Inventory", false).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = SimpleCheckboxInput("p3", "P3").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = SimpleCheckboxInput("p3", "P3", false).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = SimpleCheckboxInput("mmpi", "MMPI-2").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = SimpleCheckboxInput("mmpi", "MMPI-2", false).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

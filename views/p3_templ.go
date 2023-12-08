@@ -62,12 +62,12 @@ func P3(site models.Site, admin bool, groups [][]string, path string) templ.Comp
 				return templ_7745c5c3_Err
 			}
 			if admin {
-				templ_7745c5c3_Err = StringInput("patient", "text", "Patient Name").Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = StringInput("patient", "text", "Patient Name", true).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = SexRadioField("sex", "What is your Sex").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = SexRadioField("sex", "What is your Sex", true).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -85,7 +85,7 @@ func P3(site models.Site, admin bool, groups [][]string, path string) templ.Comp
 				return templ_7745c5c3_Err
 			}
 			for index, group := range groups {
-				templ_7745c5c3_Err = MMultiRadioField("A"+strconv.Itoa(index), strconv.Itoa(index+1)+".", group, 1).Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = MMultiRadioField("A"+strconv.Itoa(index), strconv.Itoa(index+1)+".", group, 1, true).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

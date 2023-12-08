@@ -12,7 +12,7 @@ import "bytes"
 
 import "strconv"
 
-func StringInput(id string, typology string, label string) templ.Component {
+func StringInput(id string, typology string, label string, required bool) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -66,7 +66,17 @@ func StringInput(id string, typology string, label string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if required {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" required")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -77,7 +87,7 @@ func StringInput(id string, typology string, label string) templ.Component {
 	})
 }
 
-func SimpleCheckboxInput(id string, label string) templ.Component {
+func SimpleCheckboxInput(id string, label string, required bool) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -106,7 +116,17 @@ func SimpleCheckboxInput(id string, label string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"> <label for=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if required {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" required")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("> <label for=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -134,7 +154,7 @@ func SimpleCheckboxInput(id string, label string) templ.Component {
 	})
 }
 
-func RadioInput(id string, name string, label string, value string) templ.Component {
+func RadioInput(id string, name string, label string, value string, required bool) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -171,7 +191,17 @@ func RadioInput(id string, name string, label string, value string) templ.Compon
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"> <label for=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if required {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" required")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("> <label for=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -199,7 +229,7 @@ func RadioInput(id string, name string, label string, value string) templ.Compon
 	})
 }
 
-func RadioField(id string, label string) templ.Component {
+func RadioField(id string, label string, required bool) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -225,11 +255,11 @@ func RadioField(id string, label string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = RadioInput(id+"y", id, "Yes", "1").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = RadioInput(id+"y", id, "Yes", "1", required).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = RadioInput(id+"n", id, "No", "0").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = RadioInput(id+"n", id, "No", "0", required).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -244,7 +274,7 @@ func RadioField(id string, label string) templ.Component {
 	})
 }
 
-func SexRadioField(id string, label string) templ.Component {
+func SexRadioField(id string, label string, required bool) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -270,11 +300,11 @@ func SexRadioField(id string, label string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = RadioInput(id+"y", id, "Male", "male").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = RadioInput(id+"y", id, "Male", "male", required).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = RadioInput(id+"n", id, "Female", "female").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = RadioInput(id+"n", id, "Female", "female", required).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -289,7 +319,7 @@ func SexRadioField(id string, label string) templ.Component {
 	})
 }
 
-func BoolRadioField(id string, label string) templ.Component {
+func BoolRadioField(id string, label string, required bool) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -315,11 +345,11 @@ func BoolRadioField(id string, label string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = RadioInput(id+"y", id, "True", "1").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = RadioInput(id+"y", id, "True", "1", required).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = RadioInput(id+"n", id, "False", "0").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = RadioInput(id+"n", id, "False", "0", required).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -334,7 +364,7 @@ func BoolRadioField(id string, label string) templ.Component {
 	})
 }
 
-func MultiRadioField(id string, label string) templ.Component {
+func MultiRadioField(id string, label string, required bool) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -360,19 +390,19 @@ func MultiRadioField(id string, label string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = RadioInput(id+"na", id, "Not At All", "0").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = RadioInput(id+"na", id, "Not At All", "0", required).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = RadioInput(id+"mb", id, "Mildly but it did't bother me much", "1").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = RadioInput(id+"mb", id, "Mildly but it did't bother me much", "1", required).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = RadioInput(id+"md", id, "Moderately - it wasn't pleasant at times", "2").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = RadioInput(id+"md", id, "Moderately - it wasn't pleasant at times", "2", required).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = RadioInput(id+"sv", id, "Severely - it bothered me a lot", "3").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = RadioInput(id+"sv", id, "Severely - it bothered me a lot", "3", required).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -387,7 +417,7 @@ func MultiRadioField(id string, label string) templ.Component {
 	})
 }
 
-func MMultiRadioField(id string, label string, options []string, adjust int) templ.Component {
+func MMultiRadioField(id string, label string, options []string, adjust int, required bool) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -414,7 +444,7 @@ func MMultiRadioField(id string, label string, options []string, adjust int) tem
 			return templ_7745c5c3_Err
 		}
 		for index, option := range options {
-			templ_7745c5c3_Err = RadioInput(id+strconv.Itoa(index), id, option, strconv.Itoa(index+adjust)).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = RadioInput(id+strconv.Itoa(index), id, option, strconv.Itoa(index+adjust), required).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

@@ -59,13 +59,13 @@ func MMPI(site models.Site, admin bool, questions []string, page int, path strin
 				return templ_7745c5c3_Err
 			}
 			if admin && page == 1 {
-				templ_7745c5c3_Err = StringInput("patient", "text", "Patient Name").Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = StringInput("patient", "text", "Patient Name", true).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
 			if page == 1 {
-				templ_7745c5c3_Err = SexRadioField("sex", "What is your Sex").Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = SexRadioField("sex", "What is your Sex", true).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -134,7 +134,7 @@ func MMPIFormPartial(questions []string, page int, patient string) templ.Compone
 			}
 		}
 		for index, question := range questions {
-			templ_7745c5c3_Err = BoolRadioField(strconv.Itoa(page)+"A"+strconv.Itoa(index), question).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = BoolRadioField(strconv.Itoa(page)+"A"+strconv.Itoa(index), question, false).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

@@ -19,11 +19,11 @@ templ MMPI(site models.Site, admin bool, questions []string, page int, path stri
 
                 
                 if admin && page == 1 {
-                    @StringInput("patient", "text", "Patient Name")
+                    @StringInput("patient", "text", "Patient Name", true)
                 }
 
                 if page == 1 {
-                    @SexRadioField("sex", "What is your Sex")
+                    @SexRadioField("sex", "What is your Sex", true)
                 }
 
                 @MMPIFormPartial(questions, page, "")
@@ -43,7 +43,7 @@ templ MMPIFormPartial(questions []string, page int, patient string) {
         <input type="hidden" id="patient" name="patient" value={patient} />
     }
     for index, question := range questions {
-        @BoolRadioField(strconv.Itoa(page)+"A"+strconv.Itoa(index), question)
+        @BoolRadioField(strconv.Itoa(page)+"A"+strconv.Itoa(index), question, false)
     }
 
     <button

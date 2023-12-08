@@ -62,12 +62,12 @@ func Bai(site models.Site, admin bool, questions []string, path string) templ.Co
 				return templ_7745c5c3_Err
 			}
 			if admin {
-				templ_7745c5c3_Err = StringInput("patient", "text", "Patient Name").Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = StringInput("patient", "text", "Patient Name", true).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = SexRadioField("sex", "What is your Sex").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = SexRadioField("sex", "What is your Sex", true).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -94,7 +94,7 @@ func Bai(site models.Site, admin bool, questions []string, path string) templ.Co
 				return templ_7745c5c3_Err
 			}
 			for index, question := range questions {
-				templ_7745c5c3_Err = MultiRadioField("A"+strconv.Itoa(index), question).Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = MultiRadioField("A"+strconv.Itoa(index), question, true).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

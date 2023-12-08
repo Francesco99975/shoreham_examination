@@ -44,11 +44,11 @@ func Staff(site models.Site) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = StringInput("email", "email", "Email").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = StringInput("email", "email", "Email", true).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = StringInput("password", "password", "Password").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = StringInput("password", "password", "Password", true).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -133,11 +133,11 @@ func Patient(site models.Site) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = StringInput("authid", "text", "Authentication ID").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = StringInput("authid", "text", "Authentication ID", true).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = StringInput("authcode", "password", "Authentication Code").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = StringInput("authcode", "password", "Authentication Code", true).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

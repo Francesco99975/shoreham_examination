@@ -17,17 +17,17 @@ templ Bdi(site models.Site, admin bool, groups [][]string, path string) {
                 hx-replace-url="true">
                 <input type="hidden" id="duration" name="duration" value="0"/>
                 if admin {
-                    @StringInput("patient", "text", "Patient Name")
+                    @StringInput("patient", "text", "Patient Name", true)
                 }
 
-                 @SexRadioField("sex", "What is your Sex")
+                 @SexRadioField("sex", "What is your Sex", true)
 
                 <h2 className="text-xl text-blue-900 my-3">
                      Please choose the most appropriate answer
                 </h2>
 
                 for index, group := range groups {
-                    @MMultiRadioField("A"+strconv.Itoa(index), strconv.Itoa(index + 1)+".", group, 0)
+                    @MMultiRadioField("A"+strconv.Itoa(index), strconv.Itoa(index + 1)+".", group, 0, true)
                 }
 
                 <button
