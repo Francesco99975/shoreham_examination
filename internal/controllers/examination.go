@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/Francesco99975/shorehamex/internal/models"
+	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 )
@@ -33,7 +34,20 @@ func Examination() echo.HandlerFunc {
 		}
 
 		if exam == "cmp" {
-			c.Redirect(http.StatusSeeOther, "/success")
+			sess.Options = &sessions.Options{
+				Path:     "/",
+				MaxAge:   -1,
+				HttpOnly: true,
+				// Secure: true, https
+				// Domain: "",
+				// SameSite: http.SameSiteDefaultMode,
+			}
+
+			sess.Values["authid"] = ""
+			sess.Values["patient"] = ""
+			sess.Values["examauth"] = false
+			sess.Save(c.Request(), c.Response())
+			return c.Redirect(http.StatusSeeOther, "/success")
 		}
 
 		return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/examination/%s", exam))

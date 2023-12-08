@@ -55,7 +55,7 @@ func GetPatient(authid string) (Patient, error) {
 }
 
 func (patient *Patient) NextExam() (string, error) {
-	statement := `UPDATE patient SET exams=$1 WHERE authid=$4;`
+	statement := `UPDATE patients SET exams=$1 WHERE authid=$2;`
 
 	if len(patient.Exams) <= 0 {
 		return "cmp", nil
@@ -167,7 +167,7 @@ func (temporal *PatientRes) PCalculate(patient string) (MMPIResults, error) {
 }
 
 func PLoad(id string) (PatientRes, error) {
-	statement := `SELECT * FROM temporalres WHERE id=$1;`
+	statement := `SELECT * FROM patientres WHERE id=$1;`
 
 	rows, err := db.Query(statement, id)
 

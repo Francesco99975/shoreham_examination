@@ -4,7 +4,7 @@ import "github.com/Francesco99975/shorehamex/internal/models"
 import "strconv"
 import "strings"
 
-templ MMPI(site models.Site, admin bool, questions []string, page int) {
+templ MMPI(site models.Site, admin bool, questions []string, page int, path string) {
     @CoreHTML(site) {
         @Header(admin)
         <main class="flex w-full md:w-2/3 flex-col items-start justify-between p-2 mt-5 md:self-center">
@@ -13,7 +13,7 @@ templ MMPI(site models.Site, admin bool, questions []string, page int) {
             </h1>
 
             
-            <form id="fq" class="w-full flex flex-col items-start justify-center" class="w-full" hx-post="/admin/mmpi">
+            <form id="fq" class="w-full flex flex-col items-start justify-center" class="w-full" hx-post={ path }>
 
                 
                 if admin && page == 1 {

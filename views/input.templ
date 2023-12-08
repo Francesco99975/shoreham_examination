@@ -62,11 +62,11 @@ templ MultiRadioField(id string, label string) {
     </fieldset>
 }
 
-templ MMultiRadioField(id string, label string, options []string) {
+templ MMultiRadioField(id string, label string, options []string, adjust int) {
     <fieldset>
         <legend>{ label }</legend>
         for index, option := range options {
-            @RadioInput(id+strconv.Itoa(index), id, option, strconv.Itoa(index))
+            @RadioInput(id+strconv.Itoa(index), id, option, strconv.Itoa(index+adjust))
         }
         
     </fieldset>

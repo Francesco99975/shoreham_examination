@@ -14,7 +14,7 @@ import "github.com/Francesco99975/shorehamex/internal/models"
 import "strconv"
 import "strings"
 
-func MMPI(site models.Site, admin bool, questions []string, page int) templ.Component {
+func MMPI(site models.Site, admin bool, questions []string, page int, path string) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -46,7 +46,15 @@ func MMPI(site models.Site, admin bool, questions []string, page int) templ.Comp
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><form id=\"fq\" class=\"w-full flex flex-col items-start justify-center\" class=\"w-full\" hx-post=\"/admin/mmpi\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><form id=\"fq\" class=\"w-full flex flex-col items-start justify-center\" class=\"w-full\" hx-post=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(path))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

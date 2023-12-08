@@ -129,7 +129,7 @@ func Patient(site models.Site) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><form class=\"flex flex-col justify-center items-center w-full md:w-1/2 m-3 p-2 bg-gray-100 text-green-500 rounded-md shadow-xl\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><p id=\"perrors\" class=\"hidden p-2 rounded-sm text-lg italic text-white bg-red-500\"></p><form id=\"pform\" hx-post=\"/patient\" hx-target=\"body\" hx-replace-url=\"true\" class=\"flex flex-col justify-center items-center w-full md:w-1/2 m-3 p-2 bg-gray-100 text-green-500 rounded-md shadow-xl\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -150,7 +150,27 @@ func Patient(site models.Site) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></form></main>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></form><script>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Var10 := `
+		        const form = window.document.getElementById("pform");
+                    if (form) {
+                        form.addEventListener("htmx:responseError", function (evt) {
+                        const errorBox = window.document.getElementById("perrors");
+                        if (errorBox) {
+                            errorBox.innerHTML = JSON.parse(evt.detail.xhr.responseText).message;
+                            errorBox.style.display = "block";
+                        }
+                        });
+                    }
+		`
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var10)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script></main>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

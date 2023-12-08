@@ -77,7 +77,13 @@ func MMPI(admin bool) echo.HandlerFunc {
 		buf := bytes.NewBuffer(nil)
 
 		if page == 1 {
-			err = views.MMPI(data, admin, paginatedQuestions, page).Render(context.Background(), buf)
+			var path string
+			if admin {
+				path = "/admin/mmpi"
+			} else {
+				path = "/examination/mmpi"
+			}
+			err = views.MMPI(data, admin, paginatedQuestions, page, path).Render(context.Background(), buf)
 
 			if err != nil {
 				log.Warn("TODO: you need to implement this properly")
@@ -208,7 +214,7 @@ func MMPICalc(admin bool) echo.HandlerFunc {
 				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during pdf generation: %s", err.Error()))
 			}
 
-			success, err := helpers.SendEmail("MMPI-2", results.Patient, file)
+			success, err := helpers.SendEmail("MMPI-2", results.Patient, "Attched a file with MMPI-2 results", file)
 
 			if err != nil {
 				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during email sending: %s", err.Error()))

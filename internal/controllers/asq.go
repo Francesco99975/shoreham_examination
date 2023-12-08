@@ -46,7 +46,14 @@ func Asq(admin bool) echo.HandlerFunc {
 		return GeneratePage(views.ServerError(data, err))
 	}
 
-	return GeneratePage(views.Asq(data, admin, cnt.Questions, cnt.Multiq))
+	var path string
+	if admin {
+		path = "/admin/asq"
+	} else {
+		path = "/examination/asq"
+	}
+
+	return GeneratePage(views.Asq(data, admin, cnt.Questions, cnt.Multiq, path))
 }
 
 func AsqCalc(admin bool) echo.HandlerFunc {
@@ -109,7 +116,7 @@ func AsqCalc(admin bool) echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during pdf generation: %s", err.Error()))
 		}
 
-		success, err := helpers.SendEmail("Anxiety Symptoms Questionnaire", patient, file)
+		success, err := helpers.SendEmail("Anxiety Symptoms Questionnaire", indication, patient, file)
 
 		if err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during email sending: %s", err.Error()))

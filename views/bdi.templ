@@ -3,7 +3,7 @@ package views
 import "github.com/Francesco99975/shorehamex/internal/models"
 import "strconv"
 
-templ Bdi(site models.Site, admin bool, groups [][]string) {
+templ Bdi(site models.Site, admin bool, groups [][]string, path string) {
     @CoreHTML(site) {
         <!DOCTYPE html>
         @Header(admin)
@@ -13,7 +13,7 @@ templ Bdi(site models.Site, admin bool, groups [][]string) {
             </h1>
 
             
-            <form id="fq" class="w-full flex flex-col items-start justify-center" hx-post="/admin/bdi">
+            <form id="fq" class="w-full flex flex-col items-start justify-center" hx-post={ path }>
                 <input type="hidden" id="duration" name="duration" value="0"/>
                 if admin {
                     @StringInput("patient", "text", "Patient Name")
@@ -26,7 +26,7 @@ templ Bdi(site models.Site, admin bool, groups [][]string) {
                 </h2>
 
                 for index, group := range groups {
-                    @MMultiRadioField("A"+strconv.Itoa(index), strconv.Itoa(index + 1)+".", group)
+                    @MMultiRadioField("A"+strconv.Itoa(index), strconv.Itoa(index + 1)+".", group, 0)
                 }
 
                 <button

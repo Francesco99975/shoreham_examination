@@ -111,9 +111,6 @@ func Logout() echo.HandlerFunc {
 
 		sess.Values["email"] = ""
 		sess.Values["authenticated"] = false
-		sess.Values["authid"] = ""
-		sess.Values["patient"] = ""
-		sess.Values["examauth"] = false
 		sess.Save(c.Request(), c.Response())
 
 		return c.Redirect(http.StatusSeeOther, "/")

@@ -387,7 +387,7 @@ func MultiRadioField(id string, label string) templ.Component {
 	})
 }
 
-func MMultiRadioField(id string, label string, options []string) templ.Component {
+func MMultiRadioField(id string, label string, options []string, adjust int) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -414,7 +414,7 @@ func MMultiRadioField(id string, label string, options []string) templ.Component
 			return templ_7745c5c3_Err
 		}
 		for index, option := range options {
-			templ_7745c5c3_Err = RadioInput(id+strconv.Itoa(index), id, option, strconv.Itoa(index)).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = RadioInput(id+strconv.Itoa(index), id, option, strconv.Itoa(index+adjust)).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

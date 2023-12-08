@@ -47,7 +47,12 @@ templ Patient(site models.Site) {
             <h1 class="text-center text-green-500 text-3xl font-bold my-5">
                 Authenticate
             </h1>
+            <p id="perrors" class="hidden p-2 rounded-sm text-lg italic text-white bg-red-500"></p>
             <form
+                id="pform"
+                hx-post="/patient"
+                hx-target="body"
+                hx-replace-url="true"
                 class="flex flex-col justify-center items-center w-full md:w-1/2 m-3 p-2 bg-gray-100 text-green-500 rounded-md shadow-xl"
             >
                 @StringInput("authid", "text", "Authentication ID")
@@ -57,6 +62,18 @@ templ Patient(site models.Site) {
                     Begin Examination
                 </button>
             </form>
+            <script>
+		        const form = window.document.getElementById("pform");
+                    if (form) {
+                        form.addEventListener("htmx:responseError", function (evt) {
+                        const errorBox = window.document.getElementById("perrors");
+                        if (errorBox) {
+                            errorBox.innerHTML = JSON.parse(evt.detail.xhr.responseText).message;
+                            errorBox.style.display = "block";
+                        }
+                        });
+                    }
+		</script>
         </main>
     }
 }

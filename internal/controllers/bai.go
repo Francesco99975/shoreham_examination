@@ -45,7 +45,14 @@ func Bai(admin bool) echo.HandlerFunc {
 		return GeneratePage(views.ServerError(data, err))
 	}
 
-	return GeneratePage(views.Bai(data, admin, cnt.Questions))
+	var path string
+	if admin {
+		path = "/admin/bai"
+	} else {
+		path = "/examination/bai"
+	}
+
+	return GeneratePage(views.Bai(data, admin, cnt.Questions, path))
 }
 
 func BaiCalc(admin bool) echo.HandlerFunc {
@@ -78,7 +85,7 @@ func BaiCalc(admin bool) echo.HandlerFunc {
 
 		}
 
-		rawPercentage := float64(score) / float64(models.ASQ_MAX_SCORE) * 100.0
+		rawPercentage := float64(score) / float64(models.BAI_MAX_SCORE) * 100.0
 
 		var gravity string
 		if rawPercentage <= 21 {
@@ -99,7 +106,7 @@ func BaiCalc(admin bool) echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during pdf generation: %s", err.Error()))
 		}
 
-		success, err := helpers.SendEmail("Beck Anxiety Inventory", patient, file)
+		success, err := helpers.SendEmail("Beck Anxiety Inventory", indication, patient, file)
 
 		if err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during email sending: %s", err.Error()))

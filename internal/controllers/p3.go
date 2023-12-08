@@ -45,7 +45,14 @@ func P3(admin bool) echo.HandlerFunc {
 		return GeneratePage(views.ServerError(data, err))
 	}
 
-	return GeneratePage(views.P3(data, admin, cnt.Questions))
+	var path string
+	if admin {
+		path = "/admin/p3"
+	} else {
+		path = "/examination/p3"
+	}
+
+	return GeneratePage(views.P3(data, admin, cnt.Questions, path))
 }
 
 func P3Calc(admin bool) echo.HandlerFunc {
@@ -78,9 +85,9 @@ func P3Calc(admin bool) echo.HandlerFunc {
 
 		}
 
-		score = score - models.P3_MAX_SCORE
+		score = score - models.P3_ADJUST
 
-		rawPercentage := float64(score) / float64(models.ASQ_MAX_SCORE) * 100.0
+		rawPercentage := float64(score) / float64(models.P3_MAX_SCORE) * 100.0
 
 		var gravity string
 		if rawPercentage <= 30 {
@@ -101,7 +108,7 @@ func P3Calc(admin bool) echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during pdf generation: %s", err.Error()))
 		}
 
-		success, err := helpers.SendEmail("P3", patient, file)
+		success, err := helpers.SendEmail("P3", indication, patient, file)
 
 		if err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during email sending: %s", err.Error()))
