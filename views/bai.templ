@@ -13,7 +13,8 @@ templ Bai(site models.Site, admin bool, questions []string, path string) {
             </h1>
 
             
-            <form id="fq" class="w-full flex flex-col items-start justify-center" hx-post={ path }>
+            <form id="fq" class="w-full flex flex-col items-start justify-center" hx-post={ path }  hx-target="body"
+                hx-replace-url="true">
                  <input type="hidden" id="duration" name="duration" value="0"/>
                 if admin {
                     @StringInput("patient", "text", "Patient Name")

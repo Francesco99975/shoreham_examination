@@ -57,7 +57,7 @@ func Asq(site models.Site, admin bool, questions []string, multi []string, path 
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><input type=\"hidden\" id=\"duration\" name=\"duration\" value=\"0\"> ")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"body\" hx-replace-url=\"true\"><input type=\"hidden\" id=\"duration\" name=\"duration\" value=\"0\"> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -126,6 +126,18 @@ func Asq(site models.Site, admin bool, questions []string, multi []string, path 
                     timeInput.value = timeSpent;
                 });
             }   
+
+            for (const el of document.querySelectorAll('input[type="checkbox"]')) {
+                el.addEventListener("change", function() {
+                    // Calculate the time spent on the page
+                    var endTime = new Date().getTime();
+                    var timeSpent = endTime - startTime;
+
+                    // Update duration on hidden element
+                    var timeInput = document.getElementById("duration")
+                    timeInput.value = timeSpent;
+                });
+            }
       `
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var6)
 			if templ_7745c5c3_Err != nil {

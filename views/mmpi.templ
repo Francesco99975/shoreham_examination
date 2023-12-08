@@ -13,7 +13,9 @@ templ MMPI(site models.Site, admin bool, questions []string, page int, path stri
             </h1>
 
             
-            <form id="fq" class="w-full flex flex-col items-start justify-center" class="w-full" hx-post={ path }>
+            <form id="fq" class="w-full flex flex-col items-start justify-center" class="w-full" hx-post={ path }  
+                hx-replace-url="true"
+            >
 
                 
                 if admin && page == 1 {

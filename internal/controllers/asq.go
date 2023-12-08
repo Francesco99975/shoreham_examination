@@ -87,7 +87,7 @@ func AsqCalc(admin bool) echo.HandlerFunc {
 					score++
 				}
 			} else {
-				asw := c.FormValue(fmt.Sprintf("MA%d", i))
+				asw := c.FormValue(fmt.Sprintf("MA%d", i-5))
 
 				if asw == "on" {
 					score++

@@ -169,38 +169,56 @@ func MMPICalc(admin bool) echo.HandlerFunc {
 		// 	}
 		// }
 
-		if auth, ok := sess.Values["authenticated"].(bool); !ok || !auth {
-			return echo.NewHTTPError(http.StatusBadRequest, "Invalid data")
-		}
-
 		var newlocal models.LocalRes
+		var newTemporal models.PatientRes
 
 		if page == 1 {
-
 			sex := c.FormValue("sex")
-			newlocal = models.LocalRes{Patient: patient, Sex: sex, Page: uint16(page + 1), Answers: strings.Join(answers, ""), Duration: duration, Aid: sess.Values["email"].(string)}
-			err = newlocal.Save()
-			if err != nil {
-				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Could not save tempoary data: %s", err.Error()))
+			if admin {
+				newlocal = models.LocalRes{Patient: patient, Sex: sex, Page: uint16(page + 1), Answers: strings.Join(answers, ""), Duration: duration, Aid: sess.Values["email"].(string)}
+				err = newlocal.Save()
+				if err != nil {
+					return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Could not save tempoary data: %s", err.Error()))
+				}
+			} else {
+				newTemporal = models.PatientRes{Sex: sex, Page: uint16(page + 1), Answers: strings.Join(answers, ""), Duration: duration, Pid: sess.Values["authid"].(string)}
 			}
 
 			return c.Redirect(http.StatusSeeOther, fmt.Sprintf("%s/mmpi?page=%d&patient=%s", baseRedirectPath, page+1, patient))
 		}
 
-		newlocal, err = models.Load(patient)
-		if err != nil {
-			return echo.NewHTTPError(http.StatusInternalServerError, "Could not load tempoary data")
-		}
-
-		err = newlocal.Update(page+1, answers, duration)
-		if err != nil {
-			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Could not update tempoary data: %s", err.Error()))
+		if admin {
+			newlocal, err = models.Load(patient)
+			if err != nil {
+				return echo.NewHTTPError(http.StatusInternalServerError, "Could not load tempoary data")
+			}
+			err = newlocal.Update(page+1, answers, duration)
+			if err != nil {
+				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Could not update tempoary data: %s", err.Error()))
+			}
+		} else {
+			newTemporal, err = models.PLoad(patient)
+			if err != nil {
+				return echo.NewHTTPError(http.StatusInternalServerError, "Could not load tempoary data")
+			}
+			err = newTemporal.PUpdate(page+1, answers, duration)
+			if err != nil {
+				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Could not update tempoary data: %s", err.Error()))
+			}
 		}
 
 		if page == 23 {
-			results, err := newlocal.Calculate()
-			if err != nil {
-				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during evaluation: %s", err.Error()))
+			var results models.MMPIResults
+			if admin {
+				results, err = newlocal.Calculate()
+				if err != nil {
+					return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during evaluation: %s", err.Error()))
+				}
+			} else {
+				results, err = newTemporal.PCalculate(patient)
+				if err != nil {
+					return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during evaluation: %s", err.Error()))
+				}
 			}
 
 			if err != nil {

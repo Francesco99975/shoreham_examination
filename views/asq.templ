@@ -13,7 +13,10 @@ templ Asq(site models.Site, admin bool, questions []string, multi []string, path
             </h1>
 
             
-            <form id="fq" class="w-full flex flex-col items-start justify-center" hx-post={ path }
+            <form id="fq" class="w-full flex flex-col items-start justify-center" 
+                hx-post={ path }
+                hx-target="body"
+                hx-replace-url="true"
             >
                 <input type="hidden" id="duration" name="duration" value="0"/>
 
@@ -61,6 +64,18 @@ templ Asq(site models.Site, admin bool, questions []string, multi []string, path
                     timeInput.value = timeSpent;
                 });
             }   
+
+            for (const el of document.querySelectorAll('input[type="checkbox"]')) {
+                el.addEventListener("change", function() {
+                    // Calculate the time spent on the page
+                    var endTime = new Date().getTime();
+                    var timeSpent = endTime - startTime;
+
+                    // Update duration on hidden element
+                    var timeInput = document.getElementById("duration")
+                    timeInput.value = timeSpent;
+                });
+            }
       </script>
     }
 }
