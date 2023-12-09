@@ -182,6 +182,10 @@ func MMPICalc(admin bool) echo.HandlerFunc {
 				}
 			} else {
 				newTemporal = models.PatientRes{Sex: sex, Page: uint16(page + 1), Answers: strings.Join(answers, ""), Duration: duration, Pid: sess.Values["authid"].(string)}
+				err = newTemporal.PSave()
+				if err != nil {
+					return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Could not save tempoary data for patient: %s", err.Error()))
+				}
 			}
 
 			return c.Redirect(http.StatusSeeOther, fmt.Sprintf("%s/mmpi?page=%d&patient=%s", baseRedirectPath, page+1, patient))
@@ -190,20 +194,20 @@ func MMPICalc(admin bool) echo.HandlerFunc {
 		if admin {
 			newlocal, err = models.Load(patient)
 			if err != nil {
-				return echo.NewHTTPError(http.StatusInternalServerError, "Could not load tempoary data")
+				return echo.NewHTTPError(http.StatusInternalServerError, "Could not load tempoary data for local patient")
 			}
 			err = newlocal.Update(page+1, answers, duration)
 			if err != nil {
-				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Could not update tempoary data: %s", err.Error()))
+				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Could not update tempoary data for local patient: %s", err.Error()))
 			}
 		} else {
-			newTemporal, err = models.PLoad(patient)
+			newTemporal, err = models.PLoad(sess.Values["authid"].(string))
 			if err != nil {
-				return echo.NewHTTPError(http.StatusInternalServerError, "Could not load tempoary data")
+				return echo.NewHTTPError(http.StatusInternalServerError, "Could not load tempoary data for patient")
 			}
 			err = newTemporal.PUpdate(page+1, answers, duration)
 			if err != nil {
-				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Could not update tempoary data: %s", err.Error()))
+				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Could not update tempoary data for patient: %s", err.Error()))
 			}
 		}
 
@@ -217,13 +221,8 @@ func MMPICalc(admin bool) echo.HandlerFunc {
 			} else {
 				results, err = newTemporal.PCalculate(patient)
 				if err != nil {
-					return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during evaluation: %s", err.Error()))
+					return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during evaluation for patient: %s", err.Error()))
 				}
-			}
-
-			if err != nil {
-				log.Warn("TODO: you need to implement this properly")
-				log.Errorf("rendering index: %s", err)
 			}
 
 			file, err := helpers.GeneratePDFMMPI(results)

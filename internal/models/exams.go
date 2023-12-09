@@ -18,9 +18,9 @@ const (
 )
 
 const ASQ_MAX_SCORE int = 38
-const BAI_MAX_SCORE int = 57
-const BDI_MAX_SCORE int = 30
-const P3_MAX_SCORE int = 85
+const BAI_MAX_SCORE int = 63
+const BDI_MAX_SCORE int = 33
+const P3_MAX_SCORE int = 88
 const P3_ADJUST int = 44 // To Be subtracted from p3 score
 const MMPI2_MAX_SCORE int = 567
 

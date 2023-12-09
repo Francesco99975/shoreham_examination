@@ -54,10 +54,24 @@ func GetPatient(authid string) (Patient, error) {
 	return patient, nil
 }
 
+func (patient *Patient) Terminate() error {
+	statement := `UPDATE patients SET exams=$1 WHERE authid=$2;`
+
+	patient.Exams = ""
+
+	_, err := db.Exec(statement, patient.Exams, patient.AuthId)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (patient *Patient) NextExam() (string, error) {
 	statement := `UPDATE patients SET exams=$1 WHERE authid=$2;`
 
-	if len(patient.Exams) <= 0 {
+	if patient.Exams == "pre" {
 		return "cmp", nil
 	}
 
@@ -67,7 +81,7 @@ func (patient *Patient) NextExam() (string, error) {
 
 	if len(queued) == 1 {
 		exam = patient.Exams
-		patient.Exams = ""
+		patient.Exams = "pre"
 	} else if len(queued) == 2 {
 		exam = queued[0]
 		patient.Exams = queued[1]
@@ -95,7 +109,7 @@ type PatientRes struct {
 }
 
 func (temporal *PatientRes) PSave() error {
-	statement := `INSERT INTO patientres(sex, page, answers, duration, aid) VALUES($1, $2, $3, $4, $5);`
+	statement := `INSERT INTO patientres(sex, page, answers, duration, pid) VALUES($1, $2, $3, $4, $5);`
 
 	_, err := db.Exec(statement, temporal.Sex, temporal.Page, temporal.Answers, temporal.Duration, temporal.Pid)
 
@@ -107,13 +121,13 @@ func (temporal *PatientRes) PSave() error {
 }
 
 func (temporal *PatientRes) PUpdate(newPage int, newAnswers []string, duration int) error {
-	statement := `UPDATE patientres SET page=$1,answers=$2,duration=$3 WHERE id=$4;`
+	statement := `UPDATE patientres SET page=$1,answers=$2,duration=$3 WHERE pid=$4;`
 
 	temporal.Page = uint16(newPage)
 	temporal.Answers = strings.Join(append(strings.Split(temporal.Answers, ""), newAnswers...), "")
 	temporal.Duration += duration
 
-	_, err := db.Exec(statement, temporal.Page, temporal.Answers, temporal.Duration, temporal.ID)
+	_, err := db.Exec(statement, temporal.Page, temporal.Answers, temporal.Duration, temporal.Pid)
 
 	if err != nil {
 		return err
@@ -174,7 +188,7 @@ func (temporal *PatientRes) PCalculate(patient string) (MMPIResults, error) {
 }
 
 func PLoad(id string) (PatientRes, error) {
-	statement := `SELECT * FROM patientres WHERE id=$1;`
+	statement := `SELECT * FROM patientres WHERE pid=$1;`
 
 	rows, err := db.Query(statement, id)
 

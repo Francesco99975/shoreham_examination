@@ -34,6 +34,7 @@ func Examination() echo.HandlerFunc {
 		}
 
 		if exam == "cmp" {
+			patient.Terminate()
 			sess.Options = &sessions.Options{
 				Path:     "/",
 				MaxAge:   -1,
