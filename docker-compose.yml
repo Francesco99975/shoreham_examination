@@ -1,21 +1,56 @@
 version: "3.7"
 
 services:
-  postgres:
+  shoredb:
     image: postgres:15.3-alpine
     container_name: shoredb
     restart: unless-stopped
+    labels:
+      - traefik.enable=false
+    networks:
+      - shorenet
     env_file:
-      - db.env
+      - dbp.env
     ports:
-      - "5432:5432"
+      - "5438:5432"
     volumes:
-      - shoredbvol:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
+      - shxpgdata:/var/lib/postgresql/data
+      - shxpgconf:/etc/postgresql
+      - shxpglog:/var/log/postgresql
   shorehamex:
-    depends_on: postgres
+    depends_on: [shoredb]
     container_name: shorehamex
     image: shorehamex
+    labels:
+      - traefik.http.routers.shorehamex.rule=Host(`shorehamex.dmz.urx.ink`)
+      - traefik.http.routers.shorehamex.entrypoints=web,websecure
+      - traefik.http.routers.shorehamex.service=shorehamex
+      - traefik.http.services.shorehamex.loadbalancer.server.port=8888
+      - traefik.http.routers.shorehamex.tls=true
+      - traefik.http.routers.shorehamex.tls.certresolver=le
+      - traefik.port=80
+    networks:
+      - shorenet
+      - proxy
     ports:
       - 8020:8020
     volumes:
-      - gostatic:/go/bin/static
+      - shxstatic:/go/bin/static
+
+networks:
+  proxy:
+    external: true
+  shorenet:
+    driver: bridge
+    external: false
+
+volumes:
+  shxstatic:
+    driver: local
+  shxpgdata:
+    driver: local
+  shxpgconf:
+    driver: local
+  shxpglog:
+    driver: local

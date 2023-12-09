@@ -12,3 +12,4 @@ build/postgres
 data
 *.pdf
 build
+*.tar

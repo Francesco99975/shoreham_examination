@@ -38,8 +38,8 @@ func PatientLogin() echo.HandlerFunc {
 			Path:     "/",
 			MaxAge:   86400 * 7,
 			HttpOnly: true,
-			// Secure: true, https
-			// Domain: "",
+			// Secure:   true,
+			// Domain:   "shorehamex.dmz.urx.ink",
 			// SameSite: http.SameSiteDefaultMode,
 		}
 
@@ -79,8 +79,8 @@ func Login() echo.HandlerFunc {
 			Path:     "/",
 			MaxAge:   86400 * 7,
 			HttpOnly: true,
-			// Secure: true, https
-			// Domain: "",
+			// Secure:   true,
+			// Domain:   "shorehamex.dmz.urx.ink",
 			// SameSite: http.SameSiteDefaultMode,
 		}
 
@@ -104,8 +104,8 @@ func Logout() echo.HandlerFunc {
 			Path:     "/",
 			MaxAge:   -1,
 			HttpOnly: true,
-			// Secure: true, https
-			// Domain: "",
+			// Secure:   true,
+			// Domain:   "shorehamex.dmz.urx.ink",
 			// SameSite: http.SameSiteDefaultMode,
 		}
 
