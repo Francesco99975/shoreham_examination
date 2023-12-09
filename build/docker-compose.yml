@@ -1,9 +1,0 @@
-version: "3.7"
-
-services:
-  shorehamex:
-    image: shorehamex
-    ports:
-      - 8020:8020
-    volumes:
-      - gostatic:/go/bin/web/static
