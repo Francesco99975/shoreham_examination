@@ -35,12 +35,12 @@ templ MMPI(site models.Site, admin bool, questions []string, page int, path stri
 }
 
 
-templ MMPIFormPartial(questions []string, page int, patient string) {
+templ MMPIFormPartial(questions []string, page int, pid string) {
     <input type="hidden" id="duration" name="duration" value="0"/>
 
     <input type="hidden" id="page" name="page" value={strconv.Itoa(page)} />
     if page > 1 {
-        <input type="hidden" id="patient" name="patient" value={patient} />
+        <input type="hidden" id="pid" name="pid" value={pid} />
     }
     for index, question := range questions {
         @BoolRadioField(strconv.Itoa(page)+"A"+strconv.Itoa(index), question, false)
@@ -60,7 +60,6 @@ templ MMPIFormPartial(questions []string, page int, patient string) {
      <script>   
             // Capture the start time when the page loads
             var startTime = new Date().getTime();
-            console.log("hello")
 
             // Add a submit event listener to the form
             for (const el of document.querySelectorAll('input[type="radio"]')) {

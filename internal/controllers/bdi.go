@@ -114,7 +114,19 @@ func BdiCalc(admin bool) echo.HandlerFunc {
 		if success && admin {
 			return c.Redirect(http.StatusSeeOther, "/success")
 		} else if success && !admin {
-			return c.Redirect(http.StatusSeeOther, "/examination")
+			sess, err := session.Get("session", c)
+			if err != nil {
+				return echo.NewHTTPError(http.StatusBadRequest, "Invalid data for session")
+			}
+			pt, err := models.GetPatient(sess.Values["authid"].(string))
+			if err != nil {
+				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error patient progression: %s", err.Error()))
+			}
+			exam, err := pt.NextExam()
+			if err != nil {
+				return echo.NewHTTPError(http.StatusBadRequest, err)
+			}
+			return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/examination?next=%s", exam))
 		} else {
 			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during email sending(failed): %s", err.Error()))
 		}

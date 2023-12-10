@@ -94,7 +94,7 @@ func MMPI(site models.Site, admin bool, questions []string, page int, path strin
 	})
 }
 
-func MMPIFormPartial(questions []string, page int, patient string) templ.Component {
+func MMPIFormPartial(questions []string, page int, pid string) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -120,11 +120,11 @@ func MMPIFormPartial(questions []string, page int, patient string) templ.Compone
 			return templ_7745c5c3_Err
 		}
 		if page > 1 {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<input type=\"hidden\" id=\"patient\" name=\"patient\" value=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<input type=\"hidden\" id=\"pid\" name=\"pid\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(patient))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(pid))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -177,7 +177,6 @@ func MMPIFormPartial(questions []string, page int, patient string) templ.Compone
 		templ_7745c5c3_Var9 := `   
             // Capture the start time when the page loads
             var startTime = new Date().getTime();
-            console.log("hello")
 
             // Add a submit event listener to the form
             for (const el of document.querySelectorAll('input[type="radio"]')) {

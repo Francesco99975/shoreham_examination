@@ -3,6 +3,7 @@ package controllers
 import (
 	"bytes"
 	"context"
+	"net/http"
 	"strings"
 	"time"
 
@@ -39,6 +40,10 @@ func GenerateCodes() echo.HandlerFunc {
 			if asw == "on" {
 				exams = append(exams, availableExams[i])
 			}
+		}
+
+		if len(exams) <= 0 {
+			return echo.NewHTTPError(http.StatusBadRequest, "Choose at least 1 test")
 		}
 
 		patient := models.Patient{AuthId: uuid.NewV4().String(), Name: name, Authcode: nanoid.New(), Exams: strings.Join(exams, ",")}

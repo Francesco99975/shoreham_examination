@@ -130,6 +130,7 @@ type MMPIScales []struct {
 }
 
 type LocalRes struct {
+	ID       string
 	Patient  string
 	Sex      string
 	Page     uint16
@@ -139,9 +140,9 @@ type LocalRes struct {
 }
 
 func (local *LocalRes) Save() error {
-	statement := `INSERT INTO localres(patient, sex, page, answers, duration, aid) VALUES($1, $2, $3, $4, $5, $6);`
+	statement := `INSERT INTO localres(id, patient, sex, page, answers, duration, aid) VALUES($1, $2, $3, $4, $5, $6, $7);`
 
-	_, err := db.Exec(statement, local.Patient, local.Sex, local.Page, local.Answers, local.Duration, local.Aid)
+	_, err := db.Exec(statement, local.ID, local.Patient, local.Sex, local.Page, local.Answers, local.Duration, local.Aid)
 
 	if err != nil {
 		return err
@@ -217,10 +218,10 @@ func (local *LocalRes) Calculate() (MMPIResults, error) {
 	return results, nil
 }
 
-func Load(patient string) (LocalRes, error) {
-	statement := `SELECT * FROM localres WHERE patient=$1;`
+func Load(id string) (LocalRes, error) {
+	statement := `SELECT * FROM localres WHERE id=$1;`
 
-	rows, err := db.Query(statement, patient)
+	rows, err := db.Query(statement, id)
 
 	if err != nil {
 		return LocalRes{}, err
@@ -230,7 +231,7 @@ func Load(patient string) (LocalRes, error) {
 
 	var local LocalRes
 	for rows.Next() {
-		err = rows.Scan(&local.Patient, &local.Sex, &local.Page, &local.Answers, &local.Duration, &local.Aid)
+		err = rows.Scan(&local.ID, &local.Patient, &local.Sex, &local.Page, &local.Answers, &local.Duration, &local.Aid)
 		if err != nil {
 			return LocalRes{}, err
 		}

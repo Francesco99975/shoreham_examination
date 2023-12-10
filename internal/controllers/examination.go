@@ -12,6 +12,7 @@ import (
 
 func Examination() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		exam := c.QueryParam("next")
 
 		sess, err := session.Get("session", c)
 		if err != nil {
@@ -19,22 +20,16 @@ func Examination() echo.HandlerFunc {
 		}
 
 		if auth, ok := sess.Values["examauth"].(bool); !ok || !auth {
-			return echo.NewHTTPError(http.StatusBadRequest, "Invalid data")
+			return echo.NewHTTPError(http.StatusBadRequest, "Invalid data, not authenticated")
 		}
 
-		patient, err := models.GetPatient(sess.Values["authid"].(string))
+		pt, err := models.GetPatient(sess.Values["authid"].(string))
 
-		if err != nil || patient.AuthId == "" {
+		if err != nil || pt.AuthId == "" {
 			return echo.NewHTTPError(http.StatusNotFound, "Patient not found")
 		}
 
-		exam, err := patient.NextExam()
-		if err != nil {
-			return echo.NewHTTPError(http.StatusBadRequest, err)
-		}
-
 		if exam == "cmp" {
-			patient.Terminate()
 			sess.Options = &sessions.Options{
 				Path:     "/",
 				MaxAge:   -1,
@@ -49,6 +44,10 @@ func Examination() echo.HandlerFunc {
 			sess.Values["examauth"] = false
 			sess.Save(c.Request(), c.Response())
 			return c.Redirect(http.StatusSeeOther, "/success")
+		}
+
+		if len(exam) <= 0 {
+			exam = pt.Peek()
 		}
 
 		return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/examination/%s", exam))

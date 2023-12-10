@@ -54,41 +54,27 @@ func GetPatient(authid string) (Patient, error) {
 	return patient, nil
 }
 
-func (patient *Patient) Terminate() error {
-	statement := `UPDATE patients SET exams=$1 WHERE authid=$2;`
-
-	patient.Exams = ""
-
-	_, err := db.Exec(statement, patient.Exams, patient.AuthId)
-
-	if err != nil {
-		return err
-	}
-
-	return nil
+func (patient *Patient) Peek() string {
+	return strings.Split(patient.Exams, ",")[0]
 }
 
 func (patient *Patient) NextExam() (string, error) {
 	statement := `UPDATE patients SET exams=$1 WHERE authid=$2;`
 
-	if patient.Exams == "pre" {
+	queued := strings.Split(patient.Exams, ",")
+
+	if len(queued) <= 1 {
+		patient.Exams = ""
+		_, err := db.Exec(statement, patient.Exams, patient.AuthId)
+		if err != nil {
+			return "", err
+		}
 		return "cmp", nil
 	}
 
-	queued := strings.Split(patient.Exams, ",")
+	patient.Exams = strings.Join(queued[1:], ",")
 
-	var exam string
-
-	if len(queued) == 1 {
-		exam = patient.Exams
-		patient.Exams = "pre"
-	} else if len(queued) == 2 {
-		exam = queued[0]
-		patient.Exams = queued[1]
-	} else {
-		exam = queued[0]
-		patient.Exams = strings.Join(queued[1:], ",")
-	}
+	exam := strings.Split(patient.Exams, ",")[0]
 
 	_, err := db.Exec(statement, patient.Exams, patient.AuthId)
 

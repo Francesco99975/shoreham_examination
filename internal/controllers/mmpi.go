@@ -16,7 +16,7 @@ import (
 	"github.com/Francesco99975/shorehamex/views"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/gommon/log"
+	uuid "github.com/satori/go.uuid"
 )
 
 type MMPIContent struct {
@@ -86,19 +86,17 @@ func MMPI(admin bool) echo.HandlerFunc {
 			err = views.MMPI(data, admin, paginatedQuestions, page, path).Render(context.Background(), buf)
 
 			if err != nil {
-				log.Warn("TODO: you need to implement this properly")
-				log.Errorf("rendering index: %s", err)
+				return echo.NewHTTPError(404, "Page not found", http.StatusNotFound)
 			}
 
 			return c.Blob(200, "text/html; charset=utf-8", buf.Bytes())
 		} else {
-			patient := c.QueryParam("patient")
+			pid := c.QueryParam("pid")
 
-			err = views.MMPIFormPartial(paginatedQuestions, page, patient).Render(context.Background(), buf)
+			err = views.MMPIFormPartial(paginatedQuestions, page, pid).Render(context.Background(), buf)
 
 			if err != nil {
-				log.Warn("TODO: you need to implement this properly")
-				log.Errorf("rendering index: %s", err)
+				return echo.NewHTTPError(404, "Page not found", http.StatusNotFound)
 			}
 
 			return c.Blob(200, "text/html; charset=utf-8", buf.Bytes())
@@ -115,6 +113,7 @@ func MMPICalc(admin bool) echo.HandlerFunc {
 			baseRedirectPath = "/examination"
 		}
 		answersPerPage := 25
+		pid := c.FormValue("pid")
 		patient := c.FormValue("patient")
 
 		page, err := strconv.Atoi(c.FormValue("page"))
@@ -132,7 +131,7 @@ func MMPICalc(admin bool) echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusBadRequest, "Invalid data for session")
 		}
 
-		if len(patient) <= 0 {
+		if len(patient) <= 0 && !admin {
 			patient = sess.Values["patient"].(string)
 		}
 
@@ -175,24 +174,26 @@ func MMPICalc(admin bool) echo.HandlerFunc {
 		if page == 1 {
 			sex := c.FormValue("sex")
 			if admin {
-				newlocal = models.LocalRes{Patient: patient, Sex: sex, Page: uint16(page + 1), Answers: strings.Join(answers, ""), Duration: duration, Aid: sess.Values["email"].(string)}
+				newlocal = models.LocalRes{ID: uuid.NewV4().String(), Patient: patient, Sex: sex, Page: uint16(page + 1), Answers: strings.Join(answers, ""), Duration: duration, Aid: sess.Values["email"].(string)}
 				err = newlocal.Save()
 				if err != nil {
 					return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Could not save tempoary data: %s", err.Error()))
 				}
+				pid = newlocal.ID
 			} else {
 				newTemporal = models.PatientRes{Sex: sex, Page: uint16(page + 1), Answers: strings.Join(answers, ""), Duration: duration, Pid: sess.Values["authid"].(string)}
 				err = newTemporal.PSave()
 				if err != nil {
 					return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Could not save tempoary data for patient: %s", err.Error()))
 				}
+				pid = newTemporal.Pid
 			}
 
-			return c.Redirect(http.StatusSeeOther, fmt.Sprintf("%s/mmpi?page=%d&patient=%s", baseRedirectPath, page+1, patient))
+			return c.Redirect(http.StatusSeeOther, fmt.Sprintf("%s/mmpi?page=%d&pid=%s", baseRedirectPath, page+1, pid))
 		}
 
 		if admin {
-			newlocal, err = models.Load(patient)
+			newlocal, err = models.Load(pid)
 			if err != nil {
 				return echo.NewHTTPError(http.StatusInternalServerError, "Could not load tempoary data for local patient")
 			}
@@ -203,7 +204,7 @@ func MMPICalc(admin bool) echo.HandlerFunc {
 		} else {
 			newTemporal, err = models.PLoad(sess.Values["authid"].(string))
 			if err != nil {
-				return echo.NewHTTPError(http.StatusInternalServerError, "Could not load tempoary data for patient")
+				return echo.NewHTTPError(http.StatusInternalServerError, "Could not load temporary data for patient")
 			}
 			err = newTemporal.PUpdate(page+1, answers, duration)
 			if err != nil {
@@ -240,12 +241,20 @@ func MMPICalc(admin bool) echo.HandlerFunc {
 			if success && admin {
 				return c.Redirect(http.StatusSeeOther, "/success")
 			} else if success && !admin {
-				return c.Redirect(http.StatusSeeOther, "/examination")
+				pt, err := models.GetPatient(sess.Values["authid"].(string))
+				if err != nil {
+					return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error patient progression: %s", err.Error()))
+				}
+				exam, err := pt.NextExam()
+				if err != nil {
+					return echo.NewHTTPError(http.StatusBadRequest, err)
+				}
+				return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/examination?next=%s", exam))
 			} else {
 				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during email sending(failed): %s", err.Error()))
 			}
 		}
 
-		return c.Redirect(http.StatusSeeOther, fmt.Sprintf("%s/mmpi?page=%d&patient=%s", baseRedirectPath, page+1, patient))
+		return c.Redirect(http.StatusSeeOther, fmt.Sprintf("%s/mmpi?page=%d&pid=%s", baseRedirectPath, page+1, pid))
 	}
 }
