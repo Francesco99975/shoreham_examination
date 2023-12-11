@@ -2,8 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "JosefineSans";
+  src: url("../fonts/JosefinSansRegular-x3LYV.ttf");
+  font-display: swap;
+}
+
 html {
   scroll-behavior: smooth;
+  font-family: "JosefineSans", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* Reset some default browser styles */

@@ -1,10 +1,16 @@
 package main
 
 import (
+	"bytes"
+	"context"
+	"net/http"
 	"os"
+	"time"
 
 	"github.com/Francesco99975/shorehamex/internal/controllers"
 	"github.com/Francesco99975/shorehamex/internal/middlewares"
+	"github.com/Francesco99975/shorehamex/internal/models"
+	"github.com/Francesco99975/shorehamex/views"
 
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
@@ -85,5 +91,31 @@ func createRouter() *echo.Echo {
 
 	e.POST("/logout", controllers.Logout())
 
+	e.HTTPErrorHandler = serverErrorHandler
+
 	return e
+}
+
+func serverErrorHandler(err error, c echo.Context) {
+	code := http.StatusInternalServerError
+	if he, ok := err.(*echo.HTTPError); ok {
+		code = he.Code
+	}
+	data := models.Site{
+		AppName:  "Shoreham Examination",
+		Title:    "Client Error",
+		Metatags: models.SEO{Description: "Examination tool", Keywords: "tools,exam"},
+		Year:     time.Now().Year(),
+	}
+
+	buf := bytes.NewBuffer(nil)
+	if code < 500 {
+		views.ClientError(data, err).Render(context.Background(), buf)
+
+	} else {
+		views.ServerError(data, err).Render(context.Background(), buf)
+	}
+
+	c.Blob(200, "text/html; charset=utf-8", buf.Bytes())
+
 }
