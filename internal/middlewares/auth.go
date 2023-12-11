@@ -69,7 +69,7 @@ func ExaminationReverseAuthMiddleware() echo.MiddlewareFunc {
 			if auth, ok := sess.Values["examauth"].(bool); !ok || !auth {
 				return next(c)
 			} else {
-				return c.Redirect(http.StatusSeeOther, "/")
+				return c.Redirect(http.StatusSeeOther, "/examination")
 			}
 		}
 	}

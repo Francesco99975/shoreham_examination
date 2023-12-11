@@ -29,7 +29,11 @@ func Examination() echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusNotFound, "Patient not found")
 		}
 
-		if exam == "cmp" {
+		if len(exam) <= 0 {
+			exam = pt.Peek()
+		}
+
+		if exam == "cmp" || len(exam) <= 0 {
 			sess.Options = &sessions.Options{
 				Path:     "/",
 				MaxAge:   -1,
@@ -43,11 +47,12 @@ func Examination() echo.HandlerFunc {
 			sess.Values["patient"] = ""
 			sess.Values["examauth"] = false
 			sess.Save(c.Request(), c.Response())
-			return c.Redirect(http.StatusSeeOther, "/success")
-		}
 
-		if len(exam) <= 0 {
-			exam = pt.Peek()
+			if exam == "cmp" {
+				return c.Redirect(http.StatusSeeOther, "/success")
+			} else {
+				return c.Redirect(http.StatusSeeOther, "/")
+			}
 		}
 
 		return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/examination/%s", exam))

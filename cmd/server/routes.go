@@ -27,7 +27,7 @@ func createRouter() *echo.Echo {
 
 	e.Static("/assets", "./static")
 
-	e.GET("/", controllers.Index(), middlewares.ReverseAuthMiddleware())
+	e.GET("/", controllers.Index(), middlewares.ReverseAuthMiddleware(), middlewares.ExaminationReverseAuthMiddleware())
 
 	e.GET("/staff", controllers.Staff(), middlewares.ReverseAuthMiddleware())
 
