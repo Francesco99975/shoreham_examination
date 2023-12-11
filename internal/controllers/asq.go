@@ -110,7 +110,13 @@ func AsqCalc(admin bool) echo.HandlerFunc {
 
 		indication := models.CompileBasicIndication(patient, percentage, "Anxiety Symptoms Questionnaire", gravity)
 
-		file, err := helpers.GeneratePDFGeneric("Anxiety Symptoms Questionnaire", patient, sex, duration, indication, score)
+		sess, err := session.Get("session", c)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, "Invalid data for session")
+		}
+		id := sess.Values["authid"].(string)
+
+		file, err := helpers.GeneratePDFGeneric("Anxiety Symptoms Questionnaire", id, patient, sex, duration, indication, score)
 
 		if err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during pdf generation: %s", err.Error()))
@@ -125,11 +131,8 @@ func AsqCalc(admin bool) echo.HandlerFunc {
 		if success && admin {
 			return c.Redirect(http.StatusSeeOther, "/success")
 		} else if success && !admin {
-			sess, err := session.Get("session", c)
-			if err != nil {
-				return echo.NewHTTPError(http.StatusBadRequest, "Invalid data for session")
-			}
-			pt, err := models.GetPatient(sess.Values["authid"].(string))
+
+			pt, err := models.GetPatient(id)
 			if err != nil {
 				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error patient progression: %s", err.Error()))
 			}

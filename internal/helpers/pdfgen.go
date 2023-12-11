@@ -18,7 +18,7 @@ import (
 	"github.com/johnfercher/maroto/v2/pkg/props"
 )
 
-func GeneratePDFGeneric(test string, patient string, sex string, duration int, indication string, score int) (string, error) {
+func GeneratePDFGeneric(test string, id string, patient string, sex string, duration int, indication string, score int) (string, error) {
 	date := time.Now().Format(time.RubyDate)
 	cfg := config.NewBuilder().
 		WithPageNumber("Page {current} of {total}", props.RightBottom).
@@ -28,7 +28,7 @@ func GeneratePDFGeneric(test string, patient string, sex string, duration int, i
 	mrt := maroto.New(cfg)
 	m := maroto.NewMetricsDecorator(mrt)
 
-	err := m.RegisterHeader(getPageHeader(patient, sex, duration, date))
+	err := m.RegisterHeader(getPageHeader(id, patient, sex, duration, date))
 	if err != nil {
 		return "", err
 	}
@@ -59,7 +59,7 @@ func GeneratePDFGeneric(test string, patient string, sex string, duration int, i
 		return "", err
 	}
 
-	filename := strings.ReplaceAll(fmt.Sprintf("%s-%s.pdf", patient, date), " ", "_")
+	filename := strings.ReplaceAll(fmt.Sprintf("%s+%s+%s.pdf", test, id, date), " ", "_")
 
 	document.Save(filename)
 
@@ -78,7 +78,7 @@ func GeneratePDFMMPI(results models.MMPIResults) (string, error) {
 	mrt := maroto.New(cfg)
 	m := maroto.NewMetricsDecorator(mrt)
 
-	err := m.RegisterHeader(getPageHeader(results.Patient, results.Sex, results.Duration, date))
+	err := m.RegisterHeader(getPageHeader(results.ID, results.Patient, results.Sex, results.Duration, date))
 	if err != nil {
 		return "", err
 	}
@@ -120,6 +120,7 @@ func GeneratePDFMMPI(results models.MMPIResults) (string, error) {
 				Style: fontstyle.Italic,
 				Align: align.Left,
 				Size:  16,
+				Color: getBlueColor(),
 			}))
 
 		}
@@ -130,7 +131,7 @@ func GeneratePDFMMPI(results models.MMPIResults) (string, error) {
 		return "", err
 	}
 
-	filename := strings.ReplaceAll(fmt.Sprintf("%s-%s.pdf", results.Patient, date), " ", "_")
+	filename := strings.ReplaceAll(fmt.Sprintf("%s+%s+%s.pdf", "MMPI-2", results.ID, date), " ", "_")
 
 	document.Save(filename)
 
@@ -169,29 +170,39 @@ func getTransactions(scaleResults []models.ScaleResult) []core.Row {
 	return rows
 }
 
-func getPageHeader(patient string, sex string, duration int, date string) core.Row {
+func getPageHeader(id string, patient string, sex string, duration int, date string) core.Row {
+	durationSec := duration / 1000
+	durationMin := durationSec / 60
+	durationSec = durationSec % 60
 	return row.New(50).Add(
 		col.New(10).Add(
-			text.New(fmt.Sprintf("Patient: %s", patient), props.Text{
+			text.New(fmt.Sprintf("ID: %s", id), props.Text{
 				Size:  12,
 				Align: align.Left,
 				Style: fontstyle.BoldItalic,
 				Color: getBlueColor(),
 			}),
-			text.New(fmt.Sprintf("Sex: %s", sex), props.Text{
-				Top:   6,
+			text.New(fmt.Sprintf("Patient: %s", patient), props.Text{
 				Size:  12,
+				Top:   6,
 				Align: align.Left,
+				Style: fontstyle.BoldItalic,
 				Color: getBlueColor(),
 			}),
-			text.New(fmt.Sprintf("Date: %s", date), props.Text{
+			text.New(fmt.Sprintf("Sex: %s", sex), props.Text{
 				Top:   12,
 				Size:  12,
 				Align: align.Left,
 				Color: getBlueColor(),
 			}),
-			text.New(fmt.Sprintf("Taked in: %d Minutes", duration/60000), props.Text{
+			text.New(fmt.Sprintf("Date: %s", date), props.Text{
 				Top:   18,
+				Size:  12,
+				Align: align.Left,
+				Color: getBlueColor(),
+			}),
+			text.New(fmt.Sprintf("Taked in: %d Minutes and %d Seconds", durationMin, durationSec), props.Text{
+				Top:   24,
 				Size:  12,
 				Align: align.Left,
 				Color: getBlueColor(),

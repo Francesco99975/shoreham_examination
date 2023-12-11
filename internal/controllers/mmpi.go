@@ -232,7 +232,7 @@ func MMPICalc(admin bool) echo.HandlerFunc {
 				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during pdf generation: %s", err.Error()))
 			}
 
-			success, err := helpers.SendEmail("MMPI-2", results.Patient, "Attched a file with MMPI-2 results", file)
+			success, err := helpers.SendEmail("MMPI-2", "Attched a file with MMPI-2 results", results.Patient, file)
 
 			if err != nil {
 				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during email sending: %s", err.Error()))

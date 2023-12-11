@@ -57,6 +57,7 @@ type MMPICategoryResult struct {
 }
 
 type MMPIResults struct {
+	ID         string
 	Patient    string
 	Sex        string
 	Categories []MMPICategoryResult
@@ -170,6 +171,7 @@ func (local *LocalRes) Update(newPage int, newAnswers []string, duration int) er
 func (local *LocalRes) Calculate() (MMPIResults, error) {
 	var results MMPIResults
 
+	results.ID = local.ID
 	results.Patient = local.Patient
 	results.Sex = local.Sex
 	results.Duration = local.Duration

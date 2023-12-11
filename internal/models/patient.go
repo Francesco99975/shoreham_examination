@@ -125,6 +125,7 @@ func (temporal *PatientRes) PUpdate(newPage int, newAnswers []string, duration i
 func (temporal *PatientRes) PCalculate(patient string) (MMPIResults, error) {
 	var results MMPIResults
 
+	results.ID = temporal.Pid
 	results.Patient = patient
 	results.Sex = temporal.Sex
 	results.Duration = temporal.Duration
