@@ -37,7 +37,7 @@ func Header(admin bool) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if admin {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<nav hx-boost=\"true\" class=\"m-2\"><input id=\"menu-toggle\" type=\"checkbox\"> <label class=\"menu-button-container\" for=\"menu-toggle\"><div class=\"menu-button\"></div></label><ul class=\"menu z-50\"><li><a href=\"/admin\" class=\"w-full\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<nav hx-boost=\"true\" class=\"m-2\"><input id=\"menu-toggle\" type=\"checkbox\" class=\"h-8 w-8\"> <label class=\"menu-button-container\" for=\"menu-toggle\"><div class=\"menu-button\"></div></label><ul class=\"menu z-50\"><li><a href=\"/admin\" class=\"w-full\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

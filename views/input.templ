@@ -15,7 +15,7 @@ templ StringInput(id string, typology string, label string, required bool) {
 
 templ SimpleCheckboxInput(id string, label string, required bool) {
     <div class="m-1">
-        <input type="checkbox" id={ id } name={ id } required?={required}/>
+        <input type="checkbox" id={ id } name={ id } required?={required} class="h-4 w-4"/>
         <label for={ id }>{ label }</label>
     </div>
 }
