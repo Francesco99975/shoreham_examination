@@ -134,7 +134,7 @@ func MMPIFormPartial(questions []string, page int, pid string) templ.Component {
 			}
 		}
 		for index, question := range questions {
-			templ_7745c5c3_Err = BoolRadioField(strconv.Itoa(page)+"A"+strconv.Itoa(index), question, false).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = BoolRadioField(strconv.Itoa(page)+"A"+strconv.Itoa(index), question, true).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

@@ -38,9 +38,9 @@ func Examination() echo.HandlerFunc {
 				Path:     "/",
 				MaxAge:   -1,
 				HttpOnly: true,
-				// Secure: true, https
-				// Domain: "",
-				// SameSite: http.SameSiteDefaultMode,
+				Secure:   true,
+				Domain:   "",
+				SameSite: http.SameSiteDefaultMode,
 			}
 
 			sess.Values["authid"] = ""

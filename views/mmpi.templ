@@ -43,7 +43,7 @@ templ MMPIFormPartial(questions []string, page int, pid string) {
         <input type="hidden" id="pid" name="pid" value={pid} />
     }
     for index, question := range questions {
-        @BoolRadioField(strconv.Itoa(page)+"A"+strconv.Itoa(index), question, false)
+        @BoolRadioField(strconv.Itoa(page)+"A"+strconv.Itoa(index), question, true)
     }
 
     <button
