@@ -38,9 +38,9 @@ func PatientLogin() echo.HandlerFunc {
 			Path:     "/",
 			MaxAge:   86400 * 7,
 			HttpOnly: true,
-			Secure:   true,
-			Domain:   "shorehamex.dmz.urx.ink",
-			SameSite: http.SameSiteDefaultMode,
+			// Secure:   true,
+			// Domain:   "shorehamex.dmz.urx.ink",
+			// SameSite: http.SameSiteDefaultMode,
 		}
 
 		sess.Values["authid"] = patient.AuthId
@@ -79,9 +79,9 @@ func Login() echo.HandlerFunc {
 			Path:     "/",
 			MaxAge:   86400 * 7,
 			HttpOnly: true,
-			Secure:   true,
-			Domain:   "shorehamex.dmz.urx.ink",
-			SameSite: http.SameSiteDefaultMode,
+			// Secure:   true,
+			// Domain:   "shorehamex.dmz.urx.ink",
+			// SameSite: http.SameSiteDefaultMode,
 		}
 
 		sess.Values["email"] = member.Email
@@ -104,9 +104,9 @@ func Logout() echo.HandlerFunc {
 			Path:     "/",
 			MaxAge:   -1,
 			HttpOnly: true,
-			Secure:   true,
-			Domain:   "shorehamex.dmz.urx.ink",
-			SameSite: http.SameSiteDefaultMode,
+			// Secure:   true,
+			// Domain:   "shorehamex.dmz.urx.ink",
+			// SameSite: http.SameSiteDefaultMode,
 		}
 
 		sess.Values["email"] = ""
