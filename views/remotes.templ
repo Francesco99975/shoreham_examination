@@ -1,0 +1,23 @@
+package views
+
+import "github.com/Francesco99975/shorehamex/internal/models"
+
+type RemotePatient struct {
+	id         string
+	patient    string
+	date       string
+	done       bool
+	mmpi       bool
+	indication string
+	results    models.MMPIResults
+}
+
+templ Remotes(site models.Site, rps []RemotePatient) {
+	@CoreHTML(site) {
+		<main class="flex flex-col items-center justify-evenly w-full min-h-[80vh] text-center">
+			for _, rp := range rps {
+				@Remote(rp.id, rp.patient, rp.date, rp.mmpi, rp.done, rp.indication, rp.results)
+			}
+		</main>
+	}
+}

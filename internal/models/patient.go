@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -14,18 +15,19 @@ type Patient struct {
 	Name     string
 	Authcode string
 	Exams    string
+	Created  time.Time
 }
 
 func CreatePatientExam(patient *Patient) error {
 
-	statement := `INSERT INTO patients(authid, name, authcode, exams) VALUES($1, $2, $3, $4);`
+	statement := `INSERT INTO patients(authid, name, authcode, exams, created) VALUES($1, $2, $3, $4, $5);`
 
 	hashedAuthCode, err := bcrypt.GenerateFromPassword([]byte(patient.Authcode), 12)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	_, err = db.Exec(statement, patient.AuthId, patient.Name, hashedAuthCode, patient.Exams)
+	_, err = db.Exec(statement, patient.AuthId, patient.Name, hashedAuthCode, patient.Exams, patient.Created)
 
 	return err
 }
@@ -44,7 +46,7 @@ func GetPatient(authid string) (Patient, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		err = rows.Scan(&patient.AuthId, &patient.Name, &patient.Authcode, &patient.Exams)
+		err = rows.Scan(&patient.AuthId, &patient.Name, &patient.Authcode, &patient.Exams, &patient.Created)
 		if err != nil {
 			return Patient{}, err
 		}

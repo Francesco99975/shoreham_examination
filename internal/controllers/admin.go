@@ -46,13 +46,16 @@ func GenerateCodes() echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusBadRequest, "Choose at least 1 test")
 		}
 
-		patient := models.Patient{AuthId: uuid.NewV4().String(), Name: name, Authcode: nanoid.New(), Exams: strings.Join(exams, ",")}
+		patient := models.Patient{AuthId: uuid.NewV4().String(), Name: name, Authcode: nanoid.New(), Exams: strings.Join(exams, ","), Created: time.Now()}
 
-		models.CreatePatientExam(&patient)
+		err := models.CreatePatientExam(&patient)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, "Could not create exam session")
+		}
 
 		buf := bytes.NewBuffer(nil)
 
-		err := views.GenerationResults(patient.AuthId, patient.Authcode, patient.Name).Render(context.Background(), buf)
+		err = views.GenerationResults(patient.AuthId, patient.Authcode, patient.Name).Render(context.Background(), buf)
 
 		if err != nil {
 			log.Warn("TODO: you need to implement this properly")

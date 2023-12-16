@@ -46,7 +46,10 @@ func PatientLogin() echo.HandlerFunc {
 		sess.Values["authid"] = patient.AuthId
 		sess.Values["patient"] = patient.Name
 		sess.Values["examauth"] = true
-		sess.Save(c.Request(), c.Response())
+		err = sess.Save(c.Request(), c.Response())
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, "Could not create auth session")
+		}
 
 		return c.Redirect(http.StatusSeeOther, "/examination")
 	}
@@ -86,7 +89,10 @@ func Login() echo.HandlerFunc {
 
 		sess.Values["email"] = member.Email
 		sess.Values["authenticated"] = true
-		sess.Save(c.Request(), c.Response())
+		err = sess.Save(c.Request(), c.Response())
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, "Could not create auth session")
+		}
 
 		return c.Redirect(http.StatusSeeOther, "/admin")
 	}
@@ -111,7 +117,10 @@ func Logout() echo.HandlerFunc {
 
 		sess.Values["email"] = ""
 		sess.Values["authenticated"] = false
-		sess.Save(c.Request(), c.Response())
+		err = sess.Save(c.Request(), c.Response())
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, "Could not create logout session")
+		}
 
 		return c.Redirect(http.StatusSeeOther, "/")
 	}

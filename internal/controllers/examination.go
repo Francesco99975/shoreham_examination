@@ -46,7 +46,10 @@ func Examination() echo.HandlerFunc {
 			sess.Values["authid"] = ""
 			sess.Values["patient"] = ""
 			sess.Values["examauth"] = false
-			sess.Save(c.Request(), c.Response())
+			err := sess.Save(c.Request(), c.Response())
+			if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, "Could not create clear session")
+		}
 
 			if exam == "cmp" {
 				return c.Redirect(http.StatusSeeOther, "/success")

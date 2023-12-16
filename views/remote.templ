@@ -1,0 +1,31 @@
+package views
+
+import "github.com/Francesco99975/shorehamex/internal/models"
+
+templ Remote(id string, patient string, date string, mmpi bool, done bool, indication string, results models.MMPIResults) {
+	<section class="flex flex-col w-full md:w-4/5 rounded bg-green-800 text-white shadow-lg p-3 mt-2">
+		<h3 class="text-xl md:text-3xl">{ patient }</h3>
+		<div class="flex w-full justify-between items-center text-lg md:text-xl">
+			if done {
+				<span class="rounded-sm p-1 text-center text-white bg-blue-700 shadow-sm font-bold tracking-wider">
+					COMPLETED
+				</span>
+			} else {
+				<span class="rounded-sm p-1 text-center text-white bg-orange-600 shadow-sm font-bold tracking-wider">
+					SENT
+				</span>
+			}
+			<span class="italic p-1">{ date }</span>
+		</div>
+	</section>
+	if done && len(indication) > 0 {
+		<details class="w-full md:w-4/5 bg-blue-700 text-white rounded-b-md">
+			<summary>Results</summary>
+			if !mmpi {
+				<span class="p-2 text-white">{ indication }</span>
+			} else {
+				@MMPIFinal(results)
+			}
+		</details>
+	}
+}

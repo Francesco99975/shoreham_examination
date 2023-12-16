@@ -15,6 +15,7 @@ const (
 	BAI Exam = "bai"
 	BDI Exam = "bdi"
 	P3  Exam = "p3"
+	MMPI Exam = "mmpi"
 )
 
 const ASQ_MAX_SCORE int = 38

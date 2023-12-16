@@ -13,6 +13,7 @@ import (
 	"github.com/Francesco99975/shorehamex/views"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
+	uuid "github.com/satori/go.uuid"
 )
 
 type BdiContent struct {
@@ -78,7 +79,7 @@ func BdiCalc(admin bool) echo.HandlerFunc {
 
 			asw, err := strconv.Atoi(c.FormValue(fmt.Sprintf("A%d", i)))
 			if err != nil {
-				echo.NewHTTPError(http.StatusBadRequest, "Bad request")
+				return echo.NewHTTPError(http.StatusBadRequest, "Bad request")
 			}
 
 			score += asw
@@ -100,11 +101,16 @@ func BdiCalc(admin bool) echo.HandlerFunc {
 
 		indication := models.CompileBasicIndication(patient, percentage, "Beck Depression Inventory", gravity)
 
+		var id string
 		sess, err := session.Get("session", c)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusBadRequest, "Invalid data for session")
 		}
-		id := sess.Values["authid"].(string)
+		if admin {
+			id = uuid.NewV4().String()
+		} else {
+			id = sess.Values["authid"].(string)
+		}
 
 		file, err := helpers.GeneratePDFGeneric("Beck Depression Inventory", id, patient, sex, duration, indication, score)
 
@@ -118,6 +124,11 @@ func BdiCalc(admin bool) echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during email sending: %s", err.Error()))
 		}
 		if success && admin {
+			result := models.AdminResult { ID: id, Patient: patient, Sex: sex, Test: string(models.BDI), Metric: fmt.Sprint(score), Duration: duration, Created: time.Now(), Aid: sess.Values["email"].(string) }
+			err = result.Submit()
+			if err != nil {
+				return echo.NewHTTPError(http.StatusInternalServerError, "Could not save admin test results")
+			}
 			return c.Redirect(http.StatusSeeOther, "/success")
 		} else if success && !admin {
 			pt, err := models.GetPatient(id)
@@ -128,6 +139,13 @@ func BdiCalc(admin bool) echo.HandlerFunc {
 			if err != nil {
 				return echo.NewHTTPError(http.StatusBadRequest, err)
 			}
+
+			result := models.Examination { Test: string(models.BDI), Metric: fmt.Sprint(score), Duration: duration, Created: time.Now(), Pid: sess.Values["authid"].(string) }
+			err = result.SubmitExamination()
+			if err != nil {
+				return echo.NewHTTPError(http.StatusInternalServerError, "Could not save patient test results")
+			}
+
 			return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/examination?next=%s", exam))
 		} else {
 			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during email sending(failed): %s", err.Error()))

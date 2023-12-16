@@ -10,3 +10,5 @@ type Site struct {
 	Metatags SEO
 	Year     int
 }
+
+
