@@ -164,7 +164,7 @@ func MMPIFormPartial(questions []string, page int, pid string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Var8 := `/ 23 `
+			templ_7745c5c3_Var8 := `/ 23`
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var8)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -174,7 +174,7 @@ func MMPIFormPartial(questions []string, page int, pid string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var9 := `   
+		templ_7745c5c3_Var9 := `
             // Capture the start time when the page loads
             var startTime = new Date().getTime();
 
@@ -189,7 +189,7 @@ func MMPIFormPartial(questions []string, page int, pid string) templ.Component {
                     var timeInput = document.getElementById("duration")
                     timeInput.value = timeSpent;
                 });
-            }   
+            }
       `
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var9)
 		if templ_7745c5c3_Err != nil {

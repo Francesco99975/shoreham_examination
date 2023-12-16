@@ -4,50 +4,42 @@ import "github.com/Francesco99975/shorehamex/internal/models"
 import "strconv"
 
 templ Asq(site models.Site, admin bool, questions []string, multi []string, path string) {
-    @CoreHTML(site) {
-        <!DOCTYPE html>
-        @Header(admin)
-        <main class="flex w-full md:w-2/3 flex-col items-start justify-between p-2 mt-5 md:self-center">
-            <h1 class="text-3xl text-blue-900 mb-5">
-                Anxiety Symptoms Questionnaire
-            </h1>
-
-            
-            <form id="fq" class="w-full flex flex-col items-start justify-center" 
-                hx-post={ path }
-                hx-target="body"
-                hx-replace-url="true"
-            >
-                <input type="hidden" id="duration" name="duration" value="0"/>
-
-                if admin {
-                    @StringInput("patient", "text", "Patient Name", true)
-                }
-
-                @SexRadioField("sex", "What is your Sex", true)
-
-                for index, question := range questions {
-                    @RadioField("A"+strconv.Itoa(index), question, true)
-                }
-
-                <h2 class="text-xl text-blue-900 mt-3">
-                    Do you experience or fear any of the following?
-                </h2>
-
-                for index, item := range multi {
-                    @SimpleCheckboxInput("MA"+strconv.Itoa(index), item, false)
-                }
-
-                <button
-                type="submit"
-                class="w-full mt-5 bg-green-900 text-white text-lg text-center font-bold p-2 rounded-sm"
-                >
-                    Submit
-                </button>
-            </form>
-       
-      </main>
-       <script>   
+	@CoreHTML(site) {
+		@Header(admin)
+		<main class="flex w-full md:w-2/3 flex-col items-start justify-between p-2 mt-5 md:self-center">
+			<h1 class="text-3xl text-blue-900 mb-5">
+				Anxiety Symptoms Questionnaire
+			</h1>
+			<form
+ 				id="fq"
+ 				class="w-full flex flex-col items-start justify-center"
+ 				hx-post={ path }
+ 				hx-target="body"
+ 				hx-replace-url="true"
+			>
+				<input type="hidden" id="duration" name="duration" value="0"/>
+				if admin {
+					@StringInput("patient", "text", "Patient Name", true)
+				}
+				@SexRadioField("sex", "What is your Sex", true)
+				for index, question := range questions {
+					@RadioField("A"+strconv.Itoa(index), question, true)
+				}
+				<h2 class="text-xl text-blue-900 mt-3">
+					Do you experience or fear any of the following?
+				</h2>
+				for index, item := range multi {
+					@SimpleCheckboxInput("MA"+strconv.Itoa(index), item, false)
+				}
+				<button
+ 					type="submit"
+ 					class="w-full mt-5 bg-green-900 text-white text-lg text-center font-bold p-2 rounded-sm"
+				>
+					Submit
+				</button>
+			</form>
+		</main>
+		<script>
             // Capture the start time when the page loads
             var startTime = new Date().getTime();
             console.log("hello")
@@ -63,7 +55,7 @@ templ Asq(site models.Site, admin bool, questions []string, multi []string, path
                     var timeInput = document.getElementById("duration")
                     timeInput.value = timeSpent;
                 });
-            }   
+            }
 
             for (const el of document.querySelectorAll('input[type="checkbox"]')) {
                 el.addEventListener("change", function() {
@@ -77,5 +69,5 @@ templ Asq(site models.Site, admin bool, questions []string, multi []string, path
                 });
             }
       </script>
-    }
+	}
 }

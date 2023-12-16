@@ -1,30 +1,27 @@
 package views
 
-
 templ Header(admin bool) {
-    <header class="flex justify-between items-center text-center bg-green-500 text-white border-x-8 md:border-x-[2rem] border-green-900 h-24">
-        <img src="/assets/images/logo.png" alt="LOGO" class="h-10 w-40" />
-
-        <h1 class="text-xl text-center md:text-2xl m-0 title-font hidden md:inline">
-            Shoreham Examination
-        </h1>
-
-        if admin {
-             <nav hx-boost="true" class="m-2">
-                <input id="menu-toggle" type="checkbox" class="h-8 w-8" />
-                    <label class="menu-button-container" for="menu-toggle">
-                        <div class="menu-button"></div>
-                    </label>
-                    <ul class="menu z-50">
-                        <li><a href="/admin" class="w-full">Auth Code Generator</a></li>
-                        <li><a href="/admin/asq" class="w-full">Anxiety Symptom Questionnaire</a></li>
-                        <li><a href="/admin/bai" class="w-full">Beck Anxiety Inventory</a></li>
-                        <li><a href="/admin/bdi" class="w-full">Beck Depression Inventory</a></li>
-                        <li><a href="/admin/p3" class="w-full">P3 Test</a></li>
-                        <li><a href="/admin/mmpi" class="w-full">MMPI-2</a></li>
-                        <li id="logout"><form class="w-full" hx-post="/logout" hx-target="body" hx-replace-url="true"><button class="w-full" type="submit">Logout</button></form></li>
-                    </ul>
-            </nav>
-        }
-    </header>
+	<header class="flex justify-between items-center text-center bg-green-500 text-white border-x-8 md:border-x-[2rem] border-green-900 h-24">
+		<img src="/assets/images/logo.png" alt="LOGO" class="h-10 w-40"/>
+		<h1 class="text-xl text-center md:text-2xl m-0 title-font hidden md:inline">
+			Shoreham Examination
+		</h1>
+		if admin {
+			<nav hx-boost="true" class="m-2">
+				<input id="menu-toggle" type="checkbox" class="h-8 w-8"/>
+				<label class="menu-button-container" for="menu-toggle">
+					<div class="menu-button"></div>
+				</label>
+				<ul class="menu z-50">
+					<li><a href="/admin" class="w-full">Auth Code Generator</a></li>
+					<li><a href="/admin/asq" class="w-full">Anxiety Symptom Questionnaire</a></li>
+					<li><a href="/admin/bai" class="w-full">Beck Anxiety Inventory</a></li>
+					<li><a href="/admin/bdi" class="w-full">Beck Depression Inventory</a></li>
+					<li><a href="/admin/p3" class="w-full">P3 Test</a></li>
+					<li><a href="/admin/mmpi" class="w-full">MMPI-2</a></li>
+					<li id="logout"><form class="w-full" hx-post="/logout" hx-target="body" hx-replace-url="true"><button class="w-full" type="submit">Logout</button></form></li>
+				</ul>
+			</nav>
+		}
+	</header>
 }

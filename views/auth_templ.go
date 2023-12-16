@@ -31,7 +31,7 @@ func Staff(site models.Site) templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html> <main class=\"flex flex-col items-center w-full\"><h1 class=\"text-center text-green-500 text-3xl font-bold my-5\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main class=\"flex flex-col items-center w-full\"><h1 class=\"text-center text-green-500 text-3xl font-bold my-5\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

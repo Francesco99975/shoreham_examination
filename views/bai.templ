@@ -4,43 +4,39 @@ import "github.com/Francesco99975/shorehamex/internal/models"
 import "strconv"
 
 templ Bai(site models.Site, admin bool, questions []string, path string) {
-    @CoreHTML(site) {
-        <!DOCTYPE html>
-        @Header(admin)
-        <main class="flex w-full md:w-2/3 flex-col items-start justify-between p-2 mt-5 md:self-center">
-            <h1 class="text-3xl text-blue-900 mb-5">
-                Beck Anxiety Inventory
-            </h1>
-
-            
-            <form id="fq" class="w-full flex flex-col items-start justify-center" hx-post={ path }  hx-target="body"
-                hx-replace-url="true">
-                 <input type="hidden" id="duration" name="duration" value="0"/>
-                if admin {
-                    @StringInput("patient", "text", "Patient Name", true)
-                }
-
-                 @SexRadioField("sex", "What is your Sex", true)
-
-                <h2 class="text-xl text-blue-900 my-3">
-                    Please indicate how much have you been bothered by a symptom during the past month
-                </h2>
-
-
-                for index, question := range questions {
-                    @MultiRadioField("A"+strconv.Itoa(index), question, true)
-                }
-
-                <button
-                type="submit"
-                class="w-full mt-5 bg-green-900 text-white text-lg text-center font-bold p-2 rounded-sm"
-                >
-                    Submit
-                </button>
-            </form>
-
-      </main>
-       <script>   
+	@CoreHTML(site) {
+		@Header(admin)
+		<main class="flex w-full md:w-2/3 flex-col items-start justify-between p-2 mt-5 md:self-center">
+			<h1 class="text-3xl text-blue-900 mb-5">
+				Beck Anxiety Inventory
+			</h1>
+			<form
+ 				id="fq"
+ 				class="w-full flex flex-col items-start justify-center"
+ 				hx-post={ path }
+ 				hx-target="body"
+ 				hx-replace-url="true"
+			>
+				<input type="hidden" id="duration" name="duration" value="0"/>
+				if admin {
+					@StringInput("patient", "text", "Patient Name", true)
+				}
+				@SexRadioField("sex", "What is your Sex", true)
+				<h2 class="text-xl text-blue-900 my-3">
+					Please indicate how much have you been bothered by a symptom during the past month
+				</h2>
+				for index, question := range questions {
+					@MultiRadioField("A"+strconv.Itoa(index), question, true)
+				}
+				<button
+ 					type="submit"
+ 					class="w-full mt-5 bg-green-900 text-white text-lg text-center font-bold p-2 rounded-sm"
+				>
+					Submit
+				</button>
+			</form>
+		</main>
+		<script>
             // Capture the start time when the page loads
             var startTime = new Date().getTime();
             console.log("hello")
@@ -56,7 +52,7 @@ templ Bai(site models.Site, admin bool, questions []string, path string) {
                     var timeInput = document.getElementById("duration")
                     timeInput.value = timeSpent;
                 });
-            }   
+            }
       </script>
-    }
+	}
 }

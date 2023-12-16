@@ -32,10 +32,6 @@ func Asq(site models.Site, admin bool, questions []string, multi []string, path 
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html> ")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
 			templ_7745c5c3_Err = Header(admin).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -109,7 +105,7 @@ func Asq(site models.Site, admin bool, questions []string, multi []string, path 
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Var6 := `   
+			templ_7745c5c3_Var6 := `
             // Capture the start time when the page loads
             var startTime = new Date().getTime();
             console.log("hello")
@@ -125,7 +121,7 @@ func Asq(site models.Site, admin bool, questions []string, multi []string, path 
                     var timeInput = document.getElementById("duration")
                     timeInput.value = timeSpent;
                 });
-            }   
+            }
 
             for (const el of document.querySelectorAll('input[type="checkbox"]')) {
                 el.addEventListener("change", function() {
