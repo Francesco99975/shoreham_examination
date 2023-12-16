@@ -269,7 +269,11 @@ func grade(answers []bool, scale Scale, sex string, results *MMPIResults) error 
 	}
 
 	for _, sbs := range scale.SubScales {
-		grade(answers, sbs, sex, results)
+		err := grade(answers, sbs, sex, results)
+
+		if err != nil {
+			return err
+		}
 	}
 
 	var finalScore int32
