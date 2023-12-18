@@ -1,23 +1,16 @@
 package views
 
 import "github.com/Francesco99975/shorehamex/internal/models"
+import "github.com/Francesco99975/shorehamex/views/components"
 
-type RemotePatient struct {
-	id         string
-	patient    string
-	date       string
-	done       bool
-	mmpi       bool
-	indication string
-	results    models.MMPIResults
-}
-
-templ Remotes(site models.Site, rps []RemotePatient) {
-	@CoreHTML(site) {
-		<main class="flex flex-col items-center justify-evenly w-full min-h-[80vh] text-center">
+templ Remotes(rps []models.RemotePatient) {
+	<section class="flex flex-col items-center justify-evenly w-full h-[65vh] text-center overflow-scroll">
+		if len(rps) <= 0 {
+			<h2 class="text-center text-xl text-green-700 font-bold">No Remote Patinets Yet...</h2>
+		} else {
 			for _, rp := range rps {
-				@Remote(rp.id, rp.patient, rp.date, rp.mmpi, rp.done, rp.indication, rp.results)
+				@components.Remote(rp.Id, rp.Patient, rp.Date, rp.Test, rp.Done, rp.Indication, rp.Max, rp.Score, rp.Results)
 			}
-		</main>
-	}
+		}
+	</section>
 }

@@ -61,7 +61,10 @@ func GeneratePDFGeneric(test string, id string, patient string, sex string, dura
 
 	filename := strings.ReplaceAll(fmt.Sprintf("%s+%s+%s.pdf", test, id, date), " ", "_")
 
-	document.Save(filename)
+	err = document.Save(filename)
+	if err != nil {
+		return "", err
+	}
 
 	return filename, err
 
@@ -133,7 +136,10 @@ func GeneratePDFMMPI(results models.MMPIResults) (string, error) {
 
 	filename := strings.ReplaceAll(fmt.Sprintf("%s+%s+%s.pdf", "MMPI-2", results.ID, date), " ", "_")
 
-	document.Save(filename)
+	err = document.Save(filename)
+		if err != nil {
+		return "", err
+	}
 
 	return filename, err
 

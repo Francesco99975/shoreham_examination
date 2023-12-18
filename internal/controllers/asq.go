@@ -22,39 +22,48 @@ type AsqContent struct {
 }
 
 func Asq(admin bool) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		data := models.GetDefaultSite("ASQ Exam")
 
-	data := models.Site{
-		AppName:  "Shoreham Examination",
-		Title:    "ASQ Exam",
-		Metatags: models.SEO{Description: "Examination tool", Keywords: "tools,exam"},
-		Year:     time.Now().Year(),
+		filename := "data/asq.json"
+		var cnt *AsqContent
+
+		qsj, err := os.ReadFile(filename)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		}
+
+		err = json.Unmarshal(qsj, &cnt)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		}
+
+		if len(cnt.Multiq) <= 0 || len(cnt.Questions) <= 0 {
+			html, err := helpers.GeneratePage(views.ServerError(data, err))
+
+			if err != nil {
+				return echo.NewHTTPError(http.StatusBadRequest, "Could not parse page server error")
+			}
+
+			return c.Blob(200, "text/html; charset=utf-8", html)
+		}
+
+		var path string
+		if admin {
+			path = "/admin/asq"
+		} else {
+			path = "/examination/asq"
+		}
+
+		html, err := helpers.GeneratePage(views.Asq(data, admin, cnt.Questions, cnt.Multiq, path))
+
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, "Could not parse page asq wxam")
+		}
+
+		return c.Blob(200, "text/html; charset=utf-8", html)
+
 	}
-
-	filename := "data/asq.json"
-	var cnt *AsqContent
-
-	qsj, err := os.ReadFile(filename)
-	if err != nil {
-		fmt.Printf("error while reading json: %s", err.Error())
-	}
-
-	err = json.Unmarshal(qsj, &cnt)
-	if err != nil {
-		fmt.Printf("error while parsing json: %s", err.Error())
-	}
-
-	if len(cnt.Multiq) <= 0 || len(cnt.Questions) <= 0 {
-		return GeneratePage(views.ServerError(data, err))
-	}
-
-	var path string
-	if admin {
-		path = "/admin/asq"
-	} else {
-		path = "/examination/asq"
-	}
-
-	return GeneratePage(views.Asq(data, admin, cnt.Questions, cnt.Multiq, path))
 }
 
 func AsqCalc(admin bool) echo.HandlerFunc {
@@ -152,7 +161,7 @@ func AsqCalc(admin bool) echo.HandlerFunc {
 				return echo.NewHTTPError(http.StatusBadRequest, err)
 			}
 
-			result := models.Examination { Test: string(models.ASQ), Metric: fmt.Sprint(score), Duration: duration, Created: time.Now(), Pid: sess.Values["authid"].(string) }
+			result := models.Examination { Sex: sex, Test: string(models.ASQ), Metric: fmt.Sprint(score), Duration: duration, Created: time.Now(), Pid: sess.Values["authid"].(string) }
 			err = result.SubmitExamination()
 			if err != nil {
 				return echo.NewHTTPError(http.StatusInternalServerError, "Could not save patient test results")

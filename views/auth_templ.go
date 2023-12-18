@@ -11,6 +11,8 @@ import "io"
 import "bytes"
 
 import "github.com/Francesco99975/shorehamex/internal/models"
+import "github.com/Francesco99975/shorehamex/views/layouts"
+import "github.com/Francesco99975/shorehamex/views/components"
 
 func Staff(site models.Site) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
@@ -44,11 +46,11 @@ func Staff(site models.Site) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = StringInput("email", "email", "Email", true).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.StringInput("email", "email", "Email", true).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = StringInput("password", "password", "Password", true).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.StringInput("password", "password", "Password", true).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -90,7 +92,7 @@ func Staff(site models.Site) templ.Component {
 			}
 			return templ_7745c5c3_Err
 		})
-		templ_7745c5c3_Err = CoreHTML(site).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = layouts.CoreHTML(site).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -133,11 +135,11 @@ func Patient(site models.Site) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = StringInput("authid", "text", "Authentication ID", true).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.StringInput("authid", "text", "Authentication ID", true).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = StringInput("authcode", "password", "Authentication Code", true).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.StringInput("authcode", "password", "Authentication Code", true).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -179,7 +181,7 @@ func Patient(site models.Site) templ.Component {
 			}
 			return templ_7745c5c3_Err
 		})
-		templ_7745c5c3_Err = CoreHTML(site).Render(templ.WithChildren(ctx, templ_7745c5c3_Var7), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = layouts.CoreHTML(site).Render(templ.WithChildren(ctx, templ_7745c5c3_Var7), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

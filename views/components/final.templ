@@ -1,0 +1,71 @@
+package components
+
+import "github.com/Francesco99975/shorehamex/internal/models"
+import "strconv"
+import "strings"
+
+templ MMPIFinal(results models.MMPIResults) {
+	<section class="flex flex-col w-3/4 rounded-lg p-3 my-2 justify-center items-center text-center text-green-600">
+		<h1 class="text-2xl p-2 my-3  text-center">MMPI Results for { results.Patient }</h1>
+		<h2 class="text-lg my-1 p-1">Sex: { results.Sex }</h2>
+		for _, category := range results.Categories {
+			<div class="mb-7">
+				<h2 class="text-lg">{ category.Title }</h2>
+				<p class="m-0 mt-2">
+					<strong>Derived Indications: </strong>
+					{ strings.Join(category.DerivedIndications, ",") }
+				</p>
+				<table class="border-collapse w-full mt-3">
+					<thead>
+						<tr>
+							<th class="border-1 border-solid border-gray-300 bg-slate-200 p-2 text-left">
+								Scale Name
+							</th>
+							<th
+ 								class="border-1 border-solid border-gray-300 bg-slate-200 p-2 text-left"
+							>
+								Scale Description
+							</th>
+							<th
+ 								class="border-1 border-solid border-gray-300 bg-slate-200 p-2 text-left"
+							>
+								Scale Purpose
+							</th>
+							<th
+ 								class="border-1 border-solid border-gray-300 bg-slate-200 p-2 text-left"
+							>
+								Score
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						for _, scale := range category.Scales {
+							<tr key={ scale.ScaleName }>
+								<td
+ 									class="border-1 border-solid border-gray-300 p-2 text-left"
+								>
+									{ scale.ScaleName }
+								</td>
+								<td
+ 									class="border-1 border-solid border-gray-300 p-2 text-left"
+								>
+									{ scale.ScaleDescription }
+								</td>
+								<td
+ 									class="border-1 border-solid border-gray-300 p-2 text-left"
+								>
+									{ scale.ScalePupose }
+								</td>
+								<td
+ 									class="border-1 border-solid border-gray-300 p-2 text-left"
+								>
+									{ strconv.Itoa(int(scale.Score)) }
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		}
+	</section>
+}

@@ -21,39 +21,52 @@ type P3Content struct {
 }
 
 func P3(admin bool) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		data := models.Site{
+			AppName:  "Shoreham Examination",
+			Title:    "P3 Exam",
+			Metatags: models.SEO{Description: "Examination tool", Keywords: "tools,exam"},
+			Year:     time.Now().Year(),
+		}
 
-	data := models.Site{
-		AppName:  "Shoreham Examination",
-		Title:    "P3 Exam",
-		Metatags: models.SEO{Description: "Examination tool", Keywords: "tools,exam"},
-		Year:     time.Now().Year(),
+		filename := "data/p3.json"
+		var cnt *P3Content
+
+		qsj, err := os.ReadFile(filename)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		}
+
+		err = json.Unmarshal(qsj, &cnt)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		}
+
+		if len(cnt.Questions) <= 0 {
+			html, err := helpers.GeneratePage(views.ServerError(data, err))
+
+			if err != nil {
+				return echo.NewHTTPError(http.StatusBadRequest, "Could not parse page server error")
+			}
+
+			return c.Blob(200, "text/html; charset=utf-8", html)
+		}
+
+		var path string
+		if admin {
+			path = "/admin/p3"
+		} else {
+			path = "/examination/p3"
+		}
+
+		html, err := helpers.GeneratePage(views.P3(data, admin, cnt.Questions, path))
+
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, "Could not parse page P3 Exam")
+		}
+
+		return c.Blob(200, "text/html; charset=utf-8", html)
 	}
-
-	filename := "data/p3.json"
-	var cnt *P3Content
-
-	qsj, err := os.ReadFile(filename)
-	if err != nil {
-		fmt.Printf("error while reading json: %s", err.Error())
-	}
-
-	err = json.Unmarshal(qsj, &cnt)
-	if err != nil {
-		fmt.Printf("error while parsing json: %s", err.Error())
-	}
-
-	if len(cnt.Questions) <= 0 {
-		return GeneratePage(views.ServerError(data, err))
-	}
-
-	var path string
-	if admin {
-		path = "/admin/p3"
-	} else {
-		path = "/examination/p3"
-	}
-
-	return GeneratePage(views.P3(data, admin, cnt.Questions, path))
 }
 
 func P3Calc(admin bool) echo.HandlerFunc {
@@ -144,7 +157,7 @@ func P3Calc(admin bool) echo.HandlerFunc {
 				return echo.NewHTTPError(http.StatusBadRequest, err)
 			}
 
-			result := models.Examination { Test: string(models.P3), Metric: fmt.Sprint(score), Duration: duration, Created: time.Now(), Pid: sess.Values["authid"].(string) }
+			result := models.Examination { Sex: sex, Test: string(models.P3), Metric: fmt.Sprint(score), Duration: duration, Created: time.Now(), Pid: sess.Values["authid"].(string) }
 			err = result.SubmitExamination()
 			if err != nil {
 				return echo.NewHTTPError(http.StatusInternalServerError, "Could not save patient test results")

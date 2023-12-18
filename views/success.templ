@@ -1,9 +1,10 @@
 package views
 
 import "github.com/Francesco99975/shorehamex/internal/models"
+import "github.com/Francesco99975/shorehamex/views/layouts"
 
 templ Success(site models.Site) {
-	@CoreHTML(site) {
+	@layouts.CoreHTML(site) {
 		<main class="flex flex-col w-full justify-center items-center text-center h-[80vh]">
 			<h1 class="rounded-sm text-2xl p-2 my-3 bg-green-800 shadow-xl text-white text-center">Examination Concluded Successfully</h1>
 			<a class="rounded p-2 my-5 text-center italic shadow-2xl bg-blue-800 text-white w-3/4 text-xl" href="/">Go back</a>

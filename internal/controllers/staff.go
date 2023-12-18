@@ -1,8 +1,9 @@
 package controllers
 
 import (
-	"time"
+	"net/http"
 
+	"github.com/Francesco99975/shorehamex/internal/helpers"
 	"github.com/Francesco99975/shorehamex/internal/models"
 	"github.com/Francesco99975/shorehamex/views"
 	"github.com/labstack/echo/v4"
@@ -10,12 +11,15 @@ import (
 
 func Staff() echo.HandlerFunc {
 
-	data := models.Site{
-		AppName:  "Shoreham Examination",
-		Title:    "Staff",
-		Metatags: models.SEO{Description: "Examination tool", Keywords: "tools,exam"},
-		Year:     time.Now().Year(),
-	}
+	return func(c echo.Context) error {
+		data := models.GetDefaultSite("Staff")
 
-	return GeneratePage(views.Staff(data))
+		html, err := helpers.GeneratePage(views.Staff(data))
+
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, "Could not parse page staff auth")
+		}
+
+		return c.Blob(200, "text/html; charset=utf-8", html)
+	}
 }

@@ -1,9 +1,10 @@
-package views
+package components
 
 import "github.com/Francesco99975/shorehamex/internal/models"
+import "strconv"
 
-templ Remote(id string, patient string, date string, mmpi bool, done bool, indication string, results models.MMPIResults) {
-	<section class="flex flex-col w-full md:w-4/5 rounded bg-green-800 text-white shadow-lg p-3 mt-2">
+templ Remote(id string, patient string, date string, test models.Exam, done bool, indication string, max int, score int, results models.MMPIResults) {
+	<div class="flex flex-col w-full md:w-4/5 rounded bg-green-800 text-white shadow-lg p-3 mt-2">
 		<h3 class="text-xl md:text-3xl">{ patient }</h3>
 		<div class="flex w-full justify-between items-center text-lg md:text-xl">
 			if done {
@@ -17,12 +18,13 @@ templ Remote(id string, patient string, date string, mmpi bool, done bool, indic
 			}
 			<span class="italic p-1">{ date }</span>
 		</div>
-	</section>
+	</div>
 	if done && len(indication) > 0 {
 		<details class="w-full md:w-4/5 bg-blue-700 text-white rounded-b-md">
 			<summary>Results</summary>
-			if !mmpi {
+			if test != models.MMPI {
 				<span class="p-2 text-white">{ indication }</span>
+				<results-chart score={ strconv.Itoa(score) } max={ strconv.Itoa(max) } title={ indication }></results-chart>
 			} else {
 				@MMPIFinal(results)
 			}

@@ -35,6 +35,73 @@ func CompileBasicIndication(patient string, percentage string, test string, grav
 	return fmt.Sprintf("The patient, %s, scored %s on the %s. This result is in the %s range.", patient, percentage, test, gravity)
 }
 
+func CalcTestASQ(score int, patient string) string {
+		rawPercentage := float64(score) / float64(ASQ_MAX_SCORE) * 100.0
+
+		var gravity string
+		if rawPercentage <= 30 {
+			gravity = "normal"
+		} else if rawPercentage >= 31 && rawPercentage <= 45 {
+			gravity = "moderate"
+		} else {
+			gravity = "severe"
+		}
+
+		percentage := fmt.Sprintf("%.2f", rawPercentage) + "%"
+
+		return CompileBasicIndication(patient, percentage, "Anxiety Symptom Questionnaire", gravity)
+}
+
+func CalcTestBAI(score int, patient string) string {
+		rawPercentage := float64(score) / float64(BAI_MAX_SCORE) * 100.0
+
+		var gravity string
+		if rawPercentage <= 21 {
+			gravity = "normal"
+		} else if rawPercentage >= 22 && rawPercentage <= 35 {
+			gravity = "moderate"
+		} else {
+			gravity = "severe"
+		}
+
+		percentage := fmt.Sprintf("%.2f", rawPercentage) + "%"
+
+		return CompileBasicIndication(patient, percentage, "Beck Anxiety Inventory", gravity)
+}
+
+func CalcTestBDI(score int, patient string) string {
+		rawPercentage := float64(score) / float64(BDI_MAX_SCORE) * 100.0
+
+		var gravity string
+		if rawPercentage <= 9 {
+			gravity = "normal"
+		} else if rawPercentage >= 10 && rawPercentage <= 18 {
+			gravity = "moderate"
+		} else {
+			gravity = "severe"
+		}
+		percentage := fmt.Sprintf("%.2f", rawPercentage) + "%"
+
+		return CompileBasicIndication(patient, percentage, "Beck Depression Inventory", gravity)
+}
+
+func CalcTestP3(score int, patient string) string {
+		rawPercentage := float64(score) / float64(P3_MAX_SCORE) * 100.0
+
+		var gravity string
+		if rawPercentage <= 30 {
+			gravity = "normal"
+		} else if rawPercentage >= 31 && rawPercentage <= 50 {
+			gravity = "moderate"
+		} else {
+			gravity = "severe"
+		}
+
+		percentage := fmt.Sprintf("%.2f", rawPercentage) + "%"
+
+		return CompileBasicIndication(patient, percentage, "P3", gravity)
+}
+
 const MMPI_TEST_ANSWERS string = "TTFTFFTFFFFFFTFTFFFTTTFFFTFFTFTFFTFTTTTFTFFFFTTTFTTTTFTTTFTFFTTFTTTFTTTFTFF" +
 	"TTFFFTTFFTFTTTFTTTFFFFTFFFFFFTFTTFTFFFFTFTTFTFFTFFFTTTTFFFFTFTFTFFFTFFFTFFT" +
 	"FFFTTTFTTFTFTTFTTFFFTTFFTTFTTTTFFFTTFFFTFTFFTTFFTFFFFTFFTFTFFFFTTFTFTFFTFTF" +

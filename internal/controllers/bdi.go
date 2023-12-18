@@ -22,38 +22,47 @@ type BdiContent struct {
 
 func Bdi(admin bool) echo.HandlerFunc {
 
-	data := models.Site{
-		AppName:  "Shoreham Examination",
-		Title:    "BDI Exam",
-		Metatags: models.SEO{Description: "Examination tool", Keywords: "tools,exam"},
-		Year:     time.Now().Year(),
+	return func(c echo.Context) error {
+		data := models.GetDefaultSite("BDI Exam")
+
+		filename := "data/bdi.json"
+		var cnt *BdiContent
+
+		qsj, err := os.ReadFile(filename)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		}
+
+		err = json.Unmarshal(qsj, &cnt)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		}
+
+		if len(cnt.Questions) <= 0 {
+				html, err := helpers.GeneratePage(views.ServerError(data, err))
+
+				if err != nil {
+					return echo.NewHTTPError(http.StatusBadRequest, "Could not parse page server error")
+				}
+
+				return c.Blob(200, "text/html; charset=utf-8", html)
+		}
+
+		var path string
+		if admin {
+			path = "/admin/bdi"
+		} else {
+			path = "/examination/bdi"
+		}
+
+		html, err := helpers.GeneratePage(views.Bdi(data, admin, cnt.Questions, path))
+
+		if err != nil {
+			return echo.NewHTTPError(http.StatusBadRequest, "Could not parse page bdi exam")
+		}
+
+		return c.Blob(200, "text/html; charset=utf-8", html)
 	}
-
-	filename := "data/bdi.json"
-	var cnt *BdiContent
-
-	qsj, err := os.ReadFile(filename)
-	if err != nil {
-		fmt.Printf("error while reading json: %s", err.Error())
-	}
-
-	err = json.Unmarshal(qsj, &cnt)
-	if err != nil {
-		fmt.Printf("error while parsing json: %s", err.Error())
-	}
-
-	if len(cnt.Questions) <= 0 {
-		return GeneratePage(views.ServerError(data, err))
-	}
-
-	var path string
-	if admin {
-		path = "/admin/bdi"
-	} else {
-		path = "/examination/bdi"
-	}
-
-	return GeneratePage(views.Bdi(data, admin, cnt.Questions, path))
 }
 
 func BdiCalc(admin bool) echo.HandlerFunc {
@@ -140,7 +149,7 @@ func BdiCalc(admin bool) echo.HandlerFunc {
 				return echo.NewHTTPError(http.StatusBadRequest, err)
 			}
 
-			result := models.Examination { Test: string(models.BDI), Metric: fmt.Sprint(score), Duration: duration, Created: time.Now(), Pid: sess.Values["authid"].(string) }
+			result := models.Examination { Sex: sex, Test: string(models.BDI), Metric: fmt.Sprint(score), Duration: duration, Created: time.Now(), Pid: sess.Values["authid"].(string) }
 			err = result.SubmitExamination()
 			if err != nil {
 				return echo.NewHTTPError(http.StatusInternalServerError, "Could not save patient test results")

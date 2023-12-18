@@ -32,6 +32,33 @@ func CreatePatientExam(patient *Patient) error {
 	return err
 }
 
+func GetAllPatients() ([]Patient, error) {
+	var patients []Patient
+
+	statement := `SELECT * FROM patients;`
+
+	rows, err := db.Query(statement)
+
+	if err != nil {
+		return []Patient{}, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var patient Patient
+		err = rows.Scan(&patient.AuthId, &patient.Name, &patient.Authcode, &patient.Exams, &patient.Created)
+		if err != nil {
+			return []Patient{}, err
+		}
+
+		patients = append(patients, patient)
+
+	}
+
+	return patients, nil
+}
+
 func GetPatient(authid string) (Patient, error) {
 	var patient Patient
 
