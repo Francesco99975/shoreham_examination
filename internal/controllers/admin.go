@@ -13,7 +13,6 @@ import (
 	"github.com/Francesco99975/shorehamex/views"
 	"github.com/aidarkhanov/nanoid"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/gommon/log"
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -40,7 +39,7 @@ func Admin() echo.HandlerFunc {
 					if err != nil {
 							return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 					}
-					rps = append(rps, models.RemotePatient{ Id: patient.AuthId, Patient: patient.Name, Date: patient.Created.Format(time.DateOnly), Done: len(patient.Exams) <= 0, Test: models.MMPI, Indication: "", Score: -1, Max: -1, Results: final })
+					rps = append(rps, models.RemotePatient{ Id: patient.AuthId, Patient: patient.Name, Date: patient.Created.Format(time.DateOnly), Done: len(patient.Exams) <= 0, Test: models.Tests[4], Indication: "", Score: -1, Max: -1, Results: final })
 				} else {
 					sc, err := strconv.Atoi(result.Metric)
 						if err != nil {
@@ -50,22 +49,27 @@ func Admin() echo.HandlerFunc {
 
 					var ind string
 					var mx int
+					var ts models.TestSpecification
 					switch test {
 					case models.ASQ:
 						ind = models.CalcTestASQ(sc, patient.Name)
 						mx = models.ASQ_MAX_SCORE
+						ts = models.Tests[0]
 					case models.BAI:
 						ind = models.CalcTestBAI(sc, patient.Name)
 						mx = models.BAI_MAX_SCORE
+						ts = models.Tests[1]
 					case models.BDI:
 						ind = models.CalcTestBDI(sc, patient.Name)
 						mx = models.BDI_MAX_SCORE
+						ts = models.Tests[2]
 					case models.P3:
 						ind = models.CalcTestP3(sc, patient.Name)
 						mx = models.P3_MAX_SCORE
+						ts = models.Tests[3]
 					}
 
-					rps = append(rps, models.RemotePatient{ Id: patient.AuthId, Patient: patient.Name, Date: patient.Created.Format(time.DateOnly), Done: len(patient.Exams) <= 0, Test: models.Exam(result.Test), Indication: ind, Score: sc, Max: mx, Results: models.MMPIResults{} })
+					rps = append(rps, models.RemotePatient{ Id: patient.AuthId, Patient: patient.Name, Date: patient.Created.Format(time.DateOnly), Done: len(patient.Exams) <= 0, Test: ts, Indication: ind, Score: sc, Max: mx, Results: models.MMPIResults{} })
 				}
 
 			}
@@ -113,8 +117,7 @@ func GenerateCodes() echo.HandlerFunc {
 		err = views.GenerationResults(patient.AuthId, patient.Authcode, patient.Name).Render(context.Background(), buf)
 
 		if err != nil {
-			log.Warn("TODO: you need to implement this properly")
-			log.Errorf("rendering index: %s", err)
+			return echo.NewHTTPError(http.StatusInternalServerError, "Could not create view admin codes")
 		}
 
 		return c.Blob(200, "text/html; charset=utf-8", buf.Bytes())

@@ -178,6 +178,13 @@ func Admin(site models.Site, rps []models.RemotePatient) templ.Component {
 
 				// Add 'active' class to the clicked button
 				buttons[tabNumber - 1].classList.add('bg-blue-700', 'bg-green-700', 'bg-yellow-700');
+
+				if(tabNumber == 3) {
+					const charts = document.querySelectorAll("results-chart");
+  				for (const chart of charts) {
+						chart.render(chart.id.substring(0, chart.id.length - 2));
+					}
+				}
  	 		}
 	`
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var12)

@@ -2,10 +2,14 @@ package components
 
 import "github.com/Francesco99975/shorehamex/internal/models"
 import "strconv"
+import "github.com/satori/go.uuid"
 
-templ Remote(id string, patient string, date string, test models.Exam, done bool, indication string, max int, score int, results models.MMPIResults) {
-	<div class="flex flex-col w-full md:w-4/5 rounded bg-green-800 text-white shadow-lg p-3 mt-2">
-		<h3 class="text-xl md:text-3xl">{ patient }</h3>
+templ Remote(id string, patient string, date string, test models.TestSpecification, done bool, indication string, max int, score int, results models.MMPIResults) {
+	<div class="flex flex-col w-full md:w-4/5 rounded items-center bg-green-800 text-white shadow-lg p-3 mt-2">
+		<div class="flex w-full justify-between items-center">
+			<h3 class="text-xl md:text-2xl">{ test.Name }</h3>
+			<span class="md:text-xl">{ patient }</span>
+		</div>
 		<div class="flex w-full justify-between items-center text-lg md:text-xl">
 			if done {
 				<span class="rounded-sm p-1 text-center text-white bg-blue-700 shadow-sm font-bold tracking-wider">
@@ -18,16 +22,16 @@ templ Remote(id string, patient string, date string, test models.Exam, done bool
 			}
 			<span class="italic p-1">{ date }</span>
 		</div>
+		if done && len(indication) > 0 {
+			<details class="w-full md:w-3/5 bg-blue-700 text-white rounded-b-md mt-3">
+				<summary class="text-lg md:text-2xl">Results</summary>
+				if test.ID != models.MMPI {
+					<span class="p-2 text-white italic">{ indication }</span>
+					<results-chart id={ uuid.NewV4().String() } test={ test.Name } score={ strconv.Itoa(score) } max={ strconv.Itoa(max) } low={ strconv.Itoa(test.Low) } high={ strconv.Itoa(test.High) }></results-chart>
+				} else {
+					@MMPIFinal(results)
+				}
+			</details>
+		}
 	</div>
-	if done && len(indication) > 0 {
-		<details class="w-full md:w-4/5 bg-blue-700 text-white rounded-b-md">
-			<summary>Results</summary>
-			if test != models.MMPI {
-				<span class="p-2 text-white">{ indication }</span>
-				<results-chart score={ strconv.Itoa(score) } max={ strconv.Itoa(max) } title={ indication }></results-chart>
-			} else {
-				@MMPIFinal(results)
-			}
-		</details>
-	}
 }

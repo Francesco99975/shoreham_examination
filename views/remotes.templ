@@ -4,7 +4,7 @@ import "github.com/Francesco99975/shorehamex/internal/models"
 import "github.com/Francesco99975/shorehamex/views/components"
 
 templ Remotes(rps []models.RemotePatient) {
-	<section class="flex flex-col items-center justify-evenly w-full h-[65vh] text-center overflow-scroll">
+	<section class="flex flex-col items-center w-full min-h-[80vh] text-center px-2">
 		if len(rps) <= 0 {
 			<h2 class="text-center text-xl text-green-700 font-bold">No Remote Patinets Yet...</h2>
 		} else {

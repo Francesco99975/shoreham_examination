@@ -12,7 +12,7 @@ type RemotePatient struct {
 	Patient    string
 	Date       string
 	Done       bool
-	Test       Exam
+	Test       TestSpecification
 	Indication string
 	Score      int
 	Max        int

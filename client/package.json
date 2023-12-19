@@ -15,6 +15,7 @@
   "license": "GPL-3.0",
   "dependencies": {
     "chart.js": "^4.4.1",
+    "chartjs-plugin-annotation": "^3.0.1",
     "htmx.org": "^1.9.9",
     "zod": "^3.22.4"
   },

@@ -25,6 +25,21 @@ const P3_MAX_SCORE int = 88
 const P3_ADJUST int = 44 // To Be subtracted from p3 score
 const MMPI2_MAX_SCORE int = 567
 
+type TestSpecification struct {
+	ID Exam
+	Name string
+	Low int
+	High int
+}
+
+var Tests []TestSpecification = []TestSpecification {
+	{ ID: ASQ, Name: "Anxiety Symptoms Questionnaire", Low: int(math.Round(0.30 * float64(ASQ_MAX_SCORE))), High: int(math.Round(0.45 * float64(ASQ_MAX_SCORE))) },
+	{ ID: BAI, Name: "Beck Anxiety Inventory", Low: int(math.Round(0.21 * float64(BAI_MAX_SCORE))), High: int(math.Round(0.35 * float64(BAI_MAX_SCORE))) },
+	{ ID: BDI, Name: "Beck Depression Inventory", Low: int(math.Round(0.09 * float64(BDI_MAX_SCORE))), High: int(math.Round(0.18 * float64(BDI_MAX_SCORE))) },
+	{ ID: P3, Name: "P3", Low: int(math.Round(0.30 * float64(P3_MAX_SCORE))), High: int(math.Round(0.50 * float64(P3_MAX_SCORE))) },
+	{ ID: MMPI, Name: "MMPI-2" },
+}
+
 type BasicExamResults struct {
 	Score       int32
 	Indications string
