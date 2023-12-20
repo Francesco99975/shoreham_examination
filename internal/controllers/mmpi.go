@@ -241,7 +241,7 @@ func MMPICalc(admin bool) echo.HandlerFunc {
 			}
 
 			if success && admin {
-				result := models.AdminResult { ID: newlocal.ID, Patient: patient, Sex: newlocal.Sex , Test: string(models.MMPI), Metric: strings.Join(answers, ""), Duration: duration, Created: time.Now(), Aid: sess.Values["email"].(string) }
+				result := models.AdminResult { ID: newlocal.ID, Patient: patient, Sex: newlocal.Sex , Test: string(models.MMPI), Metric: newlocal.Answers, Duration: duration, Created: time.Now(), Aid: sess.Values["email"].(string) }
 				err = result.Submit()
 				if err != nil {
 					return echo.NewHTTPError(http.StatusInternalServerError, "Could not save admin test results")
