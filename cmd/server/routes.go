@@ -67,6 +67,8 @@ func createRouter() *echo.Echo {
 
 	adminGroup.POST("", controllers.GenerateCodes())
 
+	adminGroup.GET("/local", controllers.Locals())
+
 	adminGroup.GET("/remote", controllers.Remotes())
 
 	adminGroup.GET("/asq", controllers.Asq(true))
