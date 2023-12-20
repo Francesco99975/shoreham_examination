@@ -114,7 +114,7 @@ func P3Calc(admin bool) echo.HandlerFunc {
 
 		percentage := fmt.Sprintf("%.2f", rawPercentage) + "%"
 
-		indication := models.CompileBasicIndication(patient, percentage, "P3", gravity)
+		indication := models.CompileBasicIndication(patient, percentage, "P3", duration, gravity)
 
 		var id string
 		sess, err := session.Get("session", c)

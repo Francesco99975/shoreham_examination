@@ -108,7 +108,7 @@ func BdiCalc(admin bool) echo.HandlerFunc {
 
 		percentage := fmt.Sprintf("%.2f", rawPercentage) + "%"
 
-		indication := models.CompileBasicIndication(patient, percentage, "Beck Depression Inventory", gravity)
+		indication := models.CompileBasicIndication(patient, percentage, "Beck Depression Inventory", duration, gravity)
 
 		var id string
 		sess, err := session.Get("session", c)

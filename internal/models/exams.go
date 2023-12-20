@@ -46,11 +46,14 @@ type BasicExamResults struct {
 	Examinator  Exam
 }
 
-func CompileBasicIndication(patient string, percentage string, test string, gravity string) string {
-	return fmt.Sprintf("The patient, %s, scored %s on the %s. This result is in the %s range.", patient, percentage, test, gravity)
+func CompileBasicIndication(patient string, percentage string, test string, duration int, gravity string) string {
+	durationSec := duration / 1000
+	durationMin := durationSec / 60
+	durationSec = durationSec % 60
+	return fmt.Sprintf("The patient, %s, scored %s on the %s in %d minutes at %d seconds. This result is in the %s range.", patient, percentage, test, durationMin, durationSec, gravity)
 }
 
-func CalcTestASQ(score int, patient string) string {
+func CalcTestASQ(score int, patient string, duration int) string {
 		rawPercentage := float64(score) / float64(ASQ_MAX_SCORE) * 100.0
 
 		var gravity string
@@ -64,10 +67,10 @@ func CalcTestASQ(score int, patient string) string {
 
 		percentage := fmt.Sprintf("%.2f", rawPercentage) + "%"
 
-		return CompileBasicIndication(patient, percentage, "Anxiety Symptom Questionnaire", gravity)
+		return CompileBasicIndication(patient, percentage, "Anxiety Symptom Questionnaire", duration, gravity)
 }
 
-func CalcTestBAI(score int, patient string) string {
+func CalcTestBAI(score int, patient string, duration int) string {
 		rawPercentage := float64(score) / float64(BAI_MAX_SCORE) * 100.0
 
 		var gravity string
@@ -81,10 +84,10 @@ func CalcTestBAI(score int, patient string) string {
 
 		percentage := fmt.Sprintf("%.2f", rawPercentage) + "%"
 
-		return CompileBasicIndication(patient, percentage, "Beck Anxiety Inventory", gravity)
+		return CompileBasicIndication(patient, percentage, "Beck Anxiety Inventory", duration, gravity)
 }
 
-func CalcTestBDI(score int, patient string) string {
+func CalcTestBDI(score int, patient string, duration int) string {
 		rawPercentage := float64(score) / float64(BDI_MAX_SCORE) * 100.0
 
 		var gravity string
@@ -97,10 +100,10 @@ func CalcTestBDI(score int, patient string) string {
 		}
 		percentage := fmt.Sprintf("%.2f", rawPercentage) + "%"
 
-		return CompileBasicIndication(patient, percentage, "Beck Depression Inventory", gravity)
+		return CompileBasicIndication(patient, percentage, "Beck Depression Inventory", duration, gravity)
 }
 
-func CalcTestP3(score int, patient string) string {
+func CalcTestP3(score int, patient string, duration int) string {
 		rawPercentage := float64(score) / float64(P3_MAX_SCORE) * 100.0
 
 		var gravity string
@@ -114,7 +117,7 @@ func CalcTestP3(score int, patient string) string {
 
 		percentage := fmt.Sprintf("%.2f", rawPercentage) + "%"
 
-		return CompileBasicIndication(patient, percentage, "P3", gravity)
+		return CompileBasicIndication(patient, percentage, "P3", duration, gravity)
 }
 
 const MMPI_TEST_ANSWERS string = "TTFTFFTFFFFFFTFTFFFTTTFFFTFFTFTFFTFTTTTFTFFFFTTTFTTTTFTTTFTFFTTFTTTFTTTFTFF" +

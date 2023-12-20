@@ -52,19 +52,19 @@ func Admin() echo.HandlerFunc {
 					var ts models.TestSpecification
 					switch test {
 					case models.ASQ:
-						ind = models.CalcTestASQ(sc, patient.Name)
+						ind = models.CalcTestASQ(sc, patient.Name, result.Duration)
 						mx = models.ASQ_MAX_SCORE
 						ts = models.Tests[0]
 					case models.BAI:
-						ind = models.CalcTestBAI(sc, patient.Name)
+						ind = models.CalcTestBAI(sc, patient.Name, result.Duration)
 						mx = models.BAI_MAX_SCORE
 						ts = models.Tests[1]
 					case models.BDI:
-						ind = models.CalcTestBDI(sc, patient.Name)
+						ind = models.CalcTestBDI(sc, patient.Name, result.Duration)
 						mx = models.BDI_MAX_SCORE
 						ts = models.Tests[2]
 					case models.P3:
-						ind = models.CalcTestP3(sc, patient.Name)
+						ind = models.CalcTestP3(sc, patient.Name, result.Duration)
 						mx = models.P3_MAX_SCORE
 						ts = models.Tests[3]
 					}

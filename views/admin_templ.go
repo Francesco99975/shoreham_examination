@@ -183,6 +183,9 @@ func Admin(site models.Site, rps []models.RemotePatient) templ.Component {
 					const charts = document.querySelectorAll("results-chart");
   				for (const chart of charts) {
 						chart.render(chart.id.substring(0, chart.id.length - 2));
+						window.addEventListener("resize", function() {
+							chart.render(chart.id.substring(0, chart.id.length - 2));
+						});
 					}
 				}
  	 		}

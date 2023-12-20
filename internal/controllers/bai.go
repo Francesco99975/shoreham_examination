@@ -108,7 +108,7 @@ func BaiCalc(admin bool) echo.HandlerFunc {
 
 		percentage := fmt.Sprintf("%.2f", rawPercentage) + "%"
 
-		indication := models.CompileBasicIndication(patient, percentage, "Beck Anxiety Inventory", gravity)
+		indication := models.CompileBasicIndication(patient, percentage, "Beck Anxiety Inventory", duration, gravity)
 
 		var id string
 		sess, err := session.Get("session", c)

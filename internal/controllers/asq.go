@@ -118,7 +118,7 @@ func AsqCalc(admin bool) echo.HandlerFunc {
 
 		percentage := fmt.Sprintf("%.2f", rawPercentage) + "%"
 
-		indication := models.CompileBasicIndication(patient, percentage, "Anxiety Symptoms Questionnaire", gravity)
+		indication := models.CompileBasicIndication(patient, percentage, "Anxiety Symptoms Questionnaire", duration, gravity)
 
 		var id string
 		sess, err := session.Get("session", c)
