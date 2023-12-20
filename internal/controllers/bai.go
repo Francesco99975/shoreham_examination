@@ -137,7 +137,7 @@ func BaiCalc(admin bool) echo.HandlerFunc {
 			result := models.AdminResult { ID: id, Patient: patient, Sex: sex, Test: string(models.BAI), Metric: fmt.Sprint(score), Duration: duration, Created: time.Now(), Aid: sess.Values["email"].(string) }
 			err = result.Submit()
 			if err != nil {
-				return echo.NewHTTPError(http.StatusInternalServerError, "Could not save admin test results")
+				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Could not save admin test results: %s", err.Error()))
 			}
 			return c.Redirect(http.StatusSeeOther, "/success")
 		} else if success && !admin {

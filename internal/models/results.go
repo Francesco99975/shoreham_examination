@@ -34,7 +34,7 @@ type AdminResult struct {
 func (results *AdminResult) Submit() error {
 	statement := `INSERT INTO adminresults(id, patient, sex, test, answers, duration, created, aid) VALUES($1, $2, $3, $4, $5, $6, $7, $8);`
 
-	_, err := db.Exec(statement, results.ID, results.Patient, results.Sex, results.Test, results.Metric, results.Duration, results.Aid)
+	_, err := db.Exec(statement, results.ID, results.Patient, results.Sex, results.Test, results.Metric, results.Duration, results.Created, results.Aid)
 
 	if err != nil {
 		return err

@@ -22,7 +22,7 @@ func Locals() echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusBadRequest, "Invalid data for session")
 		}
 
-		results, err := models.LoadAdminResults(sess.Values["authid"].(string))
+		results, err := models.LoadAdminResults(sess.Values["email"].(string))
 		if err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 		}
