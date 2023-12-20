@@ -44,7 +44,7 @@ func (results *AdminResult) Submit() error {
 }
 
 
-func LoadAdminResult(aid string) ([]AdminResult, error) {
+func LoadAdminResults(aid string) ([]AdminResult, error) {
 	statement := `SELECT * FROM adminresults WHERE aid=$1;`
 
 	rows, err := db.Query(statement, aid)
@@ -170,3 +170,58 @@ func (ex *Examination) CalculateMMPI(patient string, answers string) (MMPIResult
 
 	return results, nil
 }
+
+
+
+func (ex *AdminResult) LocalCalculateMMPI(answers string) (MMPIResults, error) {
+	var results MMPIResults
+
+	results.ID = ex.ID
+	results.Patient = ex.Patient
+	results.Sex = ex.Sex
+	results.Duration = ex.Duration
+
+	filename := "data/scales.json"
+	var scalesData MMPIScales
+
+	scj, err := os.ReadFile(filename)
+	if err != nil {
+		return MMPIResults{}, err
+	}
+
+	err = json.Unmarshal(scj, &scalesData)
+	if err != nil {
+		return MMPIResults{}, err
+	}
+
+	var parsedAnswers []bool
+
+	for _, answer := range strings.Split(answers, "") {
+		if answer == "T" {
+			parsedAnswers = append(parsedAnswers, true)
+		} else {
+			parsedAnswers = append(parsedAnswers, false)
+		}
+	}
+
+	for _, category := range scalesData {
+
+		results.Categories = append(results.Categories, MMPICategoryResult{
+			Title:              category.Title,
+			Scales:             make([]ScaleResult, 0),
+			DerivedIndications: make([]string, 0),
+		})
+
+		for _, scale := range category.Items {
+			err := grade(parsedAnswers, scale, ex.Sex, &results)
+			if err != nil {
+				return MMPIResults{}, err
+			}
+		}
+
+		results.Categories[len(results.Categories)-1].deriveIndications(scalesData, &results)
+	}
+
+	return results, nil
+}
+
