@@ -1,0 +1,33 @@
+package components
+
+templ Tabs(active int) {
+	<foooter hx-boost="true" class="flex justify-evenly items-center p-2 w-full sticky bottom-0 left-0 h-12 bg-green-500">
+		if active == 0 {
+			<a href="/admin" class="text-blue-700 border-x-2 px-1 border-blue-700 rounded-sm text-centerfont-bold">
+				Generate Code
+			</a>
+		} else {
+			<a href="/admin" class="text-white border-x-2 px-1 border-x-white hover:border-blue-700 rounded-sm text-center hover:text-blue-700 font-bold">
+				Generate Code
+			</a>
+		}
+		if active == 1 {
+			<a href="/admin/local" class="text-blue-700 border-x-2 px-1 border-blue-700 rounded-sm text-centerfont-bold">
+				Local Patients
+			</a>
+		} else {
+			<a href="/admin/local" class="text-white border-x-2 px-1 border-x-white hover:border-blue-700 rounded-sm text-center hover:text-blue-700 font-bold">
+				Local Patients
+			</a>
+		}
+		if active == 2 {
+			<a href="/admin/remote" class="text-blue-700 border-x-2 px-1 border-blue-700 rounded-sm text-centerfont-bold">
+				Remote Patients
+			</a>
+		} else {
+			<a href="/admin/remote" class="text-white border-x-2 px-1 border-x-white hover:border-blue-700 rounded-sm text-center hover:text-blue-700 font-bold">
+				Remote Patients
+			</a>
+		}
+	</foooter>
+}

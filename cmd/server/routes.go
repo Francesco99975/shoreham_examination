@@ -67,6 +67,8 @@ func createRouter() *echo.Echo {
 
 	adminGroup.POST("", controllers.GenerateCodes())
 
+	adminGroup.GET("/remote", controllers.Remotes())
+
 	adminGroup.GET("/asq", controllers.Asq(true))
 
 	adminGroup.POST("/asq", controllers.AsqCalc(true))
@@ -110,12 +112,12 @@ func serverErrorHandler(err error, c echo.Context) {
 
 	buf := bytes.NewBuffer(nil)
 	if code < 500 {
-		views.ClientError(data, err).Render(context.Background(), buf)
+		_ = views.ClientError(data, err).Render(context.Background(), buf)
 
 	} else {
-		views.ServerError(data, err).Render(context.Background(), buf)
+		_ = views.ServerError(data, err).Render(context.Background(), buf)
 	}
 
-	c.Blob(200, "text/html; charset=utf-8", buf.Bytes())
+	_ = c.Blob(200, "text/html; charset=utf-8", buf.Bytes())
 
 }

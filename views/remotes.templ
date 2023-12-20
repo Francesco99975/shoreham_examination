@@ -2,15 +2,41 @@ package views
 
 import "github.com/Francesco99975/shorehamex/internal/models"
 import "github.com/Francesco99975/shorehamex/views/components"
+import "github.com/Francesco99975/shorehamex/views/layouts"
 
-templ Remotes(rps []models.RemotePatient) {
-	<section class="flex flex-col items-center w-full min-h-[80vh] text-center px-2">
-		if len(rps) <= 0 {
-			<h2 class="text-center text-xl text-green-700 font-bold">No Remote Patinets Yet...</h2>
-		} else {
-			for _, rp := range rps {
-				@components.Remote(rp.Id, rp.Patient, rp.Date, rp.Test, rp.Done, rp.Indication, rp.Max, rp.Score, rp.Results)
+templ Remotes(site models.Site, rps []models.RemotePatient) {
+	@layouts.CoreHTML(site) {
+		@components.Header(true)
+		<main class="flex flex-col items-center w-full min-h-[100vh] text-center px-2">
+			if len(rps) <= 0 {
+				<h2 class="text-center text-xl text-green-700 font-bold">No Remote Patinets Yet...</h2>
+			} else {
+				for _, rp := range rps {
+					@components.Remote(rp.Id, rp.Patient, rp.Date, rp.Test, rp.Done, rp.Indication, rp.Max, rp.Score, rp.Results)
+				}
 			}
-		}
-	</section>
+		</main>
+		@components.Tabs(2)
+		<script>
+				function initCharts() {
+					const charts = document.querySelectorAll("results-chart");
+					for (const chart of charts) {
+						if(!chart.chart) {
+							chart.render(chart.id.substring(0, chart.id.length - 2));
+							window.addEventListener("resize", function() {
+								chart.render(chart.id.substring(0, chart.id.length - 2));
+							});
+						}
+					}
+				}
+
+				if(document.readyState !== 'loading') {
+					initCharts();
+				}
+
+				document.addEventListener('DOMContentLoaded', function () {
+						initCharts();
+				});
+		</script>
+	}
 }
