@@ -18,6 +18,7 @@ templ MMPI(site models.Site, admin bool, questions []string, page int, path stri
  				class="w-full"
  				hx-post={ path }
  				hx-replace-url="true"
+ 				hx-indicator="#indicator"
 			>
 				if admin && page == 1 {
 					@components.StringInput("patient", "text", "Patient Name", true)

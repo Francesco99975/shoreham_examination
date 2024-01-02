@@ -73,7 +73,7 @@ func CoreHTML(site models.Site) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script><link rel=\"stylesheet\" href=\"/assets/dist/index.css\"></head><body class=\"h-full w-full flex flex-col justify-stretch items-stretch\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</script><link rel=\"stylesheet\" href=\"/assets/dist/index.css\"></head><body class=\"h-full w-full flex flex-col justify-stretch items-stretch relative\"><div id=\"indicator\" class=\"htmx-indicator w-full h-screen absolute bottom-0 right-0 z-50 flex bg-slate-700 opacity-70 justify-center items-center\"><div class=\"loader\"></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

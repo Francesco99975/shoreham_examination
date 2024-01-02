@@ -3,7 +3,9 @@ package models
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"os"
+	"time"
 
 	_ "github.com/lib/pq"
 	"golang.org/x/crypto/bcrypt"
@@ -23,6 +25,13 @@ func Setup(dsn string) {
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	go func ()  {
+		for {
+			cleanDatabase(db)
+			time.Sleep(24 * time.Hour)
+		}
+	}()
 
 	var count int
 
@@ -57,4 +66,28 @@ func Setup(dsn string) {
 		}
 	}
 
+}
+
+
+
+func cleanDatabase(db *sql.DB) {
+	cutoffTime := time.Now().Add(-7 * 24 * time.Hour)
+
+	// Execute the delete query
+	_, err := db.Exec("DELETE FROM patients WHERE created < $1;", cutoffTime)
+	if err != nil {
+		log.Println("Error deleting old data:", err)
+	}
+
+	// Execute the delete query
+	_, err = db.Exec("DELETE FROM adminresults WHERE created < $1;", cutoffTime)
+	if err != nil {
+		log.Println("Error deleting old data:", err)
+	}
+
+	// Execute the delete query
+	_, err = db.Exec("DELETE FROM examinations WHERE created < $1;", cutoffTime)
+	if err != nil {
+		log.Println("Error deleting old data:", err)
+	}
 }

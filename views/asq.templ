@@ -18,6 +18,7 @@ templ Asq(site models.Site, admin bool, questions []string, multi []string, path
  				hx-post={ path }
  				hx-target="body"
  				hx-replace-url="true"
+ 				hx-indicator="#indicator"
 			>
 				<input type="hidden" id="duration" name="duration" value="0"/>
 				if admin {

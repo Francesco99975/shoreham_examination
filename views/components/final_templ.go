@@ -27,7 +27,7 @@ func MMPIFinal(results models.MMPIResults) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"flex flex-col w-3/4 rounded-lg p-3 my-2 justify-center items-center text-center text-green-600\"><h1 class=\"text-2xl p-2 my-3  text-center\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"flex flex-col w-full rounded-lg p-3 my-2 justify-center items-center text-center text-white\"><h1 class=\"text-2xl p-2 my-3 text-center\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -87,7 +87,7 @@ func MMPIFinal(results models.MMPIResults) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p><table class=\"border-collapse w-full mt-3\"><thead><tr><th class=\"border-1 border-solid border-gray-300 bg-slate-200 p-2 text-left\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p><table class=\"border-collapse w-full mt-3\"><thead class=\"text-green-700\"><tr><th class=\"border-1 border-solid border-gray-300 bg-slate-200 p-2 text-left\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

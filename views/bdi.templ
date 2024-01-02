@@ -18,6 +18,7 @@ templ Bdi(site models.Site, admin bool, groups [][]string, path string) {
  				hx-post={ path }
  				hx-target="body"
  				hx-replace-url="true"
+ 				hx-indicator="#indicator"
 			>
 				<input type="hidden" id="duration" name="duration" value="0"/>
 				if admin {

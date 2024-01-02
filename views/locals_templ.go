@@ -57,7 +57,7 @@ func Locals(site models.Site, rps []models.RemotePatient) templ.Component {
 				}
 			} else {
 				for _, rp := range rps {
-					templ_7745c5c3_Err = components.Remote(rp.Id, rp.Patient, rp.Date, rp.Test, rp.Done, rp.Indication, rp.Max, rp.Score, rp.Results).Render(ctx, templ_7745c5c3_Buffer)
+					templ_7745c5c3_Err = components.Local(rp.Id, rp.Patient, rp.Date, rp.Test, rp.Done, rp.Indication, rp.Max, rp.Score, rp.Results).Render(ctx, templ_7745c5c3_Buffer)
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}

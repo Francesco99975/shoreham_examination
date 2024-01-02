@@ -23,9 +23,12 @@ func PatientLogin() echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusNotFound, "Patient not found")
 		}
 
+		if len(patient.Exams) <= 0 {
+			return echo.NewHTTPError(http.StatusNotFound, "Examination Already Concluded")
+		}
+
 		err = bcrypt.CompareHashAndPassword([]byte(patient.Authcode), []byte(authcode))
-		if err != nil || len(patient.Exams) <= 0 {
-			fmt.Println(err)
+		if err != nil {
 			return echo.NewHTTPError(http.StatusUnauthorized, fmt.Sprintf("Unauthorized: %s", err.Error()))
 		}
 

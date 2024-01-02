@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/Francesco99975/shorehamex/internal/helpers"
@@ -24,9 +25,41 @@ func Remotes() echo.HandlerFunc {
 		var rps []models.RemotePatient
 
 		for _, patient := range patients {
+			var notDone []models.Exam
+			if len(patient.Exams) > 0 {
+				for _, test := range strings.Split(patient.Exams, ",") {
+					notDone = append(notDone, models.Exam(test))
+				}
+			}
 			results, err := models.LoadPatientResults(patient.AuthId)
 			if err != nil {
 				return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+			}
+
+			for _, nd := range notDone {
+					var mx int
+					var ts models.TestSpecification
+					switch nd {
+					case models.ASQ:
+						mx = models.ASQ_MAX_SCORE
+						ts = models.Tests[0]
+					case models.BAI:
+
+						mx = models.BAI_MAX_SCORE
+						ts = models.Tests[1]
+					case models.BDI:
+
+						mx = models.BDI_MAX_SCORE
+						ts = models.Tests[2]
+					case models.P3:
+						mx = models.P3_MAX_SCORE
+						ts = models.Tests[3]
+					case models.MMPI:
+						mx = -1
+						ts = models.Tests[4]
+					}
+
+					rps = append(rps, models.RemotePatient{ Id: patient.AuthId, Patient: patient.Name, Date: patient.Created.Format(time.DateOnly), Done: false, Test: ts, Indication: "", Score: -1, Max: mx, Results: models.MMPIResults{} })
 			}
 
 			for _, result := range results {
@@ -66,6 +99,8 @@ func Remotes() echo.HandlerFunc {
 					}
 
 					rps = append(rps, models.RemotePatient{ Id: patient.AuthId, Patient: patient.Name, Date: patient.Created.Format(time.DateOnly), Done: len(patient.Exams) <= 0, Test: ts, Indication: ind, Score: sc, Max: mx, Results: models.MMPIResults{} })
+
+
 				}
 
 			}

@@ -4,8 +4,8 @@ import "github.com/Francesco99975/shorehamex/internal/models"
 import "strconv"
 import "github.com/satori/go.uuid"
 
-templ Remote(id string, patient string, date string, test models.TestSpecification, done bool, indication string, max int, score int, results models.MMPIResults) {
-	<div class="flex flex-col w-full md:w-4/5 rounded items-center bg-green-800 text-white shadow-lg p-3 mt-2">
+templ Local(id string, patient string, date string, test models.TestSpecification, done bool, indication string, max int, score int, results models.MMPIResults) {
+	<div class="flex flex-col w-full md:w-4/5 rounded items-center bg-purple-900 text-white shadow-lg p-3 mt-2">
 		<div class="flex w-full justify-between items-center">
 			<h3 class="text-xl md:text-2xl">{ test.Name }</h3>
 			<span class="md:text-xl">{ patient }</span>

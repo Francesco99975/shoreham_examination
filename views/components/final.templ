@@ -5,8 +5,8 @@ import "strconv"
 import "strings"
 
 templ MMPIFinal(results models.MMPIResults) {
-	<section class="flex flex-col w-3/4 rounded-lg p-3 my-2 justify-center items-center text-center text-green-600">
-		<h1 class="text-2xl p-2 my-3  text-center">MMPI Results for { results.Patient }</h1>
+	<section class="flex flex-col w-full rounded-lg p-3 my-2 justify-center items-center text-center text-white">
+		<h1 class="text-2xl p-2 my-3 text-center">MMPI Results for { results.Patient }</h1>
 		<h2 class="text-lg my-1 p-1">Sex: { results.Sex }</h2>
 		for _, category := range results.Categories {
 			<div class="mb-7">
@@ -16,7 +16,7 @@ templ MMPIFinal(results models.MMPIResults) {
 					{ strings.Join(category.DerivedIndications, ",") }
 				</p>
 				<table class="border-collapse w-full mt-3">
-					<thead>
+					<thead class="text-green-700">
 						<tr>
 							<th class="border-1 border-solid border-gray-300 bg-slate-200 p-2 text-left">
 								Scale Name

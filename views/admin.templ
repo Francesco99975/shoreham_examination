@@ -15,7 +15,7 @@ templ Admin(site models.Site) {
 						<h1 class="text-lg md:text-xl text-green-500 font-bold">
 							Generate Patient Access Code
 						</h1>
-						<form class="w-full flex flex-col items-center justify-center" hx-post="/admin" hx-target="this" hx-swap="outerHTML">
+						<form class="w-full flex flex-col items-center justify-center" hx-indicator="#indicator" hx-post="/admin" hx-target="this" hx-swap="outerHTML">
 							@components.StringInput("patient", "text", "Patient Name", true)
 							@components.SimpleCheckboxInput("asq", "Axienty Symtoms Questionnaire", false)
 							@components.SimpleCheckboxInput("bai", "Beck Anxiety Inventory", false)
@@ -23,7 +23,7 @@ templ Admin(site models.Site) {
 							@components.SimpleCheckboxInput("p3", "P3", false)
 							@components.SimpleCheckboxInput("mmpi", "MMPI-2", false)
 							<button
- 								class="bg-green-500 text-white rounded-sm font-bold p-2"
+ 								class="bg-green-500 text-white rounded-sm font-bold p-2 cursor-pointer"
  								type="submit"
 							>
 								Generate Patient Access Code

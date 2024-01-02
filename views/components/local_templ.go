@@ -14,7 +14,7 @@ import "github.com/Francesco99975/shorehamex/internal/models"
 import "strconv"
 import "github.com/satori/go.uuid"
 
-func Remote(id string, patient string, date string, test models.TestSpecification, done bool, indication string, max int, score int, results models.MMPIResults) templ.Component {
+func Local(id string, patient string, date string, test models.TestSpecification, done bool, indication string, max int, score int, results models.MMPIResults) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -27,7 +27,7 @@ func Remote(id string, patient string, date string, test models.TestSpecificatio
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex flex-col w-full md:w-4/5 rounded items-center bg-green-800 text-white shadow-lg p-3 mt-2\"><div class=\"flex w-full justify-between items-center\"><h3 class=\"text-xl md:text-2xl\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex flex-col w-full md:w-4/5 rounded items-center bg-purple-900 text-white shadow-lg p-3 mt-2\"><div class=\"flex w-full justify-between items-center\"><h3 class=\"text-xl md:text-2xl\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

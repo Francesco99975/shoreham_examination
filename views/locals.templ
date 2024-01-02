@@ -12,7 +12,7 @@ templ Locals(site models.Site, rps []models.RemotePatient) {
 				<h2 class="text-center text-xl text-purple-700 font-bold">No Local Patinets Yet...</h2>
 			} else {
 				for _, rp := range rps {
-					@components.Remote(rp.Id, rp.Patient, rp.Date, rp.Test, rp.Done, rp.Indication, rp.Max, rp.Score, rp.Results)
+					@components.Local(rp.Id, rp.Patient, rp.Date, rp.Test, rp.Done, rp.Indication, rp.Max, rp.Score, rp.Results)
 				}
 			}
 		</main>
