@@ -146,29 +146,31 @@ func MMPICalc(admin bool) echo.HandlerFunc {
 
 		// TESTING MMPI CODE ONLY
 
-		startIndex := (page - 1) * limit
-		endIndex := startIndex + limit
+		// startIndex := (page - 1) * limit
+		// endIndex := startIndex + limit
 
-		test := strings.Split(models.MMPI_TEST_ANSWERS, "")[startIndex:endIndex]
+		// test := strings.Split(models.MMPI_TEST_ANSWERS, "")[startIndex:endIndex]
 
-		answers = append(answers, test...)
+		// answers = append(answers, test...)
 
-		// for i := 0; i < limit; i++ {
-		// 	answer, err := strconv.Atoi(c.FormValue(fmt.Sprintf("%dA%d", page, i)))
-		// 	if err != nil {
-		// 		return echo.NewHTTPError(http.StatusBadRequest, "Insifficient data")
-		// 	}
+		// END OF TEST CODE
 
-		// 	if answer > 1 || answer < 0 {
-		// 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid data")
-		// 	}
+		for i := 0; i < limit; i++ {
+			answer, err := strconv.Atoi(c.FormValue(fmt.Sprintf("%dA%d", page, i)))
+			if err != nil {
+				return echo.NewHTTPError(http.StatusBadRequest, "Insifficient data")
+			}
 
-		// 	if answer == 0 {
-		// 		answers = append(answers, "F")
-		// 	} else {
-		// 		answers = append(answers, "T")
-		// 	}
-		// }
+			if answer > 1 || answer < 0 {
+				return echo.NewHTTPError(http.StatusBadRequest, "Invalid data")
+			}
+
+			if answer == 0 {
+				answers = append(answers, "F")
+			} else {
+				answers = append(answers, "T")
+			}
+		}
 
 		var newlocal models.LocalRes
 		var newTemporal models.PatientRes
