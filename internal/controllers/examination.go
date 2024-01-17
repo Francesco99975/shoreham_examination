@@ -39,7 +39,7 @@ func Examination() echo.HandlerFunc {
 				MaxAge:   -1,
 				HttpOnly: true,
 				Secure:   true,
-				Domain:   "",
+				Domain:   "shorehamex.dmz.urx.ink",
 				SameSite: http.SameSiteDefaultMode,
 			}
 
