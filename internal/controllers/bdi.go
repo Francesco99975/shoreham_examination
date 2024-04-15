@@ -121,7 +121,7 @@ func BdiCalc(admin bool) echo.HandlerFunc {
 			id = sess.Values["authid"].(string)
 		}
 
-		file, err := helpers.GeneratePDFGeneric("Beck Depression Inventory", id, patient, sex, duration, indication, score)
+		file, err := helpers.GeneratePDFGeneric(models.Tests[2], id, patient, sex, duration, indication, score)
 
 		if err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during pdf generation: %s", err.Error()))

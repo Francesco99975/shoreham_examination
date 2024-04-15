@@ -121,7 +121,7 @@ func BaiCalc(admin bool) echo.HandlerFunc {
 			id = sess.Values["authid"].(string)
 		}
 
-		file, err := helpers.GeneratePDFGeneric("Beck Anxiety Inventory", id, patient, sex, duration, indication, score)
+		file, err := helpers.GeneratePDFGeneric(models.Tests[1], id, patient, sex, duration, indication, score)
 
 		if err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during pdf generation: %s", err.Error()))
