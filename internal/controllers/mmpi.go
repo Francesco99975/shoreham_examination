@@ -243,7 +243,7 @@ func MMPICalc(admin bool) echo.HandlerFunc {
 			}
 
 			if success && admin {
-				result := models.AdminResult { ID: newlocal.ID, Patient: newlocal.Patient, Sex: newlocal.Sex , Test: string(models.MMPI), Metric: newlocal.Answers, Duration: newlocal.Duration, Created: time.Now(), Aid: sess.Values["email"].(string) }
+				result := models.AdminResult{ID: newlocal.ID, Patient: newlocal.Patient, Sex: newlocal.Sex, Test: string(models.MMPI), Metric: newlocal.Answers, Duration: newlocal.Duration, Created: time.Now(), Aid: sess.Values["email"].(string)}
 				err = result.Submit()
 				if err != nil {
 					return echo.NewHTTPError(http.StatusInternalServerError, "Could not save admin test results")
@@ -259,7 +259,7 @@ func MMPICalc(admin bool) echo.HandlerFunc {
 					return echo.NewHTTPError(http.StatusBadRequest, err)
 				}
 
-				result := models.Examination { Sex: newTemporal.Sex, Test: string(models.MMPI), Metric: newTemporal.Answers, Duration: newTemporal.Duration, Created: time.Now(), Pid: sess.Values["authid"].(string) }
+				result := models.Examination{Sex: newTemporal.Sex, Test: string(models.MMPI), Metric: newTemporal.Answers, Duration: newTemporal.Duration, Created: time.Now(), Pid: sess.Values["authid"].(string)}
 				err = result.SubmitExamination()
 				if err != nil {
 					return echo.NewHTTPError(http.StatusInternalServerError, "Could not save patient test results")
@@ -267,7 +267,7 @@ func MMPICalc(admin bool) echo.HandlerFunc {
 
 				return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/examination?next=%s", exam))
 			} else {
-				return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during email sending(failed): %s", err.Error()))
+				return echo.NewHTTPError(http.StatusInternalServerError, "Error during email sending(failed)")
 			}
 		}
 

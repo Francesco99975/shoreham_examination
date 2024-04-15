@@ -39,13 +39,13 @@ func Bdi(admin bool) echo.HandlerFunc {
 		}
 
 		if len(cnt.Questions) <= 0 {
-				html, err := helpers.GeneratePage(views.ServerError(data, err))
+			html, err := helpers.GeneratePage(views.ServerError(data, err))
 
-				if err != nil {
-					return echo.NewHTTPError(http.StatusBadRequest, "Could not parse page server error")
-				}
+			if err != nil {
+				return echo.NewHTTPError(http.StatusBadRequest, "Could not parse page server error")
+			}
 
-				return c.Blob(200, "text/html; charset=utf-8", html)
+			return c.Blob(200, "text/html; charset=utf-8", html)
 		}
 
 		var path string
@@ -133,7 +133,7 @@ func BdiCalc(admin bool) echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during email sending: %s", err.Error()))
 		}
 		if success && admin {
-			result := models.AdminResult { ID: id, Patient: patient, Sex: sex, Test: string(models.BDI), Metric: fmt.Sprint(score), Duration: duration, Created: time.Now(), Aid: sess.Values["email"].(string) }
+			result := models.AdminResult{ID: id, Patient: patient, Sex: sex, Test: string(models.BDI), Metric: fmt.Sprint(score), Duration: duration, Created: time.Now(), Aid: sess.Values["email"].(string)}
 			err = result.Submit()
 			if err != nil {
 				return echo.NewHTTPError(http.StatusInternalServerError, "Could not save admin test results")
@@ -149,7 +149,7 @@ func BdiCalc(admin bool) echo.HandlerFunc {
 				return echo.NewHTTPError(http.StatusBadRequest, err)
 			}
 
-			result := models.Examination { Sex: sex, Test: string(models.BDI), Metric: fmt.Sprint(score), Duration: duration, Created: time.Now(), Pid: sess.Values["authid"].(string) }
+			result := models.Examination{Sex: sex, Test: string(models.BDI), Metric: fmt.Sprint(score), Duration: duration, Created: time.Now(), Pid: sess.Values["authid"].(string)}
 			err = result.SubmitExamination()
 			if err != nil {
 				return echo.NewHTTPError(http.StatusInternalServerError, "Could not save patient test results")
@@ -157,7 +157,7 @@ func BdiCalc(admin bool) echo.HandlerFunc {
 
 			return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/examination?next=%s", exam))
 		} else {
-			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during email sending(failed): %s", err.Error()))
+			return echo.NewHTTPError(http.StatusInternalServerError, "Error during email sending(failed)")
 		}
 	}
 }

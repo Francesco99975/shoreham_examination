@@ -141,7 +141,7 @@ func P3Calc(admin bool) echo.HandlerFunc {
 		}
 
 		if success && admin {
-			result := models.AdminResult { ID: id, Patient: patient, Sex: sex, Test: string(models.P3), Metric: fmt.Sprint(score), Duration: duration, Created: time.Now(), Aid: sess.Values["email"].(string) }
+			result := models.AdminResult{ID: id, Patient: patient, Sex: sex, Test: string(models.P3), Metric: fmt.Sprint(score), Duration: duration, Created: time.Now(), Aid: sess.Values["email"].(string)}
 			err = result.Submit()
 			if err != nil {
 				return echo.NewHTTPError(http.StatusInternalServerError, "Could not save admin test results")
@@ -157,7 +157,7 @@ func P3Calc(admin bool) echo.HandlerFunc {
 				return echo.NewHTTPError(http.StatusBadRequest, err)
 			}
 
-			result := models.Examination { Sex: sex, Test: string(models.P3), Metric: fmt.Sprint(score), Duration: duration, Created: time.Now(), Pid: sess.Values["authid"].(string) }
+			result := models.Examination{Sex: sex, Test: string(models.P3), Metric: fmt.Sprint(score), Duration: duration, Created: time.Now(), Pid: sess.Values["authid"].(string)}
 			err = result.SubmitExamination()
 			if err != nil {
 				return echo.NewHTTPError(http.StatusInternalServerError, "Could not save patient test results")
@@ -165,7 +165,7 @@ func P3Calc(admin bool) echo.HandlerFunc {
 
 			return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/examination?next=%s", exam))
 		} else {
-			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error during email sending(failed): %s", err.Error()))
+			return echo.NewHTTPError(http.StatusInternalServerError, "Error during email sending(failed)")
 		}
 	}
 }
