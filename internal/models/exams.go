@@ -11,10 +11,10 @@ import (
 type Exam string
 
 const (
-	ASQ Exam = "asq"
-	BAI Exam = "bai"
-	BDI Exam = "bdi"
-	P3  Exam = "p3"
+	ASQ  Exam = "asq"
+	BAI  Exam = "bai"
+	BDI  Exam = "bdi"
+	P3   Exam = "p3"
 	MMPI Exam = "mmpi"
 )
 
@@ -26,18 +26,19 @@ const P3_ADJUST int = 44 // To Be subtracted from p3 score
 const MMPI2_MAX_SCORE int = 567
 
 type TestSpecification struct {
-	ID Exam
+	ID   Exam
 	Name string
-	Low int
+	Max  int
+	Low  int
 	High int
 }
 
-var Tests []TestSpecification = []TestSpecification {
-	{ ID: ASQ, Name: "Anxiety Symptoms Questionnaire", Low: int(math.Round(0.30 * float64(ASQ_MAX_SCORE))), High: int(math.Round(0.45 * float64(ASQ_MAX_SCORE))) },
-	{ ID: BAI, Name: "Beck Anxiety Inventory", Low: int(math.Round(0.21 * float64(BAI_MAX_SCORE))), High: int(math.Round(0.35 * float64(BAI_MAX_SCORE))) },
-	{ ID: BDI, Name: "Beck Depression Inventory", Low: int(math.Round(0.09 * float64(BDI_MAX_SCORE))), High: int(math.Round(0.18 * float64(BDI_MAX_SCORE))) },
-	{ ID: P3, Name: "P3", Low: int(math.Round(0.30 * float64(P3_MAX_SCORE))), High: int(math.Round(0.50 * float64(P3_MAX_SCORE))) },
-	{ ID: MMPI, Name: "MMPI-2" },
+var Tests []TestSpecification = []TestSpecification{
+	{ID: ASQ, Name: "Anxiety Symptoms Questionnaire", Max: ASQ_MAX_SCORE, Low: int(math.Round(0.30 * float64(ASQ_MAX_SCORE))), High: int(math.Round(0.45 * float64(ASQ_MAX_SCORE)))},
+	{ID: BAI, Name: "Beck Anxiety Inventory", Max: BAI_MAX_SCORE, Low: int(math.Round(0.21 * float64(BAI_MAX_SCORE))), High: int(math.Round(0.35 * float64(BAI_MAX_SCORE)))},
+	{ID: BDI, Name: "Beck Depression Inventory", Max: BDI_MAX_SCORE, Low: int(math.Round(0.09 * float64(BDI_MAX_SCORE))), High: int(math.Round(0.18 * float64(BDI_MAX_SCORE)))},
+	{ID: P3, Name: "P3", Max: P3_MAX_SCORE, Low: int(math.Round(0.30 * float64(P3_MAX_SCORE))), High: int(math.Round(0.50 * float64(P3_MAX_SCORE)))},
+	{ID: MMPI, Name: "MMPI-2"},
 }
 
 type BasicExamResults struct {
@@ -54,70 +55,70 @@ func CompileBasicIndication(patient string, percentage string, test string, dura
 }
 
 func CalcTestASQ(score int, patient string, duration int) string {
-		rawPercentage := float64(score) / float64(ASQ_MAX_SCORE) * 100.0
+	rawPercentage := float64(score) / float64(ASQ_MAX_SCORE) * 100.0
 
-		var gravity string
-		if rawPercentage <= 30 {
-			gravity = "normal"
-		} else if rawPercentage >= 31 && rawPercentage <= 45 {
-			gravity = "moderate"
-		} else {
-			gravity = "severe"
-		}
+	var gravity string
+	if rawPercentage <= 30 {
+		gravity = "normal"
+	} else if rawPercentage >= 31 && rawPercentage <= 45 {
+		gravity = "moderate"
+	} else {
+		gravity = "severe"
+	}
 
-		percentage := fmt.Sprintf("%.2f", rawPercentage) + "%"
+	percentage := fmt.Sprintf("%.2f", rawPercentage) + "%"
 
-		return CompileBasicIndication(patient, percentage, "Anxiety Symptom Questionnaire", duration, gravity)
+	return CompileBasicIndication(patient, percentage, "Anxiety Symptom Questionnaire", duration, gravity)
 }
 
 func CalcTestBAI(score int, patient string, duration int) string {
-		rawPercentage := float64(score) / float64(BAI_MAX_SCORE) * 100.0
+	rawPercentage := float64(score) / float64(BAI_MAX_SCORE) * 100.0
 
-		var gravity string
-		if rawPercentage <= 21 {
-			gravity = "normal"
-		} else if rawPercentage >= 22 && rawPercentage <= 35 {
-			gravity = "moderate"
-		} else {
-			gravity = "severe"
-		}
+	var gravity string
+	if rawPercentage <= 21 {
+		gravity = "normal"
+	} else if rawPercentage >= 22 && rawPercentage <= 35 {
+		gravity = "moderate"
+	} else {
+		gravity = "severe"
+	}
 
-		percentage := fmt.Sprintf("%.2f", rawPercentage) + "%"
+	percentage := fmt.Sprintf("%.2f", rawPercentage) + "%"
 
-		return CompileBasicIndication(patient, percentage, "Beck Anxiety Inventory", duration, gravity)
+	return CompileBasicIndication(patient, percentage, "Beck Anxiety Inventory", duration, gravity)
 }
 
 func CalcTestBDI(score int, patient string, duration int) string {
-		rawPercentage := float64(score) / float64(BDI_MAX_SCORE) * 100.0
+	rawPercentage := float64(score) / float64(BDI_MAX_SCORE) * 100.0
 
-		var gravity string
-		if rawPercentage <= 9 {
-			gravity = "normal"
-		} else if rawPercentage >= 10 && rawPercentage <= 18 {
-			gravity = "moderate"
-		} else {
-			gravity = "severe"
-		}
-		percentage := fmt.Sprintf("%.2f", rawPercentage) + "%"
+	var gravity string
+	if rawPercentage <= 9 {
+		gravity = "normal"
+	} else if rawPercentage >= 10 && rawPercentage <= 18 {
+		gravity = "moderate"
+	} else {
+		gravity = "severe"
+	}
+	percentage := fmt.Sprintf("%.2f", rawPercentage) + "%"
 
-		return CompileBasicIndication(patient, percentage, "Beck Depression Inventory", duration, gravity)
+	return CompileBasicIndication(patient, percentage, "Beck Depression Inventory", duration, gravity)
 }
 
 func CalcTestP3(score int, patient string, duration int) string {
-		rawPercentage := float64(score) / float64(P3_MAX_SCORE) * 100.0
+	rawPercentage := float64(score) / float64(P3_MAX_SCORE) * 100.0
 
-		var gravity string
-		if rawPercentage <= 30 {
-			gravity = "normal"
-		} else if rawPercentage >= 31 && rawPercentage <= 50 {
-			gravity = "moderate"
-		} else {
-			gravity = "severe"
-		}
+	var gravity string
+	if rawPercentage <= 30 {
+		gravity = "normal"
+	} else if rawPercentage >= 31 && rawPercentage <= 50 {
+		gravity = "moderate"
+	} else {
+		gravity = "severe"
+	}
 
-		percentage := fmt.Sprintf("%.2f", rawPercentage) + "%"
+	percentage := fmt.Sprintf("%.2f", rawPercentage) + "%"
 
-		return CompileBasicIndication(patient, percentage, "P3", duration, gravity)
+	return CompileBasicIndication(patient, percentage, "P3", duration, gravity)
 }
 
 const MMPI_TEST_ANSWERS string = "TTFTFFTFFFFFFTFTFFFTTTFFFTFFTFTFFTFTTTTFTFFFFTTTFTTTTFTTTFTFFTTFTTTFTTTFTFF" +

@@ -26,7 +26,7 @@ func Setup(dsn string) {
 		fmt.Println(err)
 	}
 
-	go func ()  {
+	go func() {
 		for {
 			cleanDatabase(db)
 			time.Sleep(24 * time.Hour)
@@ -67,8 +67,6 @@ func Setup(dsn string) {
 	}
 
 }
-
-
 
 func cleanDatabase(db *sql.DB) {
 	cutoffTime := time.Now().Add(-7 * 24 * time.Hour)

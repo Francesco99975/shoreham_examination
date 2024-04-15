@@ -18,7 +18,7 @@ import (
 	"github.com/johnfercher/maroto/v2/pkg/props"
 )
 
-func GeneratePDFGeneric(test string, id string, patient string, sex string, duration int, indication string, score int) (string, error) {
+func GeneratePDFGeneric(test models.TestSpecification, id string, patient string, sex string, duration int, indication string, score int) (string, error) {
 	date := time.Now().Format(time.RubyDate)
 	cfg := config.NewBuilder().
 		WithPageNumber("Page {current} of {total}", props.RightBottom).
@@ -33,14 +33,14 @@ func GeneratePDFGeneric(test string, id string, patient string, sex string, dura
 		return "", err
 	}
 
-	m.AddRows(text.NewRow(25, fmt.Sprintf("%s results for %s", test, patient), props.Text{
+	m.AddRows(text.NewRow(25, fmt.Sprintf("%s results for %s", test.Name, patient), props.Text{
 		Top:   3,
 		Style: fontstyle.Bold,
 		Align: align.Center,
 		Size:  20,
 	}))
 
-	m.AddRows(text.NewRow(75, fmt.Sprintf("Score: %s", strconv.Itoa(score)), props.Text{
+	m.AddRows(text.NewRow(75, fmt.Sprintf("Score: %s/%s", strconv.Itoa(score), strconv.Itoa(test.Max)), props.Text{
 		Top:   5,
 		Style: fontstyle.Italic,
 		Align: align.Center,
@@ -59,7 +59,7 @@ func GeneratePDFGeneric(test string, id string, patient string, sex string, dura
 		return "", err
 	}
 
-	filename := strings.ReplaceAll(fmt.Sprintf("%s+%s+%s.pdf", test, id, date), " ", "_")
+	filename := strings.ReplaceAll(fmt.Sprintf("%s+%s+%s.pdf", test.Name, id, date), " ", "_")
 
 	err = document.Save(filename)
 	if err != nil {
@@ -137,7 +137,7 @@ func GeneratePDFMMPI(results models.MMPIResults) (string, error) {
 	filename := strings.ReplaceAll(fmt.Sprintf("%s+%s+%s.pdf", "MMPI-2", results.ID, date), " ", "_")
 
 	err = document.Save(filename)
-		if err != nil {
+	if err != nil {
 		return "", err
 	}
 

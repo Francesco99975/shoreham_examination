@@ -15,13 +15,14 @@ templ Admin(site models.Site) {
 						<h1 class="text-lg md:text-xl text-green-500 font-bold">
 							Generate Patient Access Code
 						</h1>
-						<form class="w-full flex flex-col items-center justify-center" hx-indicator="#indicator" hx-post="/admin" hx-target="this" hx-swap="outerHTML">
+						<form id="gen" class="w-full flex flex-col items-center justify-center" hx-indicator="#indicator" hx-post="/admin" hx-target="this" hx-swap="outerHTML">
 							@components.StringInput("patient", "text", "Patient Name", true)
 							@components.SimpleCheckboxInput("asq", "Axienty Symtoms Questionnaire", false)
 							@components.SimpleCheckboxInput("bai", "Beck Anxiety Inventory", false)
 							@components.SimpleCheckboxInput("bdi", "Beck Depression Inventory", false)
 							@components.SimpleCheckboxInput("p3", "P3", false)
 							@components.SimpleCheckboxInput("mmpi", "MMPI-2", false)
+							<p id="gerrors" class="hidden p-2 rounded-sm text-lg italic text-white bg-red-500"></p>
 							<button
  								class="bg-green-500 text-white rounded-sm font-bold p-2 cursor-pointer"
  								type="submit"
@@ -34,6 +35,28 @@ templ Admin(site models.Site) {
 			</div>
 		</main>
 		@components.Tabs(0)
+		<script>
+		    function init() {
+					 const form = window.document.getElementById("gen");
+                    if (form) {
+                        form.addEventListener("htmx:responseError", function (evt) {
+                        const errorBox = window.document.getElementById("gerrors");
+                        if (errorBox) {
+                            errorBox.innerHTML = JSON.parse(evt.detail.xhr.responseText).message;
+                            errorBox.style.display = "block";
+                        }
+                        });
+                    }
+				}
+
+				if(document.readyState !== 'loading') {
+					init();
+				}
+
+				document.addEventListener('DOMContentLoaded', function () {
+						init();
+				});
+		</script>
 	}
 }
 
