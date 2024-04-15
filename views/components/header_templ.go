@@ -37,7 +37,7 @@ func Header(admin bool) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if admin {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<nav hx-boost=\"true\" class=\"m-2\"><input id=\"menu-toggle\" type=\"checkbox\" class=\"h-8 w-8\"> <label class=\"menu-button-container\" for=\"menu-toggle\"><div class=\"menu-button\"></div></label><ul class=\"menu z-50\"><li><a href=\"/admin\" class=\"w-full\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<nav hx-boost=\"true\" class=\"m-2\"><input id=\"menu-toggle\" type=\"checkbox\" class=\"h-8 w-8\"> <label class=\"menu-button-container\" for=\"menu-toggle\"><div class=\"menu-button\"></div></label><ul class=\"menu z-50\"><li style=\" background-color: rgb(23 37 84 / var(--tw-bg-opacity)) !important;\"><a href=\"/admin\" style=\" background-color: rgb(23 37 84 / var(--tw-bg-opacity)) !important;\" class=\"w-full\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -91,12 +91,21 @@ func Header(admin bool) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a></li><li style=\" background-color: rgb(23 37 84 / var(--tw-bg-opacity)) !important;\"><a target=\"_blank\" href=\"https://app.skiff.com/signin\" style=\" background-color: rgb(23 37 84 / var(--tw-bg-opacity)) !important;\" class=\"w-full\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Var9 := `Results Emails @Skiff`
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var9)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a></li><li id=\"logout\"><form class=\"w-full\" hx-post=\"/logout\" hx-target=\"body\" hx-replace-url=\"true\"><button class=\"w-full\" type=\"submit\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Var9 := `Logout`
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var9)
+			templ_7745c5c3_Var10 := `Logout`
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var10)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
