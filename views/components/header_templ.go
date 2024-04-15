@@ -91,7 +91,7 @@ func Header(admin bool) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a></li><li style=\" background-color: rgb(23 37 84 / var(--tw-bg-opacity)) !important;\"><a target=\"_blank\" href=\"https://app.skiff.com/signin\" style=\" background-color: rgb(23 37 84 / var(--tw-bg-opacity)) !important;\" class=\"w-full\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a></li><li style=\"background-color: rgb(23 37 84 / var(--tw-bg-opacity)) !important;\"><a target=\"_blank\" href=\"https://app.skiff.com/signin\" style=\" background-color: rgb(23 37 84 / var(--tw-bg-opacity)) !important;\" class=\"w-full\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
